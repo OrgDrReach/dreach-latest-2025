@@ -4,7 +4,7 @@ import { ubuntu, ubuntuMono } from "@/@types/font/Font";
 import { Providers } from "../providers";
 import { ThemeProvider2 } from "@/components/themes/theme-provider";
 
-export function layout({ children }: RNChildProp) {
+export function Layout({ children }: RNChildProp) {
 	return (
 		<main className={`${ubuntu.className} ${ubuntuMono.className} antialiased`}>
 			<ThemeProvider2
