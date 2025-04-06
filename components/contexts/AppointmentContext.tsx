@@ -1,19 +1,34 @@
 import { createContext, useContext, useState, ReactNode } from "react";
+import { IProvider, EProviderType } from "@/types/provider.d.types";
 import {
-	Provider,
-	ServiceCategory,
-	ProviderType,
-} from "@/types/provider.types";
-import { AppointmentDetails } from "@/types/appointment.types";
+	Appointment,
+	EAppointmentStatus,
+	EAppointmentMode,
+	EPaymentStatus,
+} from "@/types/appointment.d.types";
 
-interface AppointmentContextType {
+interface IAppointmentContextType {
 	loading: boolean;
-	selectedProvider: Provider | null;
-	setSelectedProvider: (provider: Provider | null) => void;
-	bookAppointment: (details: AppointmentDetails) => Promise<void>;
+	selectedProvider: IProvider | null;
+	setSelectedProvider: (provider: IProvider | null) => void;
+	bookAppointment: (details: IAppointmentDetails) => Promise<void>;
 }
 
-export const AppointmentContext = createContext<AppointmentContextType>({
+interface IAppointmentDetails {
+	patientId: string;
+	providerId: string;
+	providerType: EProviderType;
+	dateTime: Date;
+	mode: EAppointmentMode;
+	reason?: string;
+	notes?: string;
+	payment?: {
+		amount: number;
+		method?: string;
+	};
+}
+
+export const AppointmentContext = createContext<IAppointmentContextType>({
 	loading: false,
 	selectedProvider: null,
 	setSelectedProvider: () => {},
@@ -22,11 +37,13 @@ export const AppointmentContext = createContext<AppointmentContextType>({
 
 export function AppointmentProvider({ children }: { children: ReactNode }) {
 	const [loading, setLoading] = useState(false);
-	const [selectedProvider, setSelectedProvider] = useState<Provider | null>(
+	const [selectedProvider, setSelectedProvider] = useState<IProvider | null>(
 		null
 	);
 
-	const bookAppointment = async (details: AppointmentDetails) => {
+	const bookAppointment = async (
+		details: IAppointmentDetails
+	): Promise<void> => {
 		try {
 			setLoading(true);
 			// Simulate API call
@@ -45,7 +62,6 @@ export function AppointmentProvider({ children }: { children: ReactNode }) {
 		<AppointmentContext.Provider
 			value={{
 				loading,
-				// setLoading,
 				selectedProvider,
 				setSelectedProvider,
 				bookAppointment,
@@ -65,4 +81,4 @@ export const useAppointment = () => {
 	return context;
 };
 
-export type { AppointmentDetails };
+export type { IAppointmentDetails };
