@@ -92,7 +92,7 @@ const Footer = () => {
 				<div className="w-full mx-auto py-5 pb-8">
 					<hr className="my-3 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-5" />
 					<span className="text-sm text-gray-200 flex justify-center text-center dark:text-gray-400">
-						© {CurrYear} Healthunity Solutions Pvt Ltd | All rights reserved.
+						© 2024 - {CurrYear} Healthunity Solutions Pvt Ltd | All rights reserved.
 					</span>
 				</div>
 			</footer>
