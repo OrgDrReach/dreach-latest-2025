@@ -5,7 +5,7 @@ import { ubuntu, ubuntuMono } from "@/@types/font/Font";
 import { Providers } from "./providers";
 import { ThemeProvider2 } from "@/components/themes/theme-provider";
 import { usePathname } from "next/navigation";
-import { layout as DashboardLayout } from "./dashboard/layout";
+import { Layout as DashboardLayout } from "./dashboard/layout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "@/components/navigation/Navbar";
