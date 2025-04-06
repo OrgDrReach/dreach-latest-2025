@@ -69,7 +69,7 @@ export default function RootLayout({
 				className={`${ubuntu.variable} ${ubuntuMono.variable} antialiased`}>
 				<ThemeProvider2
 					attribute="class"
-					defaultTheme="system"
+					defaultTheme="dark"
 					enableSystem
 					disableTransitionOnChange>
 					<Providers>
