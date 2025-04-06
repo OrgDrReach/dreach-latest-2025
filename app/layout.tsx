@@ -1,9 +1,9 @@
+"use client";
+
 import "./globals.css";
 import { ubuntu, ubuntuMono } from "@/@types/font/Font";
 import { Providers } from "./providers";
-import {
-	ThemeProvider2,
-} from "@/components/themes/theme-provider";
+import { ThemeProvider2 } from "@/components/themes/theme-provider";
 import { usePathname } from "next/navigation";
 import { layout as DashboardLayout } from "./dashboard/layout";
 import { ToastContainer } from "react-toastify";
@@ -41,10 +41,14 @@ export default function RootLayout({
 
 	const Route = pathName.startsWith("/dashboard");
 
+	const commonBodyProps = {
+		suppressHydrationWarning: true,
+	};
+
 	if (Route) {
 		return (
-			<html lang="en">
-				<body className={ubuntu.className}>
+			<html lang="en" suppressHydrationWarning>
+				<body {...commonBodyProps} className={ubuntu.className}>
 					<main>
 						<DashboardLayout>{children}</DashboardLayout>
 					</main>
@@ -56,32 +60,33 @@ export default function RootLayout({
 				</body>
 			</html>
 		);
-	} else {
-		return (
-			<html lang="en">
-				<body
-					className={`${ubuntu.variable} ${ubuntuMono.variable} antialiased`}>
-					<Providers>
-						<ThemeProvider2
-							attribute="class"
-							defaultTheme="light"
-							enableSystem
-							disableTransitionOnChange>
-							<AppointmentProvider>
-								{showNavbar && <Navbar />}
-								<div className={`pt-[73.49px] md:pt-[81.3px]`}>{children}</div>
-								{showFooter && <Footer />}
-								<ToastContainer
-									position="bottom-right"
-									autoClose={5000}
-									hideProgressBar
-								/>
-								<Toaster position="top-right" />
-							</AppointmentProvider>
-						</ThemeProvider2>
-					</Providers>
-				</body>
-			</html>
-		);
 	}
+
+	return (
+		<html lang="en" suppressHydrationWarning>
+			<body
+				{...commonBodyProps}
+				className={`${ubuntu.variable} ${ubuntuMono.variable} antialiased`}>
+				<ThemeProvider2
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange>
+					<Providers>
+						<AppointmentProvider>
+							{showNavbar && <Navbar />}
+							<div className={`pt-[73.49px] md:pt-[81.3px]`}>{children}</div>
+							{showFooter && <Footer />}
+							<ToastContainer
+								position="bottom-right"
+								autoClose={5000}
+								hideProgressBar
+							/>
+							<Toaster position="top-right" />
+						</AppointmentProvider>
+					</Providers>
+				</ThemeProvider2>
+			</body>
+		</html>
+	);
 }
