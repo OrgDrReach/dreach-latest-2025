@@ -1,4 +1,4 @@
-import WhoWeAre from "@/components/page-components/about/WhoWeAre";
+import WhoWeAre from "@/components/page-components/about/whoweare/WhoWeAre";
 
 export default function AboutUs() {
   return (
