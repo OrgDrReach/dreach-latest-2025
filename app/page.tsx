@@ -6,6 +6,7 @@ import InstantAppointment from "@/components/landing/appointment/InstantAppointm
 import StartupIndia from "@/components/landing/startupIndia/StartupIndia";
 import About from "@/components/landing/about/About";
 import DoctorCTA from "@/components/landing/doctor/DoctorCTA";
+import ServiceSummary from "@/components/landing/service/serviceSummary";
 
 export const metadata: Metadata = {
 	title: "Dreach.in",
@@ -22,6 +23,7 @@ const Home: React.FC = () => {
 				<StartupIndia />
 				<About />
 				<DoctorCTA />
+				<ServiceSummary />
 				<Banner />
 			</div>
 		</main>
