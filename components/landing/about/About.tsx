@@ -87,8 +87,7 @@ const About = () => {
                       alt="Healthcare service 1"
                     />
                     <div
-                      className="absolute inset-0 bg-gradient-to-tr from-[#00feff]/40 via-transparent to-[#ff7c25]/20 
-                        opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      className="absolute inset-0 bg-gradient-to-tr from-[#00feff]/40 via-transparent to-[#ff7c25]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
                     ></div>
                   </div>
                   <div className="absolute -top-4 -left-4 w-6 h-6 border-t-4 border-l-4 border-[#00feff]/40 rounded-tl-lg"></div>
@@ -112,7 +111,7 @@ const About = () => {
                     />
                     <div
                       className="absolute inset-0 bg-gradient-to-bl from-[#ff7c25]/40 via-transparent to-[#00feff]/20 
-                        opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
                     ></div>
                   </div>
                   <div className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-[#ff7c25]/30"></div>
@@ -136,7 +135,7 @@ const About = () => {
                     />
                     <div
                       className="absolute inset-0 bg-gradient-to-tl from-[#00feff]/30 via-transparent to-[#ff7c25]/30 
-                        opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                        opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
                     ></div>
                   </div>
                   <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-4 border-r-4 border-[#00feff]/30 rounded-br-lg"></div>
