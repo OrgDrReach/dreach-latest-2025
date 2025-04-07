@@ -77,10 +77,33 @@ module.exports = {
 						height: "0",
 					},
 				},
+				scan: {
+					"0%": { transform: "translateX(-100%)" },
+					"100%": { transform: "translateX(100%)" },
+				},
+				tilt: {
+					"0%, 50%, 100%": {
+						transform: "rotate(0deg)",
+					},
+					"25%": {
+						transform: "rotate(1deg)",
+					},
+					"75%": {
+						transform: "rotate(-1deg)",
+					},
+				},
+				float: {
+					"0%, 100%": { transform: "translateY(0)" },
+					"50%": { transform: "translateY(-20px)" },
+				},
 			},
 			animation: {
 				"accordion-down": "accordion-down 0.2s ease-out",
 				"accordion-up": "accordion-up 0.2s ease-out",
+				"scan": "scan 8s ease-in-out infinite",
+				"tilt": "tilt 10s infinite linear",
+				"float": "float 6s ease-in-out infinite",
+				"float-slow": "float 8s ease-in-out infinite",
 			},
 		},
 	},
