@@ -3,11 +3,13 @@ import React from "react";
 import Image from "next/image";
 import Book from "./Book";
 import { delay } from "@/lib/utils";
+import ImageViewer from "../images/ImageViewer";
 
 const Hero: React.FC = () => {
 	const [isButtonVisible, setIsButtonVisible] = React.useState(false);
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [showModal, setShowModal] = React.useState(false);
+	const [showImageViewer, setShowImageViewer] = React.useState(false);
 
 	React.useEffect(() => {
 		const loadButton = async () => {
@@ -97,21 +99,40 @@ const Hero: React.FC = () => {
 						</div>
 					</div>
 					<div className="w-full lg:w-1/2 flex justify-center lg:justify-end mb-8 lg:mb-0">
-						<div className="bg-[#E6E6E6] rounded-xl hover:drop-shadow-[0_35px_35px_rgba(0,0,0,0.25)] transition duration-300 p-2 sm:p-4">
-							<Image
-								src="/websiteImages/banner_img.png"
-								alt="banner image"
-								width={455}
-								height={455}
-								className="w-full max-w-[280px] sm:max-w-[400px] lg:max-w-[380px] xl:w-[450px] rounded-lg"
-								style={{
-									height: "auto",
-								}}
-							/>
+							<div 
+								className="bg-[#E6E6E6] rounded-xl hover:drop-shadow-[0_35px_35px_rgba(0,0,0,0.25)] transition duration-300 p-2 sm:p-4 cursor-pointer"
+								onClick={() => setShowImageViewer(true)}
+							>
+								<Image
+									src="/websiteImages/banner_img.png"
+									alt="banner image"
+									width={455}
+									height={455}
+									className="w-full max-w-[280px] sm:max-w-[400px] lg:max-w-[380px] xl:w-[450px] rounded-lg"
+									style={{
+										height: "auto",
+									}}
+								/>
+							</div>
 						</div>
-					</div>
 				</div>
 			</div>
+
+			<ImageViewer 
+				isOpen={showImageViewer} 
+				onClose={() => setShowImageViewer(false)}
+			>
+				<Image
+					src="/websiteImages/banner_img.png"
+					alt="banner image"
+					width={900}
+					height={900}
+					className="max-w-full max-h-[90vh] object-contain rounded-lg"
+					style={{
+						height: "auto",
+					}}
+				/>
+			</ImageViewer>
 		</main>
 	);
 };
