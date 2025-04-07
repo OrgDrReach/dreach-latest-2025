@@ -10,10 +10,10 @@ const About = () => {
 	];
 
 	return (
-		<section className="bg-gradient-to-br from-[#125872] via-[#125872]/95 to-[#125872] py-12">
-			<div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-6">
+		<section className="bg-gradient-to-br from-[#125872] via-[#125872]/95 to-[#125872] py-16 sm:py-20 md:py-24">
+			<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 				{/* Header with animated background */}
-				<div className="relative mb-10">
+				<div className="relative mb-12 sm:mb-16">
 					<div className="absolute inset-0 flex items-center justify-center">
 						<div className="w-[500px] h-[500px] bg-[#ff7c25]/5 rounded-full blur-[100px] animate-pulse"></div>
 					</div>
@@ -30,7 +30,7 @@ const About = () => {
 				</div>
 
 				{/* Main Content Grid */}
-				<div className="grid lg:grid-cols-2 gap-8 items-center">
+				<div className="grid lg:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
 					{/* Left Side: Mission & Features */}
 					<div className="space-y-8">
 						{/* Mission Card */}
@@ -70,10 +70,8 @@ const About = () => {
 					</div>
 
 					{/* Right Side: Interactive Image Stack */}
-					<div className="relative">
-						<div className="grid grid-cols-8 grid-rows-8 gap-8">
-							{" "}
-							{/* increased gap for better spacing */}
+					<div className="relative px-4 sm:px-8 md:px-0 mt-8 sm:mt-12 lg:mt-0">
+						<div className="grid grid-cols-8 grid-rows-8 gap-6 sm:gap-8">
 							{/* Main circular image */}
 							<div className="col-span-4 row-span-4 col-start-1 row-start-1">
 								<div className="relative group">
