@@ -227,7 +227,7 @@
 	}
 }
 
-/* Pages */
+/* About Page */
 @layer components {
 	/* About */
 	.about {
@@ -291,7 +291,10 @@
 	.stats-data {
 		@apply text-center p-4 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1;
 	}
+}
 
+/* Services Page */
+@layer components {
 	/* Services */
 	.servi-base {
 		--servi-grad-color-1: #125872;
