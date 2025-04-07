@@ -86,9 +86,7 @@ const About = () => {
                         group-hover:scale-110 group-hover:rotate-3"
                       alt="Healthcare service 1"
                     />
-                    <div
-                      className="absolute inset-0 bg-gradient-to-tr from-[#00feff]/40 via-transparent to-[#ff7c25]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"
-                    ></div>
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#00feff]/40 via-transparent to-[#ff7c25]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"></div>
                   </div>
                   <div className="absolute -top-4 -left-4 w-6 h-6 border-t-4 border-l-4 border-[#00feff]/40 rounded-tl-lg"></div>
                 </div>
