@@ -1,6 +1,19 @@
+"use client";
 import Image from "next/image";
+import { useState } from "react";
+import ImageViewer from "@/components/images/ImageViewer";
 
 const StartupIndia = () => {
+	const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+	const handleImageClick = (imageUrl: string) => {
+		setSelectedImage(imageUrl);
+	};
+
+	const closeImageViewer = () => {
+		setSelectedImage(null);
+	};
+
 	return (
 		<section className="relative py-5 pb-20">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,7 +30,12 @@ const StartupIndia = () => {
 										alt="Startup India Logo"
 										width={80}
 										height={24}
-										className="object-contain rounded-full"
+										className="object-contain rounded-full cursor-pointer"
+										onClick={() =>
+											handleImageClick(
+												"https://res.cloudinary.com/dxjdeviz9/image/upload/v1734199232/fc89c902-1afd-4209-a79c-8e0e892c3c94.png"
+											)
+										}
 									/>
 								</div>
 								<span className="text-sm font-medium text-[#125872] dark:text-[#32addb] pl-2 border-l border-[#32addb]/20 dark:border-[#32addb]/30">
@@ -102,14 +120,20 @@ const StartupIndia = () => {
 
 						{/* Right Image */}
 						<div className="lg:flex-1 w-full">
-							<div className="relative aspect-[4/3] w-full">
+							<div
+								className="relative aspect-[4/3] w-full"
+								onClick={() =>
+									handleImageClick(
+										"https://res.cloudinary.com/dxjdeviz9/image/upload/v1734199192/de64d3ed-2686-465b-9c16-c51b18f088c8.png"
+									)
+								}>
 								<div className="absolute inset-0 rounded-2xl overflow-hidden">
 									<div className="absolute inset-0 bg-gradient-to-tr from-[#32addb]/10 to-transparent dark:from-[#32addb]/10 mix-blend-overlay" />
 									<Image
 										src="https://res.cloudinary.com/dxjdeviz9/image/upload/v1734199192/de64d3ed-2686-465b-9c16-c51b18f088c8.png"
 										alt="Startup India Recognition"
 										fill
-										className="object-cover"
+										className="object-cover cursor-pointer"
 										priority
 									/>
 								</div>
@@ -125,6 +149,18 @@ const StartupIndia = () => {
 					<div className="absolute bottom-0 right-0 w-32 h-32 bg-[#125872]/20 dark:bg-[#125872]/5 rounded-full blur-3xl" />
 				</div>
 			</div>
+
+			<ImageViewer isOpen={!!selectedImage} onClose={closeImageViewer}>
+				{selectedImage && (
+					<Image
+						src={selectedImage}
+						alt="Enlarged view"
+						width={1200}
+						height={800}
+						className="object-contain"
+					/>
+				)}
+			</ImageViewer>
 		</section>
 	);
 };
