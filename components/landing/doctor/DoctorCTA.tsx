@@ -31,18 +31,18 @@ const avatars = [
   {
     src: "https://randomuser.me/api/portraits/women/1.jpg",
     alt: "Patient Sarah",
-    status: "online"
+    status: "online",
   },
   {
     src: "https://randomuser.me/api/portraits/men/2.jpg",
     alt: "Patient Michael",
-    status: "online"
+    status: "online",
   },
   {
     src: "https://randomuser.me/api/portraits/women/3.jpg",
     alt: "Patient Emma",
-    status: "offline"
-  }
+    status: "offline",
+  },
 ];
 
 const DoctorCTA = () => {
@@ -69,7 +69,7 @@ const DoctorCTA = () => {
               >
                 <FaStar className="w-6 h-6 text-white" />
               </motion.div>
-              <motion.span 
+              <motion.span
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
@@ -97,8 +97,10 @@ const DoctorCTA = () => {
                   className={`group bg-gradient-to-br ${feature.bgColor} backdrop-blur-sm rounded-xl p-6 text-center 
                     shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1`}
                 >
-                  <div className="w-14 h-14 bg-[#125872] dark:bg-[#32addb] rounded-xl flex items-center justify-center mx-auto mb-4 
-                    shadow-lg transform -rotate-6 group-hover:rotate-0 transition-transform duration-300">
+                  <div
+                    className="w-14 h-14 bg-[#125872] dark:bg-[#32addb] rounded-xl flex items-center justify-center mx-auto mb-4 
+                    shadow-lg transform -rotate-6 group-hover:rotate-0 transition-transform duration-300"
+                  >
                     <feature.icon className="w-7 h-7 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-[#125872] dark:text-[#32addb] mb-3">
@@ -112,8 +114,11 @@ const DoctorCTA = () => {
             </div>
 
             <div className="flex flex-col items-center space-y-6">
-              <Link href="/doctors" className="group relative inline-flex items-center">
-                <motion.button 
+              <Link
+                href="/doctors"
+                className="group relative inline-flex items-center"
+              >
+                <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-4 bg-[#125872] dark:bg-[#32addb] text-white rounded-xl
@@ -121,16 +126,16 @@ const DoctorCTA = () => {
                     flex items-center gap-3 relative overflow-hidden group"
                 >
                   <span className="relative z-10">Explore All Doctors</span>
-                  <svg 
-                    className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-200 relative z-10" 
-                    fill="none" 
-                    stroke="currentColor" 
+                  <svg
+                    className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-200 relative z-10"
+                    fill="none"
+                    stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      strokeWidth={2} 
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
                       d="M13 7l5 5m0 0l-5 5m5-5H6"
                     />
                   </svg>
@@ -138,7 +143,7 @@ const DoctorCTA = () => {
                 </motion.button>
               </Link>
 
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
@@ -154,18 +159,25 @@ const DoctorCTA = () => {
                         height={32}
                         className="w-8 h-8 rounded-full border-2 border-white dark:border-gray-900 object-cover"
                       />
-                      <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-gray-900 
-                        ${avatar.status === 'online' ? 'bg-green-400' : 'bg-gray-400'}`} 
+                      <span
+                        className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-gray-900 
+                        ${avatar.status === "online" ? "bg-green-400" : "bg-gray-400"}`}
                       />
                     </div>
                   ))}
-                  <div className="w-8 h-8 rounded-full bg-[#125872] dark:bg-[#32addb] border-2 border-white dark:border-gray-900 
-                    flex items-center justify-center text-xs text-white font-medium">
+                  <div
+                    className="w-8 h-8 rounded-full bg-[#125872] dark:bg-[#32addb] border-2 border-white dark:border-gray-900 
+                    flex items-center justify-center text-xs text-white font-medium"
+                  >
                     +47k
                   </div>
                 </div>
                 <span className="font-medium">
-                  Joined by <span className="text-[#125872] dark:text-[#32addb]">50,000+</span> patients
+                  Joined by{" "}
+                  <span className="text-[#125872] dark:text-[#32addb]">
+                    50,000+
+                  </span>{" "}
+                  patients
                 </span>
               </motion.div>
             </div>
