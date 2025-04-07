@@ -2,6 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import Hero from "@/components/landing/Hero";
 import Banner from "@/components/landing/Banner";
+import InstantAppointment from "@/components/landing/appointment/InstantAppointment";
 
 export const metadata: Metadata = {
 	title: "Dreach.in",
@@ -14,6 +15,7 @@ const Home: React.FC = () => {
 		<main>
 			<div>
 				<Hero />
+				<InstantAppointment />
 				<Banner />
 			</div>
 		</main>
