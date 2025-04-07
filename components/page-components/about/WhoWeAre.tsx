@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -8,8 +10,11 @@ import {
 	FaAward,
 	FaCheckCircle,
 } from "react-icons/fa";
+import ImageViewer from "@/components/images/ImageViewer";
 
 const WhoWeAre = () => {
+	const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
+
 	const stats = [
 		{
 			icon: <FaUserMd className="text-3xl" />,
@@ -52,9 +57,10 @@ const WhoWeAre = () => {
 								alt="Modern Healthcare Facility"
 								width={600}
 								height={400}
-								className={`who-we-are-image`}
+								className={`who-we-are-image cursor-pointer`}
 								priority
 								unoptimized={true}
+								onClick={() => setIsImageViewerOpen(true)}
 							/>
 							<div className={`who-we-are-stat-exp`}>
 								<p className={`text-3xl font-bold`}>10+</p>
@@ -62,6 +68,19 @@ const WhoWeAre = () => {
 							</div>
 						</div>
 					</div>
+
+					<ImageViewer
+						isOpen={isImageViewerOpen}
+						onClose={() => setIsImageViewerOpen(false)}>
+						<Image
+							src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?q=80&w=2000&auto=format&fit=crop"
+							alt="Modern Healthcare Facility"
+							width={1200}
+							height={800}
+							className="object-contain"
+							unoptimized={true}
+						/>
+					</ImageViewer>
 
 					<div className={`space-y-8`}>
 						<div>
@@ -91,11 +110,9 @@ const WhoWeAre = () => {
 								<FaArrowRight className={`text-lg`} />
 							</button>
 						</Link>
-            <div className={`grid grid-cols-3 gap-4`}>
-            {stats.map((stat, index) => (
-								<div
-									key={index}
-									className={`stats-data`}>
+						<div className={`grid grid-cols-3 gap-4`}>
+							{stats.map((stat, index) => (
+								<div key={index} className={`stats-data`}>
 									<div className="text-[#2da3cf] dark:text-[#56d2ff] mb-2">
 										{stat.icon}
 									</div>
@@ -107,7 +124,7 @@ const WhoWeAre = () => {
 									</div>
 								</div>
 							))}
-            </div>
+						</div>
 					</div>
 				</div>
 			</div>
