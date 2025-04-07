@@ -40,4 +40,28 @@
 	.who-we-are-separator {
 		@apply w-24 h-1.5 bg-gradient-to-r from-[#125872] to-[#2da3cf] dark:from-[#56d2ff] dark:to-[#2da3cf] mx-auto rounded-full;
 	}
+	.who-we-are-column {
+		@apply grid lg:grid-cols-2 gap-16 items-center;
+	}
+	.who-we-are-unknown {
+		@apply absolute inset-0 bg-[#125872] transform rotate-6 rounded-2xl opacity-10 group-hover:rotate-8 transition-transform duration-300;
+	}
+	.who-we-are-background {
+		@apply relative z-10 bg-white dark:bg-gray-800 p-3 rounded-2xl shadow-xl transition-transform duration-500 hover:-translate-y-2;
+	}
+	.who-we-are-image {
+		@apply rounded-xl object-cover w-full h-[400px];
+	}
+	.who-we-are-stat-exp {
+		@apply absolute -bottom-8 -right-8 bg-gradient-to-r from-[#125872] to-[#2da3cf] text-white p-6 rounded-2xl shadow-xl hidden lg:block transform transition-transform duration-300 hover:scale-105;
+	}
+	.who-we-are h3 {
+		@apply text-3xl font-bold text-[#125872] dark:text-[#56d2ff] mb-4;
+	}
+	.connect-btn {
+		@apply bg-gradient-to-r from-[#125872] to-[#2da3cf] px-8 py-4 rounded-full flex items-center space-x-3 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-95;
+	}
+	.stats-data {
+		@apply text-center p-4 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1;
+	}
 }
