@@ -1,15 +1,10 @@
 "use client";
 
 import React, { JSX } from "react";
-import { Zap, Earth, Shield, Briefcase, ArrowRight } from "lucide-react";
+import { Zap, Earth, Shield, Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-};
 
 interface MissionVisionCardProps {
   title: string;
