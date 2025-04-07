@@ -1,7 +1,6 @@
 import React from "react";
 import { RNChildProp } from "@/@types/interface/Interface";
 import { Metadata } from "next";
-import "./about.css";
 
 export const metadata: Metadata = {
 	title: "Dreach.in | About Us",
