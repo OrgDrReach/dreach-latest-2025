@@ -2974,6 +2974,7 @@ __metadata:
     embla-carousel-react: "npm:^8.5.2"
     eslint: "npm:^9"
     eslint-config-next: "npm:15.2.4"
+    framer-motion: "npm:^12.6.3"
     input-otp: "npm:^1.4.2"
     lucide-react: "npm:^0.487.0"
     next: "npm:15.2.4"
@@ -3614,6 +3615,28 @@ __metadata:
   dependencies:
     is-callable: "npm:^1.2.7"
   checksum: 10c0/0e0b50f6a843a282637d43674d1fb278dda1dd85f4f99b640024cfb10b85058aac0cc781bf689d5fe50b4b7f638e91e548560723a4e76e04fe96ae35ef039cee
+  languageName: node
+  linkType: hard
+
+"framer-motion@npm:^12.6.3":
+  version: 12.6.3
+  resolution: "framer-motion@npm:12.6.3"
+  dependencies:
+    motion-dom: "npm:^12.6.3"
+    motion-utils: "npm:^12.6.3"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10c0/be583aeeccfe23902a2676724f66a747e0fa976d94eb3471bd6f9b57ab1eab5b7c08b851728d6b2b5928e8b578c62aa8ec61c47bf6059f8aac76211c8d39e26f
   languageName: node
   linkType: hard
 
@@ -4471,6 +4494,22 @@ __metadata:
   version: 1.2.8
   resolution: "minimist@npm:1.2.8"
   checksum: 10c0/19d3fcdca050087b84c2029841a093691a91259a47def2f18222f41e7645a0b7c44ef4b40e88a1e58a40c84d2ef0ee6047c55594d298146d0eb3f6b737c20ce6
+  languageName: node
+  linkType: hard
+
+"motion-dom@npm:^12.6.3":
+  version: 12.6.3
+  resolution: "motion-dom@npm:12.6.3"
+  dependencies:
+    motion-utils: "npm:^12.6.3"
+  checksum: 10c0/ed3ff16a2e4d40fc72298f890863222d7ee008888bd6889e5ecbe81a9a5d2d23903289f35796e2e16952e21a270cbd609d74fd30399ce7a684a0f7f855c18251
+  languageName: node
+  linkType: hard
+
+"motion-utils@npm:^12.6.3":
+  version: 12.6.3
+  resolution: "motion-utils@npm:12.6.3"
+  checksum: 10c0/d44ea5b1f2a1b1e03033ae76132f1b431d117c3f205152f9811283cd7ca7782e9d499f4bdb460c64b6668ac64905fcc79636a38b40d37759f9d23b0673098534
   languageName: node
   linkType: hard
 
