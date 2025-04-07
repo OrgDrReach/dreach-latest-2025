@@ -55,13 +55,9 @@ const About = () => {
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className="group relative bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10
-                           hover:bg-white/10 transition-all duration-300"
+                  className="group relative bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:bg-white/10 transition-all duration-300"
                 >
-                  <div
-                    className="absolute -inset-px bg-gradient-to-r from-[#00feff] to-[#ff7c25] rounded-xl opacity-0 
-                                group-hover:opacity-20 transition-opacity duration-300"
-                  ></div>
+                  <div className="absolute -inset-px bg-gradient-to-r from-[#00feff] to-[#ff7c25] rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                   <div className="relative">
                     <div className="w-12 h-1 bg-[#00feff] mb-4 group-hover:w-16 transition-all duration-300"></div>
                     <p className="text-white/90 font-medium">{feature}</p>
