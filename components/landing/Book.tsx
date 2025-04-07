@@ -48,11 +48,11 @@ const Book = ({ onClick }: { onClick?: () => void }) => {
 					className="fixed z-10 inset-0 backdrop-blur-sm bg-black/30 overflow-y-auto h-full w-full flex justify-center items-start md:items-center pt-10 md:pt-0"
 					onClick={handleCloseModal}>
 					<div
-						className="relative bg-white/90 backdrop-filter rounded-lg shadow-lg p-6 mx-4 my-10 md:max-w-lg md:mx-auto"
+						className="relative bg-white/90 dark:bg-gray-900 backdrop-filter rounded-lg shadow-lg p-6 mx-4 my-10 md:max-w-lg md:mx-auto"
 						onClick={handleModalClick} // Add click handler to prevent bubbling
 					>
 						<div className="flex justify-between items-center">
-							<h3 className="text-xl font-semibold text-gray-900">
+							<h3 className="text-xl font-semibold text-gray-900 dark:text-white">
 								Confirm Your Booking
 							</h3>
 							<div
@@ -77,25 +77,27 @@ const Book = ({ onClick }: { onClick?: () => void }) => {
 							<input
 								type="email"
 								name="email"
+                                autoComplete="email"
 								placeholder="Enter your email"
 								onChange={(e) => setEmail(e.target.value)}
-								className="w-full text-black px-4 py-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 transition duration-200"
+								className="w-full text-black dark:text-white px-4 py-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 transition duration-200"
 								required
 							/>
 							<input
 								type="date"
 								name="date"
 								onChange={(e) => setDate(e.target.value)}
-								className="w-full text-gray-400 px-4 py-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring focus:text-black focus:ring-teal-500 focus:ring-opacity-50 transition duration-200"
+								className="w-full text-gray-400 dark:text-gray-100 px-4 py-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring focus:text-black focus:ring-teal-500 focus:ring-opacity-50 transition duration-200"
 								required
 								placeholder="Select your Date"
 							/>
 							<input
 								type="text"
 								name="number"
+                                autoComplete="tel"
 								placeholder="Phone Number"
 								onChange={(e) => setNumber(e.target.value)}
-								className="w-full text-black px-4 py-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 transition duration-200"
+								className="w-full text-black dark:text-white px-4 py-3 rounded-lg border border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50 transition duration-200"
 								required
 							/>
 							<button
