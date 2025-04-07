@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@layer components {
+	/* About */
+	.about {
+		--primary-color: #31addb;
+		--secondary-color: #125872;
+		--text-color: #333;
+		--bg-color: #f9f9f9;
+	}
+	.about-hero {
+		background: linear-gradient(
+			135deg,
+			var(--primary-color),
+			var(--secondary-color)
+		);
+		color: white;
+		text-align: center;
+		clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+		@apply py-28 p-10;
+	}
+	.about-hero h1 {
+		@apply text-5xl font-semibold mb-5;
+	}
+	.about-hero p {
+		@apply font-[400];
+	}
+
+	/* Who We Are */
+	.who-we-are {
+		@apply py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800;
+	}
+	.who-we-are-container {
+		@apply container mx-auto px-4 max-w-7xl;
+	}
+	.who-we-are h2 {
+		@apply text-4xl lg:text-5xl font-bold text-[#125872] dark:text-[#56d2ff] mb-4;
+	}
+	.who-we-are-separator {
+		@apply w-24 h-1.5 bg-gradient-to-r from-[#125872] to-[#2da3cf] dark:from-[#56d2ff] dark:to-[#2da3cf] mx-auto rounded-full;
+	}
+}
