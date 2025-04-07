@@ -82,9 +82,9 @@ const WhoWeAre = () => {
 						/>
 					</ImageViewer>
 
-					<div className={`space-y-8`}>
+					<div className={`space-y-8 lg:text-left text-center`}>
 						<div>
-							<h3>Revolutionizing Healthcare Access</h3>
+							<h3 className="lg:text-left text-center">Revolutionizing Healthcare Access</h3>
 							<p
 								className={`text-lg text-gray-700 dark:text-gray-300 leading-relaxed`}>
 								Dr. Reach is on a mission to transform healthcare by making it
@@ -94,26 +94,30 @@ const WhoWeAre = () => {
 								reliable solutions.
 							</p>
 						</div>
-						<div className={`grid grid-cols-2 gap-4`}>
+						<div className={`grid grid-cols-1 md:grid-cols-2 gap-4`}>
 							{highlights.map((highlight, index) => (
 								<div
 									key={index}
-									className="flex items-center space-x-2 text-gray-700 dark:text-gray-300">
+									className="flex items-center lg:justify-start justify-center space-x-2 text-gray-700 dark:text-gray-300">
 									<FaCheckCircle className="text-[#2da3cf] dark:text-[#56d2ff] flex-shrink-0" />
 									<span>{highlight}</span>
 								</div>
 							))}
 						</div>
-						<Link href={"/contact"} className={`inline-block`}>
-							<button className={`connect-btn`}>
-								<span className={`text-lg`}>Connect with Us</span>
-								<FaArrowRight className={`text-lg`} />
-							</button>
-						</Link>
+						<div className="flex lg:justify-start justify-center">
+							<Link href={"/contact"} className={`inline-block`}>
+								<button className={`connect-btn`}>
+									<span className={`text-lg`}>Connect with Us</span>
+									<FaArrowRight className={`text-lg`} />
+								</button>
+							</Link>
+						</div>
+						
+						{/* Stats section remains in grid */}
 						<div className={`grid grid-cols-3 gap-4`}>
 							{stats.map((stat, index) => (
-								<div key={index} className={`stats-data`}>
-									<div className="text-[#2da3cf] dark:text-[#56d2ff] mb-2">
+								<div key={index} className={`stats-data text-center flex flex-col items-center`}>
+									<div className="text-[#2da3cf] dark:text-[#56d2ff] mb-2 flex justify-center">
 										{stat.icon}
 									</div>
 									<div className="font-bold text-2xl text-[#125872] dark:text-[#56d2ff]">
