@@ -230,31 +230,6 @@
 /* Pages */
 @layer components {
 	/* About */
-	/* .about {
-		--primary-color: #31addb;
-		--secondary-color: #125872;
-		--text-color: #333;
-		--bg-color: #f9f9f9;
-	}
-	.about-hero {
-		background: linear-gradient(
-			135deg,
-			var(--primary-color),
-			var(--secondary-color)
-		);
-		color: white;
-		text-align: center;
-		clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-		@apply py-28 p-10;
-	}
-	.about-hero h1 {
-		@apply text-5xl font-semibold mb-5;
-	}
-	.about-hero p {
-		@apply font-[400];
-	} */
-
-	/* About */
 	.about {
 		--primary-color: #31addb;
 		--secondary-color: #125872;
