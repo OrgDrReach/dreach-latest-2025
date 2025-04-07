@@ -19,7 +19,7 @@ const Hero: React.FC = () => {
 	const handleClick = async () => {
 		setIsLoading(true);
 		await delay(500); // Reduced delay for better UX
-		setShowModal(prev => !prev); // Toggle instead of always setting to true
+		setShowModal((prev) => !prev); // Toggle instead of always setting to true
 		setIsLoading(false);
 	};
 
@@ -60,7 +60,7 @@ const Hero: React.FC = () => {
 						</div>
 						<div className={`w-full md:w-[80%] mx-auto lg:mx-0`}>
 							<div
-								className={`bg-white/10 lg:bg-none lg:bg-opacity-0 rounded-lg p-4 sm:p-6 md:p-8`}>
+								className={`bg-white/10 lg:bg-transparent rounded-lg p-4 sm:p-6 md:p-8`}>
 								<div
 									className={`flex gap-4 sm:gap-6 md:gap-8 justify-center lg:justify-start`}>
 									<div className={`text-center flex flex-col lg:gap-2`}>
