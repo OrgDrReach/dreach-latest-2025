@@ -1,5 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
+import Hero from "@/components/landing/Hero";
+import Banner from "@/components/landing/Banner";
 
 export const metadata: Metadata = {
 	title: "Dreach.in",
@@ -10,7 +12,10 @@ export const metadata: Metadata = {
 const Home: React.FC = () => {
 	return (
 		<main>
-			<div>Home</div>
+			<div>
+				<Hero />
+				<Banner />
+			</div>
 		</main>
 	);
 };
