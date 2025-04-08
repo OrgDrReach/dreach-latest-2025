@@ -1,3 +1,4 @@
+import FAQ from "@/components/page-components/services/faq/FAQ";
 import ServiceHero from "@/components/page-components/services/hero/ServiceHero";
 import OnlineConsultation from "@/components/page-components/services/online-consultation/OnlineConsultation";
 import OurServices from "@/components/page-components/services/our-services/OurServices";
@@ -14,6 +15,7 @@ export default function page() {
 				<ServiceContext />
 				<LearnMore />
 				<OnlineConsultation />
+				<FAQ />
 			</div>
 		</main>
 	);
