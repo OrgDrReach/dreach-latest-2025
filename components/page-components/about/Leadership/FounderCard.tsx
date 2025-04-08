@@ -26,7 +26,7 @@ const FounderCard: React.FC<FounderCardProps> = ({
 	const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
 
 	return (
-		<>
+		<main>
 			<div
 				className={`flex flex-col md:flex-row bg-[#135872] ${
 					reverse ? "md:flex-row-reverse border-r-8" : "border-l-8"
@@ -82,7 +82,7 @@ const FounderCard: React.FC<FounderCardProps> = ({
 					className="max-w-full max-h-[85vh] object-contain"
 				/>
 			</ImageViewer>
-		</>
+		</main>
 	);
 };
 
