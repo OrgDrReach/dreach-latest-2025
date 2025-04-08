@@ -1,9 +1,10 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import Book from "@/components/landing/Book";
 
 const ServiceHero: React.FC = () => {
-	const [isLoading, setIsLoading] = React.useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleClick = async () => {
 		setIsLoading(true);
