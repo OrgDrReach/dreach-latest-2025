@@ -30,7 +30,7 @@ const ServiceHero: React.FC = () => {
 
 			{/* Content Container */}
 			<div className="relative container mx-auto px-4 py-20">
-				<div className="grid lg:grid-cols-2 gap-16 items-center">
+				<div className="grid lg:grid-cols-2 gap-2 items-center">
 					{/* Left Content */}
 					<div className="space-y-8">
 						<h1 className="text-5xl md:text-6xl font-bold leading-tight">
@@ -72,7 +72,9 @@ const ServiceHero: React.FC = () => {
 					</div>
 
 					{/* Right Content - Stats */}
-					<div className="grid grid-cols-2 gap-6">
+					<div className="grid grid-cols-2 gap-4 max-w-[400px] w-full ml-auto">
+						{" "}
+						{/* Reduced max-width and gap */}
 						{[
 							{ number: "24/7", text: "Available Support" },
 							{ number: "100+", text: "Healthcare Experts" },
@@ -81,16 +83,20 @@ const ServiceHero: React.FC = () => {
 						].map((stat, index) => (
 							<div
 								key={index}
-								className="p-8 rounded-xl 
+								className="aspect-square p-3 rounded-lg flex flex-col justify-center items-center
                   bg-white/50 backdrop-blur-sm
                   dark:bg-white/5 dark:backdrop-blur-sm
                   transition-all duration-300 hover:transform hover:scale-105
                   border border-[#31ADDB]/20 dark:border-[#31ADDB]/20
                   shadow-lg hover:shadow-xl">
-								<h3 className="text-4xl font-bold text-[#31ADDB]">
+								<h3 className="text-2xl font-bold text-[#31ADDB]">
+									{" "}
+									{/* Reduced font size */}
 									{stat.number}
 								</h3>
-								<p className="mt-2 text-lg text-[#125872] dark:text-white/80">
+								<p className="text-sm text-center text-[#125872] dark:text-white/80">
+									{" "}
+									{/* Reduced font size */}
 									{stat.text}
 								</p>
 							</div>
