@@ -26,6 +26,8 @@ export default function RootLayout({
 		"/contact",
 		"/doctors",
 		"/services",
+		"/services/home-care",
+		"/services/integrated-care",
 		"/appointment",
 	].includes(pathName);
 
@@ -36,6 +38,8 @@ export default function RootLayout({
 		"/contact",
 		"/doctors",
 		"/services",
+		"/services/home-care",
+		"/services/integrated-care",
 		"/appointment",
 	].includes(pathName);
 
