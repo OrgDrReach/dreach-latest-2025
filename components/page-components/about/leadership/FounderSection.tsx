@@ -2,7 +2,7 @@ import React from "react";
 import FounderCard from "./FounderCard";
 import { FaLinkedin, FaTwitter, FaEnvelope, FaGithub } from "react-icons/fa";
 
-const iconsDimension = `w-10 h-10`;
+const iconsDimension = `w-8 h-8`;
 
 const founders = [
   {
