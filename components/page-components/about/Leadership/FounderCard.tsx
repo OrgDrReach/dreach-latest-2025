@@ -32,11 +32,11 @@ const FounderCard: React.FC<FounderCardProps> = ({
 					reverse ? "md:flex-row-reverse" : "md:flex-row"
 				} bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl overflow-hidden shadow-2xl hover:shadow-indigo-500/20 transition-all duration-300`}>
 				{/* Image Section */}
-				<div className="md:w-1/4 relative group">
+				<div className="md:w-1/3 relative group p-4 flex items-center justify-center">
 					<div
-						className="relative w-48 h-48 mx-auto cursor-pointer overflow-hidden rounded-lg"
+						className="relative w-full aspect-[3/4] cursor-pointer overflow-hidden rounded-lg"
 						onClick={() => setIsImageViewerOpen(true)}>
-						<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6 z-10">
+						<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-2 z-10">
 							<span className="text-white text-sm px-4 py-2 bg-black/40 backdrop-blur-sm rounded-full">
 								Click to expand
 							</span>
@@ -45,10 +45,10 @@ const FounderCard: React.FC<FounderCardProps> = ({
 							src={imageSrc}
 							fill
 							priority
-							sizes="(max-width: 768px) 100vw, 25vw"
+							sizes="(max-width: 768px) 100vw, 33vw"
 							style={{
-								objectFit: "cover",
-								objectPosition: "center top",
+								objectFit: "contain",
+								objectPosition: "center center",
 							}}
 							alt={`${name}, ${title}`}
 							className="transition-transform duration-500 group-hover:scale-110"
