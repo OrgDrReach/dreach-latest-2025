@@ -2,13 +2,24 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Book from "@/components/landing/Book";
+import { delay } from "@/lib/utils";
 
 const ServiceHero: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [showModal, setShowModal] = React.useState(false);
+	const [isButtonVisible, setIsButtonVisible] = React.useState(false);
 
+	React.useEffect(() => {
+		const loadButton = async () => {
+			await delay(1000);
+			setIsButtonVisible(true);
+		};
+		loadButton();
+	}, []);
 	const handleClick = async () => {
 		setIsLoading(true);
-		await new Promise((resolve) => setTimeout(resolve, 500));
+		await delay(500); // Reduced delay for better UX
+		setShowModal((prev) => !prev); // Toggle instead of always setting to true
 		setIsLoading(false);
 	};
 
@@ -44,13 +55,17 @@ const ServiceHero: React.FC = () => {
 						</p>
 
 						<div className="flex flex-wrap gap-4">
-							<div
-								onClick={handleClick}
-								className="px-8 py-4 rounded-lg transition-all duration-300
+							{isButtonVisible && (
+								<div
+									onClick={handleClick}
+									className="px-8 py-4 rounded-lg transition-all duration-300
                   bg-[#31ADDB] text-white hover:bg-[#125872]
                   shadow-lg hover:shadow-xl dark:hover:bg-[#31ADDB]/80 cursor-pointer">
-								{isLoading ? "Loading..." : <Book onClick={handleClick} />}
-							</div>
+									{isLoading ?
+										"Loading..."
+									:	<Book onClick={showModal ? handleClick : undefined} />}
+								</div>
+							)}
 							<button
 								className="px-8 py-4 rounded-lg transition-all duration-300
                 border-2 border-[#31ADDB] text-[#31ADDB]
