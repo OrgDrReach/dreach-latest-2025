@@ -27,11 +27,10 @@ const FounderCard: React.FC<FounderCardProps> = ({
 			<div className="relative my-auto md:h-auto md:w-[400px]">
 				<Image
 					src={imageSrc}
-					width={10}
-					height={10}
+					width={600}
+					height={200}
 					alt={`${name}, ${title}`}
-					layout="responsive"
-					className="transition-transform duration-500 p-5 h-40 transform hover:scale-105"
+					className="transition-transform duration-500 p-5 transform hover:scale-105"
 				/>
 			</div>
 			<div className="lg:px-10 p-5 text-justify sm-text-start flex flex-col justify-center md:w-full">
