@@ -26,7 +26,7 @@ const ServiceHero: React.FC = () => {
 	return (
 		<main className="relative min-h-[600px] bg-gradient-to-br from-white to-[#f8fdff] dark:from-slate-900 dark:to-slate-800">
 			{/* Background Pattern */}
-			<div className="absolute inset-0 bg-[url('/assets/pattern-bg.svg')] opacity-5 dark:opacity-10"></div>
+			<div className="absolute inset-0 opacity-5 dark:opacity-10"></div>
 
 			{/* Content Container */}
 			<div className="relative container mx-auto px-4 py-20">
