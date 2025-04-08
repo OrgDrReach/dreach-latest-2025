@@ -85,7 +85,7 @@ const LeadPost = ({
 			</div>
 
 			<ImageViewer isOpen={isImageOpen} onClose={() => setIsImageOpen(false)}>
-				<ImageViewer
+				<Image
 					src={imgSrc}
 					alt={title}
 					width={800}
