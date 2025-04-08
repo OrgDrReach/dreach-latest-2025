@@ -1,5 +1,6 @@
 import FounderSection from "@/components/page-components/about/leadership/FounderSection";
 import OurMissionVision from "@/components/page-components/about/mission-vision/OurMissionVision";
+import OurTeam from "@/components/page-components/about/our-team/OurTeam";
 import WhoWeAre from "@/components/page-components/about/whoweare/WhoWeAre";
 
 export default function AboutUs() {
@@ -18,6 +19,7 @@ export default function AboutUs() {
 				<WhoWeAre />
 				<OurMissionVision />
 				<FounderSection />
+				<OurTeam />
 			</div>
 		</main>
 	);
