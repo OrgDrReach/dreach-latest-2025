@@ -2,6 +2,8 @@ import React from "react";
 import FounderCard from "./FounderCard";
 import { FaLinkedin, FaTwitter, FaEnvelope, FaGithub } from "react-icons/fa";
 
+const iconsDimension = `w-10 h-10`;
+
 const founders = [
   {
     name: "Rewant Raj",
@@ -9,9 +11,9 @@ const founders = [
     bio: `The inspiration behind Dr. Reach came from a deeply personal experience. My mother, living in a remote area, faced significant challenges in accessing medical care for her brain tumor. She endured high costs and exhaustion from constant travel and stays in different locations to receive the care she needed. Seeing her struggle, I felt driven to create a solution that would break down these barriers to quality healthcare. Dr. Reach was born out of a desire to ensure accessibility to comprehensive medical assistance and optimal treatment options without undue hardship, so that others like my mother wouldn't have to face similar obstacles.`,
     imageSrc: "/assets/teamImages/founders/Rewant_Raj.png",
     socialLinks: [
-      { icon: <FaLinkedin />, url: "https://linkedin.com/in/johndoe" },
-      { icon: <FaTwitter />, url: "https://twitter.com/johndoe" },
-      { icon: <FaEnvelope />, url: "mailto:john@example.com" },
+      { icon: <FaLinkedin className={iconsDimension} />, url: "https://linkedin.com/in/johndoe" },
+      { icon: <FaTwitter className={iconsDimension} />, url: "https://twitter.com/johndoe" },
+      { icon: <FaEnvelope className={iconsDimension} />, url: "mailto:john@example.com" },
     ],
   },
   {
@@ -20,9 +22,9 @@ const founders = [
     bio: `The inspiration behind Dr. Reach comes from a deeply personal experience. My father battled Stage 5 Chronic Kidney Disease (CKD), and throughout his journey, we faced immense challenges—frequent hospital visits, high medical costs, and the emotional and physical toll of navigating a complex healthcare system. Witnessing his struggle firsthand made me realize the urgent need for a seamless, accessible, and efficient healthcare solution. Dr. Reach was born from this vision—to ensure that no one has to go through the same hardship just to receive the care they deserve. Our goal is to bridge the gap between patients and quality healthcare, making essential medical services more affordable, accessible, and integrated for everyone, regardless of their location or financial status.`,
     imageSrc: "/assets/teamImages/founders/Aditya_Kumar.jpeg",
     socialLinks: [
-      { icon: <FaLinkedin />, url: "https://linkedin.com/in/janesmith" },
-      { icon: <FaGithub />, url: "https://github.com/janesmith" },
-      { icon: <FaEnvelope />, url: "mailto:jane@example.com" },
+      { icon: <FaLinkedin className={iconsDimension} />, url: "https://linkedin.com/in/janesmith" },
+      { icon: <FaGithub className={iconsDimension} />, url: "https://github.com/janesmith" },
+      { icon: <FaEnvelope className={iconsDimension} />, url: "mailto:jane@example.com" },
     ],
     reverse: true,
   },
