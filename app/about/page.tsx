@@ -1,3 +1,5 @@
+import FounderSection from "@/components/page-components/about/Leadership/FounderSection";
+import OurMissionVision from "@/components/page-components/about/mission-vision/OurMissionVision";
 import WhoWeAre from "@/components/page-components/about/whoweare/WhoWeAre";
 
 export default function AboutUs() {
@@ -14,6 +16,8 @@ export default function AboutUs() {
       {/* stacked about components */}
       <div>
         <WhoWeAre />
+        <OurMissionVision />
+        <FounderSection />
       </div>
     </main>
   );
