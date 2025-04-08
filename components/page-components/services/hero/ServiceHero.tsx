@@ -33,12 +33,6 @@ const ServiceHero: React.FC = () => {
 				<div className="grid lg:grid-cols-2 gap-16 items-center">
 					{/* Left Content */}
 					<div className="space-y-8">
-						<div className="inline-block px-4 py-2 rounded-full bg-[#31ADDB]/10 backdrop-blur-sm">
-							<span className="font-medium text-[#125872] dark:text-white">
-								Our Services
-							</span>
-						</div>
-
 						<h1 className="text-5xl md:text-6xl font-bold leading-tight">
 							<span className="text-[#125872] dark:text-white">
 								Healthcare Solutions
