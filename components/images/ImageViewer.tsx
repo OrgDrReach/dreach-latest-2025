@@ -11,7 +11,7 @@ const ImageViewer: FC<ImageViewerProps> = ({ isOpen, onClose, children }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md"
       onClick={onClose}
     >
       <div
@@ -19,7 +19,7 @@ const ImageViewer: FC<ImageViewerProps> = ({ isOpen, onClose, children }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2"
+          className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-black/70"
           onClick={onClose}
         >
           <svg
