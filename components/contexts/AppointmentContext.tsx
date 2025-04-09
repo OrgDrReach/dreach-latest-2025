@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
-import { IProvider, EProviderType } from "@/types/provider.d.types";
+import { Provider, EProviderType } from "@/types/provider.d.types";
 import {
   Appointment,
   EAppointmentStatus,
@@ -9,8 +9,8 @@ import {
 
 interface IAppointmentContextType {
   loading: boolean;
-  selectedProvider: IProvider | null;
-  setSelectedProvider: (provider: IProvider | null) => void;
+  selectedProvider: Provider | null;
+  setSelectedProvider: (provider: Provider | null) => void;
   bookAppointment: (details: IAppointmentDetails) => Promise<void>;
 }
 
@@ -37,7 +37,7 @@ export const AppointmentContext = createContext<IAppointmentContextType>({
 
 export function AppointmentProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
-  const [selectedProvider, setSelectedProvider] = useState<IProvider | null>(
+  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(
     null,
   );
 
