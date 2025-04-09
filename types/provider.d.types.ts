@@ -19,10 +19,6 @@ export interface IAddress {
 	state: string;
 	country: string;
 	postalCode: string;
-	coordinates?: {
-		latitude: number;
-		longitude: number;
-	};
 }
 
 export interface ITimeSlot {
