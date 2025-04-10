@@ -116,7 +116,6 @@ const DoctorCTA = () => {
               <Link
                 href="/doctors"
                 className="group relative inline-flex items-center"
-                legacyBehavior
               >
                 <motion.button
                   whileHover={{ scale: 1.05 }}
