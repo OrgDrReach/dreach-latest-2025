@@ -113,6 +113,7 @@ const Navi = ({ openNav, isNavOpen }: Props & { isNavOpen: boolean }) => {
               <Link
                 className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg"
                 href={`${auth ? `/dashboard` : `/auth/login`}`}
+                legacyBehavior
               >
                 {" "}
                 {auth ? `Dashboard` : `Get Started`}{" "}
@@ -216,7 +217,10 @@ const MobileNav = ({ nav, closeNav }: MobileNavProps) => {
           {/* CTA */}
           <div className="flex-col items-center justify-center gap-4">
             <div className="pb-2">
-              <Link href={`${auth ? `/dashboard` : `/auth/register`}`}>
+              <Link
+                href={`${auth ? `/dashboard` : `/auth/register`}`}
+                legacyBehavior
+              >
                 <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg">
                   {" "}
                   {auth ? `Dashboard` : `Get Started`}{" "}

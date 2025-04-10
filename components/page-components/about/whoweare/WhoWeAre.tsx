@@ -110,7 +110,7 @@ const WhoWeAre = () => {
               ))}
             </div>
             <div className="flex lg:justify-start justify-center">
-              <Link href={"/contact"} className={`inline-block`}>
+              <Link href={"/contact"} className={`inline-block`} legacyBehavior>
                 <button className={`connect-btn`}>
                   <span className={`text-lg`}>Connect with Us</span>
                   <FaArrowRight className={`text-lg`} />

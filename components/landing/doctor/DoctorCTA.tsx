@@ -51,7 +51,6 @@ const DoctorCTA = () => {
       {/* Background Decoration */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#125872]/5 to-[#32addb]/5 pointer-events-none" />
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#125872]/10 rounded-full blur-3xl" />
-
       <div className="container mx-auto px-4 relative">
         <div className="max-w-4xl mx-auto">
           <motion.div
@@ -117,6 +116,7 @@ const DoctorCTA = () => {
               <Link
                 href="/doctors"
                 className="group relative inline-flex items-center"
+                legacyBehavior
               >
                 <motion.button
                   whileHover={{ scale: 1.05 }}

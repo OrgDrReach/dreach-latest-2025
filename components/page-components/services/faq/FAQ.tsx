@@ -9,7 +9,7 @@ export default function FAQ() {
     <section className="relative py-16 lg:py-24 overflow-hidden">
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800 -z-10" />
-      
+
       {/* Content Container */}
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header Section */}
@@ -44,7 +44,7 @@ export default function FAQ() {
                 alt="Doctor and Patient"
                 className="w-full h-auto"
               />
-              
+
               {/* Stats Card */}
               <div className="absolute bottom-4 left-4 bg-white/95 dark:bg-slate-800/95 p-4 rounded-xl shadow-lg">
                 <div className="flex items-center gap-3">

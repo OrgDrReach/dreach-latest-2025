@@ -75,7 +75,6 @@ const ServiceSummary = () => {
         <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-sky-100/50 to-transparent dark:from-sky-900/20" />
         <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-sky-100/50 to-transparent dark:from-sky-900/20" />
       </div>
-
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -100,7 +99,7 @@ const ServiceSummary = () => {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
         >
           {services.map((service, index) => (
-            <Link href={service.link} key={index}>
+            <Link href={service.link} key={index} legacyBehavior>
               <motion.div
                 variants={itemVariants}
                 className="group relative bg-white/90 dark:bg-sky-950/50 backdrop-blur-sm rounded-xl p-4 md:p-5 
@@ -151,6 +150,7 @@ const ServiceSummary = () => {
               text-white text-sm font-semibold rounded-full hover:shadow-lg hover:shadow-sky-500/20 
               dark:hover:shadow-sky-500/10 transition-all duration-300 transform hover:-translate-y-0.5
               border border-sky-400/20 dark:border-sky-500/20"
+            legacyBehavior
           >
             Explore All Services
             <svg

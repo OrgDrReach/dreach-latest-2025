@@ -5,7 +5,6 @@ import { Zap, Earth, Shield, Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-
 interface MissionVisionCardProps {
   title: string;
   items: Array<{
