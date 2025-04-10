@@ -98,7 +98,7 @@ export const doctors: Provider[] = [
 				],
 			},
 		],
-		profileImage: "https://example.com/doctors/john-smith.jpg",
+		profileImage: "https://randomuser.me/api/portraits/men/1.jpg",
 		consultMode: [EDoctorConsultMode.CLINIC, EDoctorConsultMode.VIDEO_CONSULT],
 	},
 	{
@@ -175,7 +175,7 @@ export const doctors: Provider[] = [
 				],
 			},
 		],
-		profileImage: "https://example.com/doctors/sarah-johnson.jpg",
+		profileImage: "https://randomuser.me/api/portraits/women/2.jpg",
 		consultMode: [
 			EDoctorConsultMode.CLINIC,
 			EDoctorConsultMode.VIDEO_CONSULT,
