@@ -56,7 +56,7 @@ export default function page() {
 				<DoctorHero />
 				<DoctorFeatured />
 				<div className={`mb-8 px-4`}>
-				<SearchAndFilters
+					<SearchAndFilters
 						initialLocation={userLocation}
 						onSearch={handleSearch}
 						isSearching={false}
