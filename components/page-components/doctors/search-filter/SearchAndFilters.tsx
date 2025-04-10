@@ -1,483 +1,462 @@
 "use client";
 
 import React, {
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-  useRef,
+	useState,
+	useCallback,
+	useMemo,
+	useEffect,
+	useRef,
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  FaSearch,
-  FaMapMarkerAlt,
-  FaCalendarAlt,
-  FaStethoscope,
-  FaTimes,
-  FaVideo,
-  FaUserMd,
-  FaUserNurse,
+	FaSearch,
+	FaMapMarkerAlt,
+	FaCalendarAlt,
+	FaStethoscope,
+	FaTimes,
+	FaVideo,
+	FaUserMd,
+	FaUserNurse,
 } from "react-icons/fa";
 import { debounce } from "lodash";
 import { getUserLocation, LocationData } from "@/utils/location";
 import { toast } from "sonner";
 import { doctors } from "@/data/doctorData";
-import { IAddress } from "@/types/provider.d.types";
+import { useDoctorStore } from "@/lib/stores/doctorStore";
+import { IDoctor, EDoctorConsultMode } from "@/types/doctor.d.types";
+import { IAddress, Provider } from "@/types/provider.d.types";
 
 interface LocationSuggestion {
-  id: string;
-  text: string;
-  address: IAddress;
+	id: string;
+	text: string;
+	address: IAddress;
 }
 
-// Improved TypeScript interfaces
 export interface SearchState {
-  query: string;
-  location: string;
+	query: string;
+	location: string;
 }
 
 export interface FilterState {
-  availableToday: boolean;
-  nextThreeDays: boolean;
-  femaleDoctors: boolean;
-  maleDoctors: boolean;
-  videoConsult: boolean;
+	availableToday: boolean;
+	nextThreeDays: boolean;
+	femaleDoctors: boolean;
+	maleDoctors: boolean;
+	videoConsult: boolean;
 }
 
 type TabType = "all" | "online" | "clinic";
 
-// Extracted filter configurations for better maintainability
+// Enhanced filter configurations with improved TypeScript support
 const FILTER_CONFIG = [
-  {
-    key: "availableToday",
-    label: "Available Today",
-    icon: FaStethoscope,
-    iconColor: "text-blue-500",
-  },
-  {
-    key: "nextThreeDays",
-    label: "Next 3 Days",
-    icon: FaCalendarAlt,
-    iconColor: "text-green-500",
-  },
-  {
-    key: "femaleDoctors",
-    label: "Female Doctors",
-    icon: FaUserNurse,
-    iconColor: "text-purple-500",
-  },
-  {
-    key: "maleDoctors",
-    label: "Male Doctors",
-    icon: FaUserMd,
-    iconColor: "text-indigo-500",
-  },
-  {
-    key: "videoConsult",
-    label: "Video Consult",
-    icon: FaVideo,
-    iconColor: "text-teal-500",
-  },
+	{
+		key: "availableToday",
+		label: "Available Today",
+		icon: FaStethoscope,
+		iconColor: "text-blue-500 dark:text-blue-400",
+		description: "See doctors available for consultation today",
+	},
+	{
+		key: "nextThreeDays",
+		label: "Next 3 Days",
+		icon: FaCalendarAlt,
+		iconColor: "text-green-500 dark:text-green-400",
+		description: "View appointments in the next 3 days",
+	},
+	{
+		key: "femaleDoctors",
+		label: "Female Doctors",
+		icon: FaUserNurse,
+		iconColor: "text-purple-500 dark:text-purple-400",
+		description: "Filter for female healthcare providers",
+	},
+	{
+		key: "maleDoctors",
+		label: "Male Doctors",
+		icon: FaUserMd,
+		iconColor: "text-indigo-500 dark:text-indigo-400",
+		description: "Filter for male healthcare providers",
+	},
+	{
+		key: "videoConsult",
+		label: "Video Consult",
+		icon: FaVideo,
+		iconColor: "text-teal-500 dark:text-teal-400",
+		description: "Available for online video consultation",
+	},
 ] as const;
 
 interface SearchAndFiltersProps {
-  initialLocation?: LocationData | null;
-  onSearch: (
-    searchData: { query: string; location: string },
-    filterData: {
-      availableToday: boolean;
-      nextThreeDays: boolean;
-      femaleDoctors: boolean;
-      maleDoctors: boolean;
-      videoConsult: boolean;
-    },
-  ) => void;
-  isSearching: boolean; // Add this prop
+	initialLocation?: LocationData | null;
+	onSearch: (searchData: SearchState, filterData: FilterState) => void;
+	isSearching: boolean;
 }
 
 const DEBOUNCE_DELAY = 500;
 
 const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
-  initialLocation,
-  onSearch,
-  isSearching, // Add this prop
+	initialLocation,
+	onSearch,
+	isSearching,
 }) => {
-  const [activeTab, setActiveTab] = useState<TabType>("all");
-  const [search, setSearch] = useState<SearchState>({
-    query: "",
-    location: "",
-  });
-  const [filters, setFilters] = useState<FilterState>({
-    availableToday: false,
-    nextThreeDays: false,
-    femaleDoctors: false,
-    maleDoctors: false,
-    videoConsult: false,
-  });
-  const [locationSuggestions, setLocationSuggestions] = useState<
-    LocationSuggestion[]
-  >([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isLoadingLocation, setIsLoadingLocation] = useState(true);
-  const abortControllerRef = useRef<AbortController>(new AbortController());
+	const [activeTab, setActiveTab] = useState<TabType>("all");
+	const [search, setSearch] = useState<SearchState>({
+		query: "",
+		location: "",
+	});
+	const [filters, setFilters] = useState<FilterState>({
+		availableToday: false,
+		nextThreeDays: false,
+		femaleDoctors: false,
+		maleDoctors: false,
+		videoConsult: false,
+	});
+	const [locationSuggestions, setLocationSuggestions] = useState<
+		LocationSuggestion[]
+	>([]);
+	const [showSuggestions, setShowSuggestions] = useState(false);
+	const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+	const { searchDoctors, filteredDoctors } = useDoctorStore();
 
-  // Memoized location suggestions
-  const getLocationSuggestions = useMemo(
-    () =>
-      debounce((input: string): LocationSuggestion[] => {
-        if (!input) return [];
+	// Enhanced search functionality
+	const handleSearch = useCallback(
+		async (searchData: SearchState, filterData: FilterState) => {
+			const filtered = doctors.filter((doctor: Provider) => {
+				const isMatchingQuery =
+					searchData.query ?
+						doctor.name
+							.toLowerCase()
+							.includes(searchData.query.toLowerCase()) ||
+						(doctor as IDoctor).specialization.some((spec) =>
+							spec.toLowerCase().includes(searchData.query.toLowerCase())
+						)
+					:	true;
 
-        return doctors
-          .map((doc) => ({
-            id: `${doc.address[0].city}-${doc.address[0].state}`,
-            text: [
-              doc.address[0].city,
-              doc.address[0].state,
-              doc.address[0].country,
-            ]
-              .filter(Boolean)
-              .join(", "),
-            address: doc.address[0],
-          }))
-          .filter(
-            (loc, index, self) =>
-              loc.text.toLowerCase().includes(input.toLowerCase()) &&
-              index === self.findIndex((t) => t.id === loc.id),
-          )
-          .slice(0, 5);
-      }, 300),
-    [],
-  );
+				const isMatchingLocation =
+					searchData.location ?
+						doctor.address.some(
+							(addr) =>
+								addr.city
+									.toLowerCase()
+									.includes(searchData.location.toLowerCase()) ||
+								addr.state
+									.toLowerCase()
+									.includes(searchData.location.toLowerCase())
+						)
+					:	true;
 
-  // Debounced search with cleanup
-  const debouncedSearch = useMemo(
-    () =>
-      debounce(
-        async (searchData: SearchState, filterData: FilterState) => {
-          try {
-            await onSearch(searchData, filterData);
-          } catch (error) {
-            toast.error("Search failed. Please try again.");
-          }
-        },
-        DEBOUNCE_DELAY,
-        { leading: false, trailing: true },
-      ),
-    [onSearch],
-  );
+				const isMatchingFilters = {
+					videoConsult:
+						!filterData.videoConsult ||
+						(doctor as IDoctor).consultMode.includes(
+							EDoctorConsultMode.VIDEO_CONSULT
+						),
+					gender:
+						(!filterData.femaleDoctors && !filterData.maleDoctors) ||
+						(filterData.femaleDoctors && doctor.name.includes("Dr.")) ||
+						(filterData.maleDoctors && !doctor.name.includes("Dr.")),
+				};
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      debouncedSearch.cancel();
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-    };
-  }, [debouncedSearch]);
+				return (
+					isMatchingQuery &&
+					isMatchingLocation &&
+					Object.values(isMatchingFilters).every(Boolean)
+				);
+			});
 
-  const handleSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      setSearch((prev) => ({ ...prev, [name]: value }));
-      debouncedSearch({ ...search, [name]: value }, filters);
-    },
-    [search, filters, debouncedSearch],
-  );
+			searchDoctors(filtered);
+		},
+		[searchDoctors]
+	);
 
-  const toggleFilter = useCallback(
-    (filterKey: keyof FilterState) => {
-      setFilters((prev) => {
-        const newFilters = {
-          ...prev,
-          [filterKey]: !prev[filterKey],
-        };
-        debouncedSearch(search, newFilters);
-        return newFilters;
-      });
-    },
-    [search, debouncedSearch],
-  );
+	// Add debounced search effect
+	useEffect(() => {
+		const debouncedSearch = debounce(() => {
+			onSearch(search, filters);
+			handleSearch(search, filters);
+		}, DEBOUNCE_DELAY);
 
-  const resetFilters = useCallback(() => {
-    const resetState = {
-      availableToday: false,
-      nextThreeDays: false,
-      femaleDoctors: false,
-      maleDoctors: false,
-      videoConsult: false,
-    };
-    setFilters(resetState);
-    debouncedSearch(search, resetState);
-  }, [search, debouncedSearch]);
+		debouncedSearch();
+		return () => debouncedSearch.cancel();
+	}, [search, filters, onSearch, handleSearch]);
 
-  useEffect(() => {
-    let isMounted = true;
+	const handleInputChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			const { name, value } = e.target;
+			setSearch((prev) => ({ ...prev, [name]: value }));
+		},
+		[]
+	);
 
-    async function fetchLocation() {
-      try {
-        setIsLoadingLocation(true);
-        const locationData = await getUserLocation(); // Remove empty string parameter
+	const handleFilterChange = useCallback((key: keyof FilterState) => {
+		setFilters((prev) => ({
+			...prev,
+			[key]: !prev[key],
+		}));
+	}, []);
 
-        if (isMounted && locationData) {
-          const parts = [
-            locationData.city,
-            locationData.state,
-            locationData.country,
-          ].filter(Boolean);
+	// Initialize location with initialLocation prop
+	useEffect(() => {
+		if (initialLocation) {
+			setSearch((prev) => ({
+				...prev,
+				location: `${initialLocation.city}, ${initialLocation.state}, ${initialLocation.country}`,
+			}));
+			setIsLoadingLocation(false);
+		} else {
+			initializeLocation();
+		}
+	}, [initialLocation]);
 
-          setSearch((prev) => ({
-            ...prev,
-            location: parts.join(", "),
-          }));
-        }
-      } catch (error) {
-        console.error("Error fetching location:", error);
-        if (isMounted) {
-          setSearch((prev) => ({
-            ...prev,
-            location: "Mumbai, Maharashtra", // Default location
-          }));
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoadingLocation(false);
-        }
-      }
-    }
+	// Location initialization function
+	const initializeLocation = async () => {
+		try {
+			const location = await getUserLocation();
+			if (location) {
+				setSearch((prev) => ({
+					...prev,
+					location: `${location.city}, ${location.state}, ${location.country}`,
+				}));
+				toast.success("Location detected successfully");
+			}
+		} catch (error) {
+			toast.error("Could not detect location");
+		} finally {
+			setIsLoadingLocation(false);
+		}
+	};
 
-    fetchLocation();
+	// Handle location input focus
+	const handleLocationFocus = useCallback(() => {
+		setShowSuggestions(true);
+		// Generate location suggestions based on doctor addresses
+		const suggestions: LocationSuggestion[] = doctors
+			.flatMap((doctor) =>
+				doctor.address.map((addr) => ({
+					id: `${addr.city}-${addr.state}-${addr.country}`,
+					text: `${addr.city}, ${addr.state}, ${addr.country}`,
+					address: addr,
+				}))
+			)
+			.filter(
+				(suggestion, index, self) =>
+					index === self.findIndex((s) => s.text === suggestion.text)
+			);
+		setLocationSuggestions(suggestions);
+	}, []);
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+	// Handle location input blur
+	const handleLocationBlur = useCallback(() => {
+		// Delay hiding suggestions to allow click events
+		setTimeout(() => {
+			setShowSuggestions(false);
+		}, 200);
+	}, []);
 
-  const handleLocationInput = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
-      setSearch((prev) => ({ ...prev, location: value }));
+	// Handle tab changes
+	const handleTabChange = useCallback((tab: TabType) => {
+		setActiveTab(tab);
+		setFilters((prev) => ({
+			...prev,
+			videoConsult: tab === "online",
+		}));
+	}, []);
 
-      // Get suggestions and ensure we handle the return type correctly
-      const suggestions = getLocationSuggestions(value) || [];
-      setLocationSuggestions(suggestions);
-      setShowSuggestions(value.length > 0);
+	// Add new handler for search button click
+	const handleSearchClick = useCallback(() => {
+		onSearch(search, filters);
+		handleSearch(search, filters);
+	}, [search, filters, onSearch, handleSearch]);
 
-      debouncedSearch({ ...search, location: value }, filters);
-    },
-    [search, filters, debouncedSearch, getLocationSuggestions],
-  );
+	// Update SearchInput components with new handlers
+	return (
+		<motion.div
+			initial={{ opacity: 0, y: 20 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ duration: 0.5 }}
+			className="bg-white dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl mt-5 shadow-lg p-4 md:p-6 max-w-7xl mx-auto border border-gray-200 dark:border-gray-700">
+			{/* Add Tabs Section */}
+			<div className="flex space-x-4 mb-6">
+				{["all", "online", "clinic"].map((tab) => (
+					<button
+						key={tab}
+						onClick={() => handleTabChange(tab as TabType)}
+						className={`
+							px-4 py-2 rounded-lg font-medium transition-all duration-200
+							${
+								activeTab === tab ?
+									"bg-[#30ACDA] text-white"
+								:	"text-gray-600 dark:text-gray-300 hover:bg-[#30ACDA]/10"
+							}
+						`}>
+						{tab.charAt(0).toUpperCase() + tab.slice(1)}
+					</button>
+				))}
+			</div>
 
-  // Add this component for location suggestions
-  const LocationSuggestions: React.FC<{
-    suggestions: LocationSuggestion[];
-  }> = ({ suggestions }) => {
-    if (!showSuggestions || suggestions.length === 0) return null;
+			{/* Update Search Section with Search Button */}
+			<div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-4 items-start">
+				<SearchInput
+					icon={<FaSearch className="h-5 w-5 text-gray-400" />}
+					name="query"
+					value={search.query}
+					onChange={handleInputChange}
+					placeholder="Search doctors, specialties..."
+					aria-label="Search doctors"
+				/>
+				<SearchInput
+					icon={<FaMapMarkerAlt className="h-5 w-5 text-gray-400" />}
+					name="location"
+					value={search.location}
+					onChange={handleInputChange}
+					placeholder="Location"
+					aria-label="Search location"
+					disabled={isSearching}
+					isLoading={isLoadingLocation}
+					onFocus={handleLocationFocus}
+					onBlur={handleLocationBlur}
+				/>
+				<button
+					onClick={handleSearchClick}
+					disabled={isSearching}
+					className={`
+						px-6 py-3 rounded-xl font-medium
+						transition-all duration-200
+						flex items-center justify-center
+						min-w-[120px]
+						${
+							isSearching ?
+								"bg-gray-100 dark:bg-gray-700 cursor-not-allowed"
+							:	"bg-[#30ACDA] hover:bg-[#2691B7] text-white shadow-sm hover:shadow-md"
+						}
+					`}>
+					{isSearching ?
+						<div className="flex items-center space-x-2">
+							<div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
+							<span>Searching...</span>
+						</div>
+					:	<div className="flex items-center space-x-2">
+							<FaSearch className="h-5 w-5" />
+							<span>Search</span>
+						</div>
+					}
+				</button>
+			</div>
 
-    return (
-      <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
-        {suggestions.map((suggestion) => (
-          <button
-            key={suggestion.id}
-            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 first:rounded-t-xl last:rounded-b-xl"
-            onClick={() => {
-              setSearch((prev) => ({ ...prev, location: suggestion.text }));
-              setShowSuggestions(false);
-              debouncedSearch(
-                { ...search, location: suggestion.text },
-                filters,
-              );
-            }}
-          >
-            <div className="flex items-center">
-              <FaMapMarkerAlt className="h-4 w-4 text-gray-400 mr-2" />
-              <span>{suggestion.text}</span>
-            </div>
-          </button>
-        ))}
-      </div>
-    );
-  };
+			{/* Filters Section */}
+			<div className="mt-4">
+				<div className="flex flex-wrap gap-3">
+					{FILTER_CONFIG.map(({ key, label, icon: Icon, iconColor }) => (
+						<button
+							key={key}
+							onClick={() => handleFilterChange(key as keyof FilterState)}
+							className={`
+                inline-flex items-center px-4 py-2 rounded-lg
+                border transition-all duration-200
+                ${
+									filters[key as keyof FilterState] ?
+										"bg-[#30ACDA]/10 border-[#30ACDA] text-[#30ACDA]"
+									:	"border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-[#30ACDA] hover:text-[#30ACDA]"
+								}
+              `}>
+							<Icon className={`mr-2 h-4 w-4 ${iconColor}`} />
+							{label}
+						</button>
+					))}
+				</div>
+			</div>
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="bg-white dark:bg-gray-800 rounded-2xl mt-5 shadow-xl p-4 md:p-6 max-w-7xl mx-auto"
-    >
-      {/* Search Tabs */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        {["all", "online", "clinic"].map((tab) => (
-          <motion.button
-            key={tab}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setActiveTab(tab as TabType)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 capitalize ${
-              activeTab === tab
-                ? "bg-primary-blue/10 text-primary-blue shadow-sm"
-                : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-            }`}
-          >
-            {tab} Doctors
-          </motion.button>
-        ))}
-      </div>
-
-      {/* Search Form */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Doctor/Specialty Search */}
-        <div className="sm:col-span-2 relative">
-          <SearchInput
-            icon={<FaSearch className="h-5 w-5 text-gray-400" />}
-            name="query"
-            value={search.query}
-            onChange={handleSearchChange}
-            placeholder="Search doctors, specialties, symptoms..."
-            aria-label="Search doctors, specialties, symptoms"
-            isLoading={isSearching}
-          />
-        </div>
-
-        {/* Location */}
-        <div className="relative">
-          <SearchInput
-            icon={
-              isLoadingLocation ? (
-                <div className="animate-spin">
-                  <FaMapMarkerAlt className="h-5 w-5 text-gray-400" />
-                </div>
-              ) : (
-                <FaMapMarkerAlt className="h-5 w-5 text-gray-400" />
-              )
-            }
-            name="location"
-            value={search.location}
-            onChange={handleLocationInput}
-            placeholder={
-              isLoadingLocation ? "Detecting location..." : "Enter location"
-            }
-            disabled={isLoadingLocation}
-            onFocus={() => setShowSuggestions(true)}
-            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-            aria-label="Enter location"
-            isLoading={isSearching}
-          />
-          <LocationSuggestions suggestions={locationSuggestions} />
-        </div>
-
-        {/* Search Button */}
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          type="button"
-          disabled={isSearching}
-          className="w-full bg-primary-blue hover:bg-primary-blue/90 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 disabled:opacity-50 shadow-md hover:shadow-lg"
-          aria-label="Search"
-        >
-          <FaSearch className="h-5 w-5" />
-          <span>{isSearching ? "Searching..." : "Search"}</span>
-        </motion.button>
-      </div>
-
-      {/* Quick Filters */}
-      <div className="mt-6">
-        <AnimatePresence>
-          <motion.div className="flex flex-wrap gap-3 items-center">
-            {FILTER_CONFIG.map(({ key, label, icon: Icon, iconColor }) => (
-              <motion.button
-                key={key}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                type="button"
-                onClick={() => toggleFilter(key as keyof FilterState)}
-                className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                  filters[key as keyof FilterState]
-                    ? "bg-primary-blue/10 text-primary-blue shadow-sm"
-                    : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
-                }`}
-              >
-                {Icon && <Icon className={`mr-2 h-4 w-4 ${iconColor}`} />}
-                {label}
-              </motion.button>
-            ))}
-
-            {Object.values(filters).some(Boolean) && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                type="button"
-                onClick={resetFilters}
-                className="inline-flex items-center px-3 py-2 rounded-full bg-red-100 text-red-600 text-sm font-medium hover:bg-red-200 transition-all duration-200"
-                aria-label="Clear Filters"
-              >
-                <FaTimes className="mr-1 h-4 w-4" />
-                Clear Filters
-              </motion.button>
-            )}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </motion.div>
-  );
+			{/* Location Suggestions */}
+			<div className="relative">
+				<AnimatePresence>
+					{showSuggestions && locationSuggestions.length > 0 && (
+						<motion.div
+							initial={{ opacity: 0, y: -10 }}
+							animate={{ opacity: 1, y: 0 }}
+							exit={{ opacity: 0, y: -10 }}
+							className="absolute z-10 left-0 right-0 mt-1 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 max-h-60 overflow-y-auto">
+							{locationSuggestions.map((suggestion) => (
+								<button
+									key={suggestion.id}
+									className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700"
+									onClick={() => {
+										setSearch((prev) => ({
+											...prev,
+											location: suggestion.text,
+										}));
+										setShowSuggestions(false);
+									}}>
+									<div className="flex items-center">
+										<FaMapMarkerAlt className="h-4 w-4 text-gray-400 mr-2" />
+										<span>{suggestion.text}</span>
+									</div>
+								</button>
+							))}
+						</motion.div>
+					)}
+				</AnimatePresence>
+			</div>
+		</motion.div>
+	);
 };
 
-// Extracted reusable SearchInput component
+// Enhanced SearchInput component with better TypeScript support
 const SearchInput: React.FC<{
-  icon: React.ReactNode;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
-  disabled?: boolean;
-  onFocus?: () => void;
-  onBlur?: () => void;
-  "aria-label": string;
-  isLoading?: boolean;
+	icon: React.ReactNode;
+	name: string;
+	value: string;
+	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	placeholder: string;
+	disabled?: boolean;
+	onFocus?: () => void;
+	onBlur?: () => void;
+	"aria-label": string;
+	isLoading?: boolean;
 }> = ({
-  icon,
-  name,
-  value,
-  onChange,
-  placeholder,
-  disabled,
-  onFocus,
-  onBlur,
-  "aria-label": ariaLabel,
-  isLoading,
+	icon,
+	name,
+	value,
+	onChange,
+	placeholder,
+	disabled,
+	onFocus,
+	onBlur,
+	"aria-label": ariaLabel,
+	isLoading,
 }) => (
-  <div className="relative">
-    <div
-      className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-      aria-hidden="true"
-    >
-      {icon}
-    </div>
-    <input
-      type="text"
-      name={name}
-      value={value}
-      onChange={onChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      placeholder={placeholder}
-      disabled={disabled}
-      aria-label={ariaLabel}
-      role="textbox"
-      className={`block w-full pl-10 pr-3 py-3 border border-gray-200 
-				dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary-blue 
-				dark:focus:ring-primary-blue focus:border-transparent dark:bg-gray-700 
-				dark:text-white transition-all duration-200 hover:border-gray-300 
-				dark:hover:border-gray-500 ${disabled ? "cursor-wait opacity-75" : ""}`}
-    />
-    {isLoading && (
-      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-        <div className="animate-spin h-5 w-5 border-2 border-primary-blue border-t-transparent rounded-full" />
-      </div>
-    )}
-  </div>
+	<div className="relative">
+		<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+			{icon}
+		</div>
+		<input
+			type="text"
+			name={name}
+			value={value}
+			onChange={onChange}
+			onFocus={onFocus}
+			onBlur={onBlur}
+			placeholder={placeholder}
+			disabled={disabled}
+			aria-label={ariaLabel}
+			className={`
+        block w-full pl-10 pr-3 py-3 
+        border border-gray-200 dark:border-gray-600 
+        rounded-xl 
+        focus:ring-2 focus:ring-[#30ACDA] dark:focus:ring-[#2691B7]/70 
+        focus:border-transparent 
+        bg-white dark:bg-gray-700 
+        text-gray-900 dark:text-white 
+        placeholder-gray-500 dark:placeholder-gray-400
+        transition-all duration-200 
+        ${disabled ? "cursor-wait opacity-75" : ""}
+      `}
+		/>
+		{isLoading && (
+			<div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+				<div className="animate-spin h-5 w-5 border-2 border-[#30ACDA] border-t-transparent rounded-full" />
+			</div>
+		)}
+	</div>
 );
 
 export default SearchAndFilters;
