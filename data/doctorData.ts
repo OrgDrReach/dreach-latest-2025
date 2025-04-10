@@ -2,13 +2,8 @@ import {
 	EDayOfWeek,
 	EDoctorConsultMode,
 	EDoctorStatus,
-	IDoctor,
-} from "../types/doctor.d.types";
-import {
-	EProviderType,
-	IBaseProvider,
-	Provider,
-} from "../types/provider.d.types";
+} from "@/types/doctor.d.types";
+import { EProviderType, Provider } from "@/types/provider.d.types";
 
 export const doctors: Provider[] = [
 	{

@@ -22,6 +22,7 @@ export interface IDoctor {
 	isVerified: boolean;
 	status: EDoctorStatus;
 	consultMode: EDoctorConsultMode[];
+	consultationFee?: number; // Add this optional property
 }
 
 export interface IClinicInfo {
@@ -64,4 +65,22 @@ export enum EDoctorConsultMode {
 	CLINIC = "CLINIC",
 	VIDEO_CONSULT = "VIDEO_CONSULT",
 	HYBRID = "HYBRID",
+}
+
+// Add this new interface for featured doctors
+export interface IFeaturedDoctor extends IDoctor {
+  nextAvailable: string;
+  availableSlots: number;
+  consultationFee: number; // Make it required for featured doctors
+  isBookmarked?: boolean;
+	address: IAddress[];
+	contact: IContactInfo[];
+  featured: boolean;
+  rating: number;
+  totalRatings?: number;
+  nextAvailableSlot?: {
+    date: string;
+    time: string;
+  };
+  languages?: string[];
 }
