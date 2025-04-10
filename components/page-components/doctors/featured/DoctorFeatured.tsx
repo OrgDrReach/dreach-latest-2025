@@ -189,7 +189,7 @@ const DoctorFeatured = () => {
 											<FaStar className="text-yellow-400 mr-1" />
 											<span className="font-medium">{doctor.rating}</span>
 										</div>
-										<div className="flex items-center text-sm text-gray-600">
+										<div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
 											<FaLanguage className="mr-1 text-gray-400" />
 											{doctor.languages?.slice(0, 2).join(", ")}
 										</div>
