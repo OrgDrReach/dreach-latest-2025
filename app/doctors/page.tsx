@@ -63,6 +63,16 @@ export default function page() {
 					/>
 				</div>
 			</div>
+			<div className={`container mx-auto`}>
+				<div className="py-8 lg:px-32 px-4">
+					<h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+						Available Doctors
+					</h2>
+					<p className="text-gray-600 dark:text-gray-300">
+						Find and book appointments with the right doctor
+					</p>
+				</div>
+			</div>
 		</main>
 	);
 }
