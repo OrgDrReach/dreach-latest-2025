@@ -3,9 +3,7 @@
 import React, {
 	useState,
 	useCallback,
-	useMemo,
 	useEffect,
-	useRef,
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -13,11 +11,12 @@ import {
 	FaMapMarkerAlt,
 	FaCalendarAlt,
 	FaStethoscope,
-	FaTimes,
 	FaVideo,
 	FaUserMd,
 	FaUserNurse,
 } from "react-icons/fa";
+import { MdLocationSearching } from "react-icons/md";
+import { IoMdLocate } from "react-icons/io";
 import { debounce } from "lodash";
 import { getUserLocation, LocationData } from "@/utils/location";
 import { toast } from "sonner";
@@ -116,6 +115,7 @@ const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
 	>([]);
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+	const [isLocationActive, setIsLocationActive] = useState(false);
 	const { searchDoctors, filteredDoctors } = useDoctorStore();
 
 	// Enhanced search functionality
@@ -132,18 +132,21 @@ const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
 						)
 					:	true;
 
+				// Modified location matching to show all doctors when no location is specified
 				const isMatchingLocation =
-					searchData.location ?
-						doctor.address.some(
-							(addr) =>
-								addr.city
-									.toLowerCase()
-									.includes(searchData.location.toLowerCase()) ||
-								addr.state
-									.toLowerCase()
-									.includes(searchData.location.toLowerCase())
-						)
-					:	true;
+					!searchData.location || // Added this condition to show all when no location
+					doctor.address.some(
+						(addr) =>
+							addr.city
+								.toLowerCase()
+								.includes(searchData.location.toLowerCase()) ||
+							addr.state
+								.toLowerCase()
+								.includes(searchData.location.toLowerCase()) ||
+							addr.country
+								.toLowerCase()
+								.includes(searchData.location.toLowerCase())
+					);
 
 				const isMatchingFilters = {
 					videoConsult:
@@ -208,19 +211,43 @@ const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
 		}
 	}, [initialLocation]);
 
-	// Location initialization function
+	// Modified location initialization function
 	const initializeLocation = async () => {
+		setIsLoadingLocation(true);
 		try {
-			const location = await getUserLocation();
-			if (location) {
-				setSearch((prev) => ({
-					...prev,
-					location: `${location.city}, ${location.state}, ${location.country}`,
-				}));
-				toast.success("Location detected successfully");
+			if (!isLocationActive) {
+				const location = await getUserLocation();
+				if (location) {
+					setSearch((prev) => ({
+						...prev,
+						location: `${location.city}, ${location.state}, ${location.country}`,
+					}));
+					toast.success("Location detected successfully");
+					handleSearch(
+						{
+							...search,
+							location: `${location.city}, ${location.state}, ${location.country}`,
+						},
+						filters
+					);
+					setIsLocationActive(true);
+				} else {
+					setSearch((prev) => ({ ...prev, location: "" }));
+					toast.error("Could not detect location, showing all doctors");
+				}
+			} else {
+				// Clear location and deactivate
+				setSearch((prev) => ({ ...prev, location: "" }));
+				setIsLocationActive(false);
+				handleSearch({ ...search, location: "" }, filters);
+				toast.success("Location detection disabled, showing all doctors");
 			}
 		} catch (error) {
-			toast.error("Could not detect location");
+			setSearch((prev) => ({
+				...prev,
+				location: "",
+			}));
+			toast.error("Could not detect location, showing all doctors");
 		} finally {
 			setIsLoadingLocation(false);
 		}
@@ -311,10 +338,16 @@ const SearchAndFilters: React.FC<SearchAndFiltersProps> = ({
 					onChange={handleInputChange}
 					placeholder="Location"
 					aria-label="Search location"
-					disabled={isSearching}
+					disabled={isSearching || isLoadingLocation}
 					isLoading={isLoadingLocation}
 					onFocus={handleLocationFocus}
 					onBlur={handleLocationBlur}
+					showGPS={true}
+					isLocationActive={isLocationActive}
+					onGPSClick={() => {
+						setIsLoadingLocation(true);
+						initializeLocation();
+					}}
 				/>
 				<button
 					onClick={handleSearchClick}
@@ -412,6 +445,9 @@ const SearchInput: React.FC<{
 	onBlur?: () => void;
 	"aria-label": string;
 	isLoading?: boolean;
+	showGPS?: boolean;
+	onGPSClick?: () => void;
+	isLocationActive?: boolean;
 }> = ({
 	icon,
 	name,
@@ -423,6 +459,9 @@ const SearchInput: React.FC<{
 	onBlur,
 	"aria-label": ariaLabel,
 	isLoading,
+	showGPS,
+	onGPSClick,
+	isLocationActive,
 }) => (
 	<div className="relative">
 		<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -439,7 +478,7 @@ const SearchInput: React.FC<{
 			disabled={disabled}
 			aria-label={ariaLabel}
 			className={`
-        block w-full pl-10 pr-3 py-3 
+        block w-full pl-10 ${showGPS ? "pr-10" : "pr-3"} py-3 
         border border-gray-200 dark:border-gray-600 
         rounded-xl 
         focus:ring-2 focus:ring-[#30ACDA] dark:focus:ring-[#2691B7]/70 
@@ -451,8 +490,32 @@ const SearchInput: React.FC<{
         ${disabled ? "cursor-wait opacity-75" : ""}
       `}
 		/>
+		{showGPS && (
+			<button
+				onClick={onGPSClick}
+				className="absolute inset-y-0 right-0 pr-3 flex items-center"
+				disabled={disabled}
+				title={isLocationActive ? "Disable location" : "Get current location"}>
+				{isLocationActive ?
+					<IoMdLocate
+						className={`h-5 w-5 ${
+							disabled ?
+								"text-gray-400 cursor-not-allowed"
+							:	"text-green-500 hover:text-green-600 cursor-pointer"
+						}`}
+					/>
+				:	<MdLocationSearching
+						className={`h-5 w-5 ${
+							disabled ?
+								"text-gray-400 cursor-not-allowed"
+							:	"text-green-500 hover:text-green-600 cursor-pointer"
+						}`}
+					/>
+				}
+			</button>
+		)}
 		{isLoading && (
-			<div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+			<div className="absolute right-10 top-1/2 transform -translate-y-1/2">
 				<div className="animate-spin h-5 w-5 border-2 border-[#30ACDA] border-t-transparent rounded-full" />
 			</div>
 		)}
