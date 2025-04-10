@@ -1,26 +1,21 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { toast } from "sonner";
+import React, { useState, useCallback } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import { Toaster } from "sonner";
 import {
-	FaStar,
-	FaVideo,
-	FaUserMd,
-	FaTimes,
-	FaCalendarAlt,
-	FaClock,
-	FaLanguage,
-	FaUsers,
+  FaStar,
+  FaVideo,
+  FaUserMd,
+  FaClock,
+  FaLanguage,
+  FaUsers,
 } from "react-icons/fa";
 
-import {
-	IFeaturedDoctor,
-	EDoctorConsultMode,
-	IDoctor,
-} from "@/types/doctor.d.types";
+import { IFeaturedDoctor, IDoctor } from "@/types/doctor.d.types";
 import { AppointmentBookingModal } from "../booking/AppointmentBookingModal";
+import ImageViewer from "@/components/images/ImageViewer";
 import { useDoctorStore } from "@/lib/stores/doctorStore";
 import { featuredDoctors } from "@/data/featuredDoctorData";
 import { EProviderType, IContactInfo, Provider } from "@/types/provider.d.types";
@@ -72,6 +67,8 @@ const DoctorFeatured = () => {
 		null
 	);
 	const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+	const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
+	const [selectedImage, setSelectedImage] = useState<string | null>(null);
 	const { fetchDoctors } = useDoctorStore();
 
 	const handleBookNow = useCallback((doctor: IFeaturedDoctor) => {
@@ -82,6 +79,11 @@ const DoctorFeatured = () => {
 	const handleCloseBooking = useCallback(() => {
 		setSelectedDoctor(null);
 		setIsBookingModalOpen(false);
+	}, []);
+
+	const handleImageClick = useCallback((imageSrc: string) => {
+		setSelectedImage(imageSrc);
+		setIsImageViewerOpen(true);
 	}, []);
 
 	return (
@@ -128,12 +130,25 @@ const DoctorFeatured = () => {
 							}}
 							whileHover={{ y: -5, scale: 1.02 }}
 							className="bg-white dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-soft hover:shadow-strong transition-all duration-400 overflow-hidden border border-gray-100/20 dark:border-gray-700/30">
-							<div className="relative h-48 overflow-hidden">
-								<img
-									src={doctor.profileImage}
-									alt={`${doctor.firstName} ${doctor.lastName}`}
-									className="w-full h-full object-cover transform hover:scale-102 transition-transform duration-400"
-								/>
+							<div className="relative h-48 overflow-hidden group">
+								<div 
+									className="cursor-pointer relative w-full h-full"
+									onClick={() => handleImageClick(doctor.profileImage || '')}
+								>
+									<Image
+										src={doctor.profileImage || '/placeholder-doctor.jpg'}
+										alt={`Dr. ${doctor.firstName} ${doctor.lastName}`}
+										fill
+										sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+										className="object-cover transform group-hover:scale-110 transition-transform duration-400"
+										priority={index < 4} // Prioritize loading for first 4 images
+									/>
+									<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-2">
+										<span className="text-white text-sm px-4 py-2 bg-black/40 backdrop-blur-sm rounded-full">
+											Click to expand
+										</span>
+									</div>
+								</div>
 								{doctor.status === "ONLINE" && (
 									<div className="absolute top-4 right-4 bg-emerald-500/90 backdrop-blur-xs text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center shadow-soft animate-pulse-soft">
 										<div className="w-2 h-2 bg-white rounded-full animate-pulse mr-2"></div>
@@ -210,6 +225,22 @@ const DoctorFeatured = () => {
 					))}
 				</div>
 			</div>
+
+			<ImageViewer
+				isOpen={isImageViewerOpen}
+				onClose={() => setIsImageViewerOpen(false)}
+			>
+				{selectedImage && (
+					<Image
+						src={selectedImage}
+						alt="Doctor profile"
+						width={800}
+						height={600}
+						className="max-w-full max-h-[85vh] object-contain rounded-lg"
+						priority
+					/>
+				)}
+			</ImageViewer>
 
 			<AppointmentBookingModal
 				isOpen={isBookingModalOpen}
