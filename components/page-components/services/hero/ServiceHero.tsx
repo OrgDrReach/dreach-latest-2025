@@ -26,7 +26,19 @@ const ServiceHero: React.FC = () => {
   return (
     <main className="relative min-h-[600px] bg-gradient-to-br from-white to-[#f8fdff] dark:from-slate-900 dark:to-slate-800">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5 dark:opacity-10"></div>
+      <div 
+        className="absolute inset-0 opacity-[0.22] dark:opacity-[0.15]"
+        style={{
+          backgroundImage: `
+            linear-gradient(#31ADDB 1.6px, transparent 1.6px),
+            linear-gradient(90deg, #31ADDB 1.6px, transparent 1.6px),
+            linear-gradient(#31ADDB 0.8px, transparent 0.8px),
+            linear-gradient(90deg, #31ADDB 0.8px, transparent 0.8px)
+          `,
+          backgroundSize: '40px 40px, 40px 40px, 8px 8px, 8px 8px',
+          backgroundPosition: '-1.6px -1.6px, -1.6px -1.6px, -0.8px -0.8px, -0.8px -0.8px'
+        }}
+      ></div>
 
       {/* Content Container */}
       <div className="relative container mx-auto px-4 py-20">
