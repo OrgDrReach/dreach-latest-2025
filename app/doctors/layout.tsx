@@ -1,6 +1,8 @@
 import React from "react";
 import { RNChildProp } from "@/@types/interface/Interface";
 import { Metadata } from "next";
+import { AppointmentProvider } from "@/components/contexts/AppointmentContext";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
 	title: "Dreach.in | Doctors",
@@ -11,7 +13,10 @@ export const metadata: Metadata = {
 const layout: React.FC = ({ children }: RNChildProp) => {
 	return (
 		<main>
-			<div>{children}</div>
+			<AppointmentProvider>
+				<Toaster richColors closeButton position="bottom-right" />
+				<div>{children}</div>
+			</AppointmentProvider>
 		</main>
 	);
 };
