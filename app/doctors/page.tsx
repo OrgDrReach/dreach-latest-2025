@@ -7,6 +7,7 @@ import {
 	FilterState,
 } from "@/components/page-components/doctors/search-filter/SearchAndFilters";
 import DoctorHero from "@/components/page-components/doctors/hero/DoctorHero";
+import DoctorFeatured from "@/components/page-components/doctors/featured/DoctorFeatured";
 
 export default function page() {
 	const [userLocation, setUserLocation] = useState<LocationData | null>(null);
@@ -53,6 +54,7 @@ export default function page() {
 		<main className={`bg-gray-100 dark:bg-gray-900 min-h-screen`}>
 			<div className={``}>
 				<DoctorHero />
+				<DoctorFeatured />
 			</div>
 		</main>
 	);
