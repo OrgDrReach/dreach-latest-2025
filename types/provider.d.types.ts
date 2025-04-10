@@ -1,5 +1,12 @@
+import { 
+  IDoctor, 
+  EDoctorStatus, 
+  EClinicRole, 
+  EClinicPermissions, 
+  IClinicStaff,
+  EStaffStatus 
+} from "./doctor.d.types";
 import { Ambulance, EAmbulanceStatus } from "./ambulance.d.types";
-import { IDoctor, EDoctorStatus } from "./doctor.d.types";
 import { Hospital } from "./hospital.d.types";
 import { Lab, ELabStatus } from "./lab.d.types";
 import { Pharmaceutical, EPharmacyStatus } from "./pharmaceutical.d.types";
@@ -10,6 +17,7 @@ export enum EProviderType {
   AMBULANCE = "ambulance",
   LAB = "labs",
   PHARMACEUTICAL = "pharmaceuticals",
+  CLINIC_STAFF = "clinic_staff",
 }
 
 export interface IAddress {
@@ -51,7 +59,8 @@ export type ProviderStatus =
   | EDoctorStatus
   | ELabStatus
   | EPharmacyStatus
-  | EAmbulanceStatus;
+  | EAmbulanceStatus
+  | EStaffStatus;
 
 export interface IBaseProvider {
   id: string;
@@ -64,6 +73,9 @@ export interface IBaseProvider {
   reviews?: IReview[];
   isVerified: boolean;
   status: ProviderStatus;
+  role?: EClinicRole;
+  clinicId?: string;
+  permissions?: EClinicPermissions[];
 }
 
 export type Provider =
@@ -71,4 +83,5 @@ export type Provider =
   | (IBaseProvider & Hospital)
   | (IBaseProvider & Ambulance)
   | (IBaseProvider & Lab)
-  | (IBaseProvider & Pharmaceutical);
+  | (IBaseProvider & Pharmaceutical)
+  | (IBaseProvider & IClinicStaff);
