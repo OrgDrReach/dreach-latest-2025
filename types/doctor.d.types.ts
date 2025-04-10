@@ -30,6 +30,14 @@ export interface IClinicInfo {
   name: string;
   address: IAddress[];
   contact: IContactInfo[];
+  staff?: {
+    assistantDoctors?: IAssistantDoctor[];
+    nurses?: INurse[];
+    receptionists?: IReceptionist[];
+    others?: IClinicStaff[];
+  };
+  departments?: string[];
+  facilities?: string[];
 }
 
 export interface IAvailability {
@@ -83,4 +91,87 @@ export interface IFeaturedDoctor extends IDoctor {
     time: string;
   };
   languages?: string[];
+}
+
+export enum EClinicRole {
+  ASSISTANT_DOCTOR = "ASSISTANT_DOCTOR",
+  NURSE = "NURSE",
+  RECEPTIONIST = "RECEPTIONIST",
+  LAB_TECHNICIAN = "LAB_TECHNICIAN",
+  PHARMACY_ASSISTANT = "PHARMACY_ASSISTANT"
+}
+
+export enum EStaffStatus {
+  ACTIVE = "ACTIVE",
+  ON_LEAVE = "ON_LEAVE",
+  INACTIVE = "INACTIVE",
+  TERMINATED = "TERMINATED"
+}
+
+export interface IClinicStaff {
+  id: string;
+  clinicId: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  role: EClinicRole;
+  status: EStaffStatus;
+  joinDate: Date;
+  shifts?: ITimeSlot[];
+  contactInfo: IContactInfo;
+  profileImage?: string;
+  permissions: EClinicPermissions[];
+}
+
+export enum EClinicPermissions {
+  MANAGE_APPOINTMENTS = "MANAGE_APPOINTMENTS",
+  VIEW_PATIENT_RECORDS = "VIEW_PATIENT_RECORDS",
+  EDIT_PATIENT_RECORDS = "EDIT_PATIENT_RECORDS",
+  MANAGE_INVENTORY = "MANAGE_INVENTORY",
+  MANAGE_BILLING = "MANAGE_BILLING",
+  MANAGE_STAFF = "MANAGE_STAFF",
+  GENERATE_REPORTS = "GENERATE_REPORTS"
+}
+
+export interface IReceptionist extends IClinicStaff {
+  managedDoctors: string[]; // Array of doctor IDs
+  appointmentManagement: {
+    canSchedule: boolean;
+    canReschedule: boolean;
+    canCancel: boolean;
+    canConfirm: boolean;
+  };
+}
+
+export interface IAssistantDoctor extends IClinicStaff {
+  degree: string[];
+  specialization: string[];
+  registrationNumber: string;
+  supervisingDoctor: string; // Primary doctor's ID
+  canPrescribe: boolean;
+  consultationRights: {
+    independent: boolean;
+    supervisedOnly: boolean;
+  };
+}
+
+export interface INurse extends IClinicStaff {
+  qualification: string[];
+  certification: string[];
+  specializations?: string[];
+  dutyType: "FULL_TIME" | "PART_TIME" | "ON_CALL";
+}
+
+// Add interface for appointment management
+export interface IAppointmentManager {
+  clinicId: string;
+  staffId: string;
+  role: EClinicRole;
+  permissions: EClinicPermissions[];
+  actions: {
+    lastModified: Date;
+    modifiedBy: string;
+    actionType: "SCHEDULE" | "RESCHEDULE" | "CANCEL" | "CONFIRM";
+    appointmentId: string;
+  }[];
 }
