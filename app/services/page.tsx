@@ -7,16 +7,16 @@ import ServiceContext from "@/components/page-components/services/service-contex
 import React from "react";
 
 export default function page() {
-	return (
-		<main>
-			<div>
-				<ServiceHero />
-				<OurServices />
-				<ServiceContext />
-				<LearnMore />
-				<OnlineConsultation />
-				<FAQ />
-			</div>
-		</main>
-	);
+  return (
+    <main>
+      <div>
+        <ServiceHero />
+        <OurServices />
+        <ServiceContext />
+        <LearnMore />
+        <OnlineConsultation />
+        <FAQ />
+      </div>
+    </main>
+  );
 }
