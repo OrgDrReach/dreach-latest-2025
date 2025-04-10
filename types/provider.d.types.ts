@@ -7,7 +7,12 @@ import {
   EStaffStatus 
 } from "./doctor.d.types";
 import { Ambulance, EAmbulanceStatus } from "./ambulance.d.types";
-import { Hospital } from "./hospital.d.types";
+import { 
+  Hospital,
+  EHospitalStatus,
+  EHospitalStaffRole,
+  EHospitalSpecialization
+} from "./hospital.d.types";
 import { Lab, ELabStatus } from "./lab.d.types";
 import { Pharmaceutical, EPharmacyStatus } from "./pharmaceutical.d.types";
 
@@ -38,6 +43,13 @@ export interface IOperatingHours {
   regular: ITimeSlot;
   weekends?: ITimeSlot;
   holidays?: ITimeSlot;
+  emergency?: {
+    available: boolean;
+    hours: ITimeSlot;
+  };
+  departments?: {
+    [departmentId: string]: ITimeSlot;
+  };
 }
 
 export interface IContactInfo {
@@ -53,6 +65,11 @@ export interface IReview {
   rating: number;
   comment?: string;
   createdAt: Date;
+  departmentId?: string;
+  staffId?: string;
+  treatmentType?: string;
+  visitType?: "INPATIENT" | "OUTPATIENT" | "EMERGENCY";
+  verifiedVisit: boolean;
 }
 
 export type ProviderStatus =
@@ -60,7 +77,8 @@ export type ProviderStatus =
   | ELabStatus
   | EPharmacyStatus
   | EAmbulanceStatus
-  | EStaffStatus;
+  | EStaffStatus
+  | EHospitalStatus;
 
 export interface IBaseProvider {
   id: string;
@@ -73,9 +91,15 @@ export interface IBaseProvider {
   reviews?: IReview[];
   isVerified: boolean;
   status: ProviderStatus;
-  role?: EClinicRole;
+  role?: EClinicRole | EHospitalStaffRole;
   clinicId?: string;
   permissions?: EClinicPermissions[];
+  specialization?: string[] | EHospitalSpecialization[];
+  departments?: string[];
+  staffRole?: {
+    type: "CLINIC" | "HOSPITAL";
+    role: EClinicRole | EHospitalStaffRole;
+  };
 }
 
 export type Provider =
