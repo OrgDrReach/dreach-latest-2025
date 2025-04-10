@@ -21,7 +21,6 @@ import {
 	EAppointmentStatus,
 } from "@/types/appointment.d.types";
 import { doctors as mockDoctors } from "@/data/doctorData";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 // Add this helper function at the top of the file
 const mapConsultModeToAppointmentMode = (
@@ -186,14 +185,12 @@ export const AppointmentBookingModal: React.FC<
 					variants={modalVariants}
 					className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
 					<motion.div
-						className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md mx-auto relative"
+						className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md mx-auto relative flex flex-col max-h-[90vh]"
 						variants={modalVariants}>
-						{/* Header - Outside scroll area */}
+						{/* Fixed Header */}
 						<div className="p-6 border-b border-gray-200 dark:border-gray-700">
 							<div className="flex justify-between items-center">
-								<h2 className="text-2xl font-bold bg-[#30ACDA] bg-clip-text text-transparent">
-									Book Appointment
-								</h2>
+								<h2 className="text-2xl font-bold">Book Appointment</h2>
 								<button
 									onClick={onClose}
 									className="rounded-full p-2 hover:bg-[#30acda]/10 transition-colors">
@@ -222,10 +219,13 @@ export const AppointmentBookingModal: React.FC<
 							)}
 						</div>
 
-						{/* Scrollable content */}
-						<ScrollArea className="max-h-[60vh]">
-							<div className="p-6">
-								<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+						{/* Scrollable Content */}
+						<div className="flex-1 overflow-y-auto">
+							<div className="px-6">
+								<form
+									id="appointment-form"
+									onSubmit={handleSubmit(onSubmit)}
+									className="py-6 space-y-6">
 									{/* Form Fields */}
 									<div className="space-y-4">
 										{[
@@ -255,8 +255,8 @@ export const AppointmentBookingModal: React.FC<
 														type={type || "text"}
 														{...register(field as keyof BookingFormData)}
 														className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 
-                                 focus:ring-2 focus:ring-[#30acda] focus:border-transparent
-                                 dark:bg-gray-700 dark:text-white"
+														focus:ring-2 focus:ring-[#30acda] focus:border-transparent
+														dark:bg-gray-700 dark:text-white"
 													/>
 												</div>
 												{errors[field as keyof BookingFormData] && (
@@ -275,8 +275,8 @@ export const AppointmentBookingModal: React.FC<
 											<select
 												{...register("consultMode")}
 												className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 
-                             focus:ring-2 focus:ring-[#30acda] focus:border-transparent
-                             dark:bg-gray-700 dark:text-white">
+												focus:ring-2 focus:ring-[#30acda] focus:border-transparent
+												dark:bg-gray-700 dark:text-white">
 												{Object.values(EDoctorConsultMode).map((mode) => (
 													<option key={mode} value={mode}>
 														{mode.replace("_", " ")}
@@ -295,8 +295,8 @@ export const AppointmentBookingModal: React.FC<
 												<textarea
 													{...register("reason")}
 													className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 
-                               focus:ring-2 focus:ring-[#30acda] focus:border-transparent
-                               dark:bg-gray-700 dark:text-white min-h-[100px]"
+													focus:ring-2 focus:ring-[#30acda] focus:border-transparent
+													dark:bg-gray-700 dark:text-white min-h-[100px]"
 												/>
 											</div>
 											{errors.reason && (
@@ -308,17 +308,17 @@ export const AppointmentBookingModal: React.FC<
 									</div>
 								</form>
 							</div>
-						</ScrollArea>
+						</div>
 
-						{/* Footer - Outside scroll area */}
-						<div className="p-6 border-t border-gray-200 dark:border-gray-700">
+						{/* Fixed Footer */}
+						<div className="p-6 border-t border-gray-200 dark:border-gray-700 mt-auto">
 							<button
 								type="submit"
 								form="appointment-form" // Add this ID to your form
 								disabled={isSubmitting}
 								className="w-full bg-gradient-to-r from-[#2e5566] to-[#30acda] text-white py-3 rounded-xl
-                       hover:from-[#2e5566]/90 hover:to-[#30acda]/90 transition-all duration-300
-                       disabled:opacity-50 disabled:cursor-not-allowed">
+								hover:from-[#2e5566]/90 hover:to-[#30acda]/90 transition-all duration-300
+								disabled:opacity-50 disabled:cursor-not-allowed">
 								{isSubmitting ? "Booking..." : "Confirm Booking"}
 							</button>
 						</div>
