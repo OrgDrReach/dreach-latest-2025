@@ -8,9 +8,12 @@ import SearchAndFilters, {
 } from "@/components/page-components/doctors/search-filter/SearchAndFilters";
 import DoctorHero from "@/components/page-components/doctors/hero/DoctorHero";
 import DoctorFeatured from "@/components/page-components/doctors/featured/DoctorFeatured";
+import DoctorList from "@/components/page-components/doctors/search-filter/DoctorList";
 
 export default function page() {
 	const [userLocation, setUserLocation] = useState<LocationData | null>(null);
+	const [isSearching, setIsSearching] = useState(false);
+	const [searchError, setSearchError] = useState<string | undefined>();
 	const [searchParams, setSearchParams] = useState({
 		query: "",
 		location: "",
@@ -36,18 +39,31 @@ export default function page() {
 		initLocation();
 	}, []);
 
-	const handleSearch = (searchData: SearchState, filterData: FilterState) => {
-		setSearchParams({
-			query: searchData.query,
-			location: searchData.location,
-			filters: {
-				availableToday: filterData.availableToday,
-				nextThreeDays: filterData.nextThreeDays,
-				femaleDoctors: filterData.femaleDoctors,
-				maleDoctors: filterData.maleDoctors,
-				videoConsult: filterData.videoConsult,
-			},
-		});
+	const handleSearch = async (
+		searchData: SearchState,
+		filterData: FilterState
+	) => {
+		setIsSearching(true);
+		setSearchError(undefined);
+
+		try {
+			setSearchParams({
+				query: searchData.query,
+				location: searchData.location,
+				filters: {
+					availableToday: filterData.availableToday,
+					nextThreeDays: filterData.nextThreeDays,
+					femaleDoctors: filterData.femaleDoctors,
+					maleDoctors: filterData.maleDoctors,
+					videoConsult: filterData.videoConsult,
+				},
+			});
+		} catch (error) {
+			setSearchError("Failed to perform search");
+			console.error("Search error:", error);
+		} finally {
+			setIsSearching(false);
+		}
 	};
 
 	return (
@@ -59,7 +75,7 @@ export default function page() {
 					<SearchAndFilters
 						initialLocation={userLocation}
 						onSearch={handleSearch}
-						isSearching={false}
+						isSearching={isSearching}
 					/>
 				</div>
 			</div>
@@ -72,6 +88,13 @@ export default function page() {
 						Find and book appointments with the right doctor
 					</p>
 				</div>
+				<DoctorList
+					searchQuery={searchParams.query}
+					locationQuery={searchParams.location}
+					filters={searchParams.filters}
+					isLoading={isSearching}
+					error={searchError}
+				/>
 			</div>
 		</main>
 	);
