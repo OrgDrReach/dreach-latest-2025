@@ -189,7 +189,7 @@ const DoctorList: React.FC<DoctorListProps> = ({
 						<h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 px-4">
 							{location} ({doctors.length} doctors)
 						</h2>
-						<div className="space-y-8">
+						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 							{doctors.map((doctor, index) => (
 								<DoctorCard key={`${location}-${index}`} doctor={doctor} />
 							))}

@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { FaMapMarkerAlt, FaVideo, FaPhoneAlt, FaUserMd } from "react-icons/fa";
 import { IDoctor, EDoctorConsultMode } from "@/types/doctor.d.types";
 import { Provider, EProviderType } from "@/types/provider.d.types";
+import ImageViewer from "@/components/images/ImageViewer";
 
 interface DoctorCardProps {
 	doctor: Provider & IDoctor;
 }
 
 const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
+	const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
 	const {
 		name,
 		specialization,
@@ -27,128 +30,119 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor }) => {
 	const primaryAddress = address[0];
 
 	return (
-		<div className="group w-full max-w-4xl mx-auto p-5 rounded-[1.5rem] bg-white/90 dark:bg-gray-900/95 backdrop-blur-sm border-2 border-gray-100 dark:border-gray-800 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_8px_30px_rgba(76,192,244,0.08)]">
-			<div className="flex flex-col lg:flex-row gap-6">
-				{/* Left Section */}
-				<div className="lg:w-72 flex flex-col gap-4">
-					{/* Profile Image */}
-					<div className="relative mx-auto lg:mx-0 p-3 border border-gray-100 dark:border-gray-800 rounded-2xl bg-gray-50/50 dark:bg-gray-800/50">
-						<div className="absolute inset-0 bg-gradient-to-b from-[#4cc0f4]/10 to-[#125872]/10 rounded-2xl blur-xl scale-95 group-hover:scale-110 transition-transform duration-500" />
-						<div className="relative w-36 h-44 lg:w-full lg:h-64 rounded-xl overflow-hidden ring-1 ring-[#4cc0f4]/20 dark:ring-[#4cc0f4]/30 transition-all duration-300 group-hover:ring-2 group-hover:ring-[#4cc0f4]/50 group-hover:shadow-lg">
-							<img
-								className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+		<>
+			{/* Increased max-width and adjusted padding */}
+			<div className="group w-full max-w-sm mx-auto p-4 rounded-xl bg-white/90 dark:bg-gray-900/95 backdrop-blur-sm border border-gray-100 dark:border-gray-800 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_8px_30px_rgba(76,192,244,0.08)]">
+				<div className="flex flex-col gap-4">
+					{/* Increased Image Height */}
+					<div className="relative">
+						<div
+							className="relative w-full h-52 rounded-xl overflow-hidden ring-1 ring-[#4cc0f4]/20 dark:ring-[#4cc0f4]/30 transition-all duration-300 group-hover:ring-2 group-hover:ring-[#4cc0f4]/50 cursor-pointer"
+							onClick={() => setIsImageViewerOpen(true)}>
+							<Image
 								src={profileImage || "/default-doctor.jpg"}
 								alt={name}
-								loading="lazy"
+								fill
+								className="object-cover transition-transform duration-500 group-hover:scale-110"
+								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+								priority={false}
 							/>
 							<div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
 
-							{/* Status Badge */}
+							{/* Adjusted Status Badge */}
 							{status === "ONLINE" && (
-								<div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-emerald-500/90 backdrop-blur-sm text-white text-xs font-medium rounded-full shadow-lg flex items-center gap-1.5">
-									<span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-									Available Now
+								<div className="absolute top-3 right-3 px-3 py-1 bg-emerald-500/90 backdrop-blur-sm text-white text-sm font-medium rounded-full shadow-lg flex items-center gap-1.5">
+									<span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+									Available
 								</div>
 							)}
 						</div>
 					</div>
 
-					{/* Quick Stats */}
-					<div className="border border-gray-100 dark:border-gray-800 rounded-xl">
-						<div className="flex items-center justify-between px-4 py-3 bg-gray-50/80 dark:bg-gray-800/50 rounded-xl backdrop-blur-sm">
-							{[
-								{ value: experience, label: "Years" },
-								{ value: rating || "N/A", label: "Rating" },
-								{ value: consultMode.length, label: "Services" },
-							].map((stat, index) => (
-								<div key={index} className="flex-1 text-center">
-									<div className="text-lg font-bold text-[#125872] dark:text-[#4cc0f4]">
-										{stat.value}
-									</div>
-									<div className="text-xs font-medium text-gray-500 dark:text-gray-400">
-										{stat.label}
-									</div>
-								</div>
-							))}
-						</div>
-					</div>
-				</div>
-
-				{/* Right Section */}
-				<div className="flex-1 flex flex-col gap-4">
-					{/* Doctor Info */}
-					<div className="p-4 border border-gray-100 dark:border-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-800/50">
-						<h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+					{/* Increased Text Sizes for Doctor Info */}
+					<div className="space-y-2">
+						<h2 className="text-xl font-bold text-gray-900 dark:text-white truncate">
 							{name}
 						</h2>
-						<div className="mt-1 flex flex-wrap items-center gap-2">
+						<div className="flex flex-wrap items-center gap-2 text-sm">
 							<span className="text-[#4cc0f4] font-semibold">
-								{specialization.join(", ")}
+								{specialization[0]}
 							</span>
-							<span className="text-gray-400 text-sm">•</span>
-							<span className="text-gray-600 dark:text-gray-400 text-sm">
-								{degree.join(", ")}
-							</span>
+							{specialization.length > 1 && (
+								<span className="text-[#4cc0f4] font-semibold">
+									+{specialization.length - 1}
+								</span>
+							)}
 						</div>
 					</div>
 
-					{/* Info Grid */}
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-						<div className="flex items-center gap-3 p-3 border border-gray-100 dark:border-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-800/50 hover:border-[#4cc0f4]/30 transition-colors duration-300">
-							<FaMapMarkerAlt className="text-xl text-gray-400" />
-							<div className="min-w-0">
-								<div className="text-xs text-gray-500 dark:text-gray-400">
-									Location
+					{/* Increased Stats Size */}
+					<div className="grid grid-cols-3 gap-3 text-center">
+						{[
+							{ value: experience, label: "Yrs" },
+							{ value: rating || "N/A", label: "Rating" },
+							{ value: consultMode.length, label: "Services" },
+						].map((stat, index) => (
+							<div
+								key={index}
+								className="p-2.5 border border-gray-100 dark:border-gray-800 rounded-lg bg-gray-50/80 dark:bg-gray-800/50">
+								<div className="text-lg font-bold text-[#125872] dark:text-[#4cc0f4]">
+									{stat.value}
 								</div>
-								<div className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
-									{primaryAddress.city}, {primaryAddress.state},{" "}
-									{primaryAddress.country}
-								</div>
-							</div>
-						</div>
-
-						<div className="flex items-center gap-3 p-3 border border-gray-100 dark:border-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-800/50 hover:border-[#4cc0f4]/30 transition-colors duration-300">
-							<FaUserMd className="text-xl text-gray-400" />
-							<div className="min-w-0">
-								<div className="text-xs text-gray-500 dark:text-gray-400">
-									Consult Mode
-								</div>
-								<div className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
-									{consultMode
-										.map((mode) => mode.replace(/_/g, " "))
-										.join(", ")}
+								<div className="text-sm text-gray-500 dark:text-gray-400">
+									{stat.label}
 								</div>
 							</div>
-						</div>
+						))}
 					</div>
 
-					{/* Action Buttons */}
-					<div className="flex gap-3 mt-1 p-3 border border-gray-100 dark:border-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-800/50">
+					{/* Increased Location Text Size */}
+					<div className="flex items-center gap-2.5 text-sm text-gray-600 dark:text-gray-400">
+						<FaMapMarkerAlt className="text-gray-400 flex-shrink-0 text-base" />
+						<span className="truncate">
+							{primaryAddress.city}, {primaryAddress.state}
+						</span>
+					</div>
+
+					{/* Larger Action Buttons */}
+					<div className="flex gap-3 mt-2">
 						{contact.phone[0] && (
 							<button
 								onClick={() =>
 									(window.location.href = `tel:${contact.phone[0]}`)
 								}
-								className="flex-1 px-6 py-2.5 bg-[#4cc0f4] hover:bg-[#4cc0f4]/90 text-white rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#4cc0f4]/20 active:scale-[0.98] flex items-center justify-center gap-2">
+								className="flex-1 px-4 py-2.5 bg-[#4cc0f4] hover:bg-[#4cc0f4]/90 text-white rounded-lg text-base font-medium transition-all duration-300 flex items-center justify-center gap-2">
 								<FaPhoneAlt className="text-sm" />
-								Call Now
+								Call
 							</button>
 						)}
-
 						<Link
 							href={{
 								pathname: "/appointment",
 								query: { doctorId: id },
 							}}
 							className="flex-1">
-							<button className="w-full px-6 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/20 active:scale-[0.98]">
-								Book Appointment
+							<button className="w-full px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg text-base font-medium transition-all duration-300">
+								Book
 							</button>
 						</Link>
 					</div>
 				</div>
 			</div>
-		</div>
+
+			{/* Image Viewer Modal - Increased Image Size */}
+			<ImageViewer
+				isOpen={isImageViewerOpen}
+				onClose={() => setIsImageViewerOpen(false)}>
+				<Image
+					src={profileImage || "/default-doctor.jpg"}
+					alt={name}
+					width={600}
+					height={400}
+					className="object-contain rounded-xl"
+				/>
+			</ImageViewer>
+		</>
 	);
 };
 
