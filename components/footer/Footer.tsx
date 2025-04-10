@@ -71,6 +71,7 @@ const Footer = () => {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    legacyBehavior
                   >
                     {link.name}
                   </Link>
@@ -100,7 +101,6 @@ const Footer = () => {
           </span>
         </div>
       </footer>
-
       {/* for small screen only */}
       <footer className="block bg-[#061418] lg:hidden p-8 pt-10">
         <div className="   ">
@@ -142,6 +142,7 @@ const Footer = () => {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    legacyBehavior
                   >
                     {link.name}
                   </Link>
