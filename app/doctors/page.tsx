@@ -10,6 +10,7 @@ import DoctorHero from "@/components/page-components/doctors/hero/DoctorHero";
 import DoctorFeatured from "@/components/page-components/doctors/featured/DoctorFeatured";
 import DoctorList from "@/components/page-components/doctors/search-filter/DoctorList";
 import ModernFAQ from "@/components/page-components/doctors/faq/ModernFAQ";
+import DocFooter from "@/components/page-components/doctors/footer/DocFooter";
 
 export default function page() {
 	const [userLocation, setUserLocation] = useState<LocationData | null>(null);
@@ -99,7 +100,9 @@ export default function page() {
 				<div className={`mt-12`}>
 					<ModernFAQ />
 				</div>
-				<div className={`mt-8`}></div>
+				<div className={`mt-8`}>
+					<DocFooter />
+				</div>
 			</div>
 		</main>
 	);
