@@ -190,7 +190,9 @@ export const AppointmentBookingModal: React.FC<
 						{/* Fixed Header */}
 						<div className="p-6 border-b border-gray-200 dark:border-gray-700">
 							<div className="flex justify-between items-center">
-								<h2 className="text-2xl font-bold">Book Appointment</h2>
+								<h2 className="text-2xl font-bold bg-[#30ACDA] bg-clip-text text-transparent">
+									Book Appointment
+								</h2>
 								<button
 									onClick={onClose}
 									className="rounded-full p-2 hover:bg-[#30acda]/10 transition-colors">
