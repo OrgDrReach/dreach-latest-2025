@@ -9,6 +9,7 @@ import SearchAndFilters, {
 import DoctorHero from "@/components/page-components/doctors/hero/DoctorHero";
 import DoctorFeatured from "@/components/page-components/doctors/featured/DoctorFeatured";
 import DoctorList from "@/components/page-components/doctors/search-filter/DoctorList";
+import ModernFAQ from "@/components/page-components/doctors/faq/ModernFAQ";
 
 export default function page() {
 	const [userLocation, setUserLocation] = useState<LocationData | null>(null);
@@ -95,6 +96,10 @@ export default function page() {
 					isLoading={isSearching}
 					error={searchError}
 				/>
+				<div className={`mt-12`}>
+					<ModernFAQ />
+				</div>
+				<div className={`mt-8`}></div>
 			</div>
 		</main>
 	);
