@@ -1,18 +1,18 @@
 import Verify from "@/components/auth/verify/Verify";
-import React from "react";
+import { redirect } from "next/navigation";
 
-const page = async ({
-  searchParams,
+export default function VerifyPage({
+	searchParams,
 }: {
-  searchParams: Promise<{ phone: string }>;
-}) => {
-  const params = await searchParams;
-  console.log(params.phone);
-  return (
-    <div>
-      <Verify phone={params.phone} />
-    </div>
-  );
-};
+	searchParams: { phone?: string };
+}) {
+	if (!searchParams.phone) {
+		redirect("/auth/login");
+	}
 
-export default page;
+	return (
+		<div>
+			<Verify phone={searchParams.phone} />
+		</div>
+	);
+}
