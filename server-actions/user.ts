@@ -116,3 +116,43 @@ export const loginUser = async (phone: string, password: string) => {
 		};
 	}
 };
+
+export const updateOAuthUser = async (
+	userId: string,
+	data: {
+		phone?: string;
+		userType?: "patient" | "provider";
+		providerRole?:
+			| "doctor"
+			| "hospital"
+			| "lab"
+			| "pharmaceutical"
+			| "ambulance";
+	}
+) => {
+	try {
+		const res = await fetch(
+			`${process.env["SERVER_URL"]}/user/update/${userId}`,
+			{
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
+			}
+		);
+
+		const responseData = await res.json();
+		return {
+			status: res.status,
+			message: responseData.message,
+			user: responseData.user,
+		};
+	} catch (error) {
+		console.error("OAuth user update error:", error);
+		return {
+			status: 500,
+			message: "Internal Server Error",
+		};
+	}
+};
