@@ -103,11 +103,13 @@ const Register = () => {
 						</h2>
 						<div className="space-y-6">
 							<button
-								onClick={handleGoogleSignIn}
+								onClick={() =>
+									signIn("google", { callbackUrl: "/auth/complete-profile" })
+								}
 								type="button"
 								className="w-full flex items-center justify-center gap-3 px-4 py-3 text-gray-700 bg-white rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#31addb] transition-all duration-200 hover:scale-[1.02]">
 								<FcGoogle className="w-5 h-5" />
-								<span>Sign up with Google</span>
+								<span>Continue with Google</span>
 							</button>
 							<div className="relative">
 								<div className="absolute inset-0 flex items-center">
@@ -128,11 +130,11 @@ const Register = () => {
 										<input
 											type="text"
 											{...register("firstName")}
-											placeholder="Enter your first name"
+											placeholder="First name"
 											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200"
 										/>
 										{errors.firstName && (
-											<p className="mt-1 text-sm text-red-500">
+											<p className="mt-1 text-sm text-red-400">
 												{errors.firstName.message}
 											</p>
 										)}
@@ -144,11 +146,11 @@ const Register = () => {
 										<input
 											type="text"
 											{...register("lastName")}
-											placeholder="Enter your last name"
+											placeholder="Last name"
 											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200"
 										/>
 										{errors.lastName && (
-											<p className="mt-1 text-sm text-red-500">
+											<p className="mt-1 text-sm text-red-400">
 												{errors.lastName.message}
 											</p>
 										)}
@@ -156,7 +158,7 @@ const Register = () => {
 								</div>
 								<div>
 									<label className="text-sm font-medium text-white">
-										Email
+										Email Address
 									</label>
 									<input
 										type="email"
@@ -165,7 +167,7 @@ const Register = () => {
 										className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200"
 									/>
 									{errors.email && (
-										<p className="mt-1 text-sm text-red-500">
+										<p className="mt-1 text-sm text-red-400">
 											{errors.email.message}
 										</p>
 									)}
@@ -185,21 +187,47 @@ const Register = () => {
 										<input
 											type="tel"
 											{...register("phone")}
-											placeholder="Enter mobile number"
+											placeholder="Enter your mobile number"
 											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200"
 										/>
 									</div>
 									{errors.phone && (
-										<p className="mt-1 text-sm text-red-500">
+										<p className="mt-1 text-sm text-red-400">
 											{errors.phone.message}
 										</p>
 									)}
 								</div>
 								<div>
 									<label className="text-sm font-medium text-white">
-										Sign up as
+										Password
 									</label>
-									<div className="grid grid-cols-2 gap-4 mt-1">
+									<div className="relative">
+										<input
+											type={showPassword ? "text" : "password"}
+											{...register("password")}
+											placeholder="Create a password"
+											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200 pr-10"
+										/>
+										<button
+											type="button"
+											onClick={() => setShowPassword(!showPassword)}
+											className="absolute inset-y-0 right-0 flex items-center pr-3 mt-1 text-gray-400 hover:text-gray-500">
+											{showPassword ?
+												<EyeOffIcon className="h-5 w-5" />
+											:	<EyeIcon className="h-5 w-5" />}
+										</button>
+									</div>
+									{errors.password && (
+										<p className="mt-1 text-sm text-red-400">
+											{errors.password.message}
+										</p>
+									)}
+								</div>
+								<div className="space-y-3">
+									<label className="text-sm font-medium text-white">
+										Register as
+									</label>
+									<div className="grid grid-cols-2 gap-4">
 										<label
 											className={`flex items-center justify-center px-4 py-3 rounded-lg cursor-pointer transition-all duration-200 ${
 												watch("userType") === "patient" ?
@@ -210,9 +238,10 @@ const Register = () => {
 												type="radio"
 												{...register("userType")}
 												value="patient"
+												defaultChecked
 												className="hidden"
 											/>
-											<span className="flex items-center gap-2">
+											<span className="flex items-center space-x-2">
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
 													className="w-5 h-5"
@@ -238,7 +267,7 @@ const Register = () => {
 												value="provider"
 												className="hidden"
 											/>
-											<span className="flex items-center gap-2">
+											<span className="flex items-center space-x-2">
 												<svg
 													xmlns="http://www.w3.org/2000/svg"
 													className="w-5 h-5"
@@ -246,7 +275,6 @@ const Register = () => {
 													fill="none"
 													stroke="currentColor"
 													strokeWidth="2">
-													<path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
 													<path d="M3 9V7a2 2 0 0 1 2-2h2.93a2 2 0 0 0 1.664-.89l.812-1.22A2 2 0 0 1 12.07 2h1.86a2 2 0 0 1 1.664.89l.812 1.22A2 2 0 0 0 18.07 5H19a2 2 0 0 1 2 2v2" />
 													<circle cx="12" cy="13" r="3" />
 												</svg>
@@ -254,63 +282,16 @@ const Register = () => {
 											</span>
 										</label>
 									</div>
-									{errors.userType && (
-										<p className="mt-1 text-sm text-red-500">
-											{errors.userType.message}
-										</p>
-									)}
-								</div>
-								<div>
-									<label className="text-sm font-medium text-white">
-										Password
-									</label>
-									<div className="relative">
-										<input
-											type={showPassword ? "text" : "password"}
-											{...register("password")}
-											placeholder="Create a password"
-											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200"
-										/>
-										<button
-											type="button"
-											onClick={() => setShowPassword(!showPassword)}
-											className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none">
-											{showPassword ?
-												<EyeOffIcon className="w-5 h-5" />
-											:	<EyeIcon className="w-5 h-5" />}
-										</button>
-									</div>
-									{errors.password && (
-										<p className="mt-1 text-sm text-red-500">
-											{errors.password.message}
-										</p>
-									)}
 								</div>
 								<button
 									type="submit"
-									disabled={isSubmitting || loading}
-									className="w-full px-4 py-3 text-white bg-[#31addb] rounded-lg hover:bg-[#00bbff] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#31addb] transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed">
+									disabled={loading}
+									className="w-full px-4 py-3 text-white bg-[#31addb] rounded-lg hover:bg-[#00bbff] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#31addb] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
 									{loading ?
-										<span className="flex items-center justify-center">
-											<svg
-												className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-												xmlns="http://www.w3.org/2000/svg"
-												fill="none"
-												viewBox="0 0 24 24">
-												<circle
-													className="opacity-25"
-													cx="12"
-													cy="12"
-													r="10"
-													stroke="currentColor"
-													strokeWidth="4"></circle>
-												<path
-													className="opacity-75"
-													fill="currentColor"
-													d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-											</svg>
-											Creating account...
-										</span>
+										<div className="flex items-center justify-center">
+											<div className="w-5 h-5 border-t-2 border-b-2 border-white rounded-full animate-spin"></div>
+											<span className="ml-2">Registering...</span>
+										</div>
 									:	"Create Account"}
 								</button>
 							</form>
@@ -319,7 +300,7 @@ const Register = () => {
 								<Link
 									href="/auth/login"
 									className="text-orange-400 hover:text-orange-500 transition-colors duration-200">
-									Sign in
+									Login
 								</Link>
 							</p>
 						</div>
