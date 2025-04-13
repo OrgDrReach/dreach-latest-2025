@@ -2,19 +2,21 @@ import Verify from "@/components/auth/verify/Verify";
 import { VerifyErrorBoundary } from "@/components/auth/verify/VerifyErrorBoundary";
 import { redirect } from "next/navigation";
 
-export default function VerifyPage({
+export default async function VerifyPage({
 	searchParams,
 }: {
-	searchParams: { phone?: string };
+	searchParams: Record<string, string | string[] | undefined>;
 }) {
-	if (!searchParams.phone) {
+	const phone = searchParams.phone as string | undefined;
+
+	if (!phone) {
 		redirect("/auth/login");
 	}
 
 	return (
 		<main className="min-h-screen">
 			<VerifyErrorBoundary>
-				<Verify phone={searchParams.phone} />
+				<Verify phone={phone} />
 			</VerifyErrorBoundary>
 		</main>
 	);
