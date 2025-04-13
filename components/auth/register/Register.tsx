@@ -131,7 +131,7 @@ const Register = () => {
 											type="text"
 											{...register("firstName")}
 											placeholder="First name"
-											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200"
+											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200 text-black"
 										/>
 										{errors.firstName && (
 											<p className="mt-1 text-sm text-red-400">
@@ -147,7 +147,7 @@ const Register = () => {
 											type="text"
 											{...register("lastName")}
 											placeholder="Last name"
-											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200"
+											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200 text-black"
 										/>
 										{errors.lastName && (
 											<p className="mt-1 text-sm text-red-400">
@@ -164,7 +164,7 @@ const Register = () => {
 										type="email"
 										{...register("email")}
 										placeholder="Enter your email"
-										className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200"
+										className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200 text-black"
 									/>
 									{errors.email && (
 										<p className="mt-1 text-sm text-red-400">
@@ -177,18 +177,14 @@ const Register = () => {
 										Mobile Number
 									</label>
 									<div className="flex gap-2">
-										<select
-											name="countryCode"
-											className="px-3 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200">
-											<option value="+91">+91 (IND)</option>
-											<option value="+1">+1 (USA)</option>
-											<option value="+44">+44 (UK)</option>
-										</select>
+										<div className="px-3 py-3 mt-1 border border-gray-300 rounded-lg bg-white text-gray-700 min-w-[100px] flex items-center justify-center">
+											<p className={`font-bold`}>+91 (IND)</p>
+										</div>
 										<input
 											type="tel"
 											{...register("phone")}
 											placeholder="Enter your mobile number"
-											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200"
+											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200 text-black"
 										/>
 									</div>
 									{errors.phone && (
@@ -206,7 +202,7 @@ const Register = () => {
 											type={showPassword ? "text" : "password"}
 											{...register("password")}
 											placeholder="Create a password"
-											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200 pr-10"
+											className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200 pr-10 text-black"
 										/>
 										<button
 											type="button"
