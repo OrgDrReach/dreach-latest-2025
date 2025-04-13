@@ -1,4 +1,5 @@
 import Verify from "@/components/auth/verify/Verify";
+import { VerifyErrorBoundary } from "@/components/auth/verify/VerifyErrorBoundary";
 import { redirect } from "next/navigation";
 
 export default function VerifyPage({
@@ -11,8 +12,10 @@ export default function VerifyPage({
 	}
 
 	return (
-		<div>
-			<Verify phone={searchParams.phone} />
-		</div>
+		<main className="min-h-screen">
+			<VerifyErrorBoundary>
+				<Verify phone={searchParams.phone} />
+			</VerifyErrorBoundary>
+		</main>
 	);
 }
