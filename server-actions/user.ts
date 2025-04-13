@@ -45,21 +45,45 @@ export const registerUser = async (formdata: SignUpSchemaType) => {
 	}
 };
 
-export const verifyUser = async (phone: string, otp: number) => {
+export const verifyUser = async (phone: string, otp: string) => {
 	try {
-		const res = await fetch(
-			`${process.env["SERVER_URL"]}/user/verifyUserRegistration`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					phone: phone,
-					otp: otp,
-				}),
-			}
-		);
+		const res = await fetch(`${process.env["SERVER_URL"]}/user/verify`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				phone,
+				otp,
+			}),
+		});
+
+		const data = await res.json();
+		return {
+			status: res.status,
+			message: data.message,
+			token: data.token,
+		};
+	} catch (error) {
+		console.error("Verification error:", error);
+		return {
+			status: 500,
+			message: "Internal server error",
+		};
+	}
+};
+
+export const resendOTP = async (phone: string) => {
+	try {
+		const res = await fetch(`${process.env["SERVER_URL"]}/user/resend-otp`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				phone,
+			}),
+		});
 
 		const data = await res.json();
 		return {
@@ -67,9 +91,10 @@ export const verifyUser = async (phone: string, otp: number) => {
 			message: data.message,
 		};
 	} catch (error) {
+		console.error("Resend OTP error:", error);
 		return {
 			status: 500,
-			message: "Internal Server Error",
+			message: "Internal server error",
 		};
 	}
 };
