@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { updateOAuthUser } from "@/server-actions/user";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -25,8 +25,13 @@ type CompleteProfileFormData = z.infer<typeof completeProfileSchema>;
 export default function CompleteProfile() {
 	const { data: session, update } = useSession();
 	const router = useRouter();
+	const [isClient, setIsClient] = useState(false);
 	const [showProviderModal, setShowProviderModal] = useState(false);
 	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		setIsClient(true);
+	}, []);
 
 	const {
 		register,
@@ -61,7 +66,9 @@ export default function CompleteProfile() {
 
 			await update(); // Update the session with new data
 			toast.success("Profile updated successfully!");
-			router.push("/dashboard");
+			if (isClient) {
+				router.push("/dashboard");
+			}
 		} catch (error) {
 			toast.error("An error occurred while updating your profile");
 			setLoading(false);
@@ -88,14 +95,16 @@ export default function CompleteProfile() {
 
 			await update(); // Update the session with new data
 			toast.success("Profile updated successfully!");
-			router.push("/dashboard");
+			if (isClient) {
+				router.push("/dashboard");
+			}
 		} catch (error) {
 			toast.error("An error occurred while updating your profile");
 			setLoading(false);
 		}
 	};
 
-	if (!session) {
+	if (!session && isClient) {
 		router.push("/auth/login");
 		return null;
 	}
