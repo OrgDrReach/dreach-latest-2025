@@ -20,6 +20,19 @@ export const authOptions: NextAuthOptions = {
 					response_type: "code",
 				},
 			},
+			profile(profile) {
+				return {
+					id: profile.sub,
+					email: profile.email,
+					name: profile.name,
+					firstName: profile.given_name,
+					lastName: profile.family_name,
+					image: profile.picture,
+					role: EUserRole.PATIENT,
+					isVerified: true,
+					phone: "",
+				};
+			},
 		}),
 		CredentialsProvider({
 			name: "Credentials",
@@ -64,7 +77,7 @@ export const authOptions: NextAuthOptions = {
 		error: "/auth/error",
 	},
 	callbacks: {
-		async jwt({ token, user }) {
+		async jwt({ token, user, account }) {
 			if (user) {
 				token.id = user.id;
 				token.email = user.email;
@@ -72,7 +85,7 @@ export const authOptions: NextAuthOptions = {
 				token.phone = user.phone;
 				token.firstName = user.firstName;
 				token.lastName = user.lastName;
-				token.role = user.role;
+				token.role = user.role || EUserRole.PATIENT;
 				token.isVerified = user.isVerified;
 				token.providerRole = user.providerRole;
 				token.address = user.address;
