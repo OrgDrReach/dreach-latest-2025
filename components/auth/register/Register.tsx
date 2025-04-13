@@ -1,29 +1,16 @@
 "use client";
 import Image from "next/image";
-// import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Header from "@/components/auth/login/header";
 import Img from "@/public/websiteImages/registerpageImage.webp";
 import Link from "next/link";
-
-import * as z from "zod";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { SubmitHandler, useForm } from "react-hook-form";
 import { registerUser } from "@/server-actions/user";
 import { SignUpSchema, SignUpSchemaType } from "@/Zod/zod";
-
 import { useRouter } from "next/navigation";
-import { getCookie } from "cookies-next";
+import { toast } from "react-toastify";
 import ProviderModal from "./ProviderModal";
-
-const mapRes = {
-	201: "User Registered Successfully",
-	400: "Invalid Data",
-	500: "Internal Server Error",
-	409: "User Already Exists",
-};
 
 const Register = () => {
 	const [loading, setLoading] = useState(false);
@@ -38,7 +25,6 @@ const Register = () => {
 		register,
 		handleSubmit,
 		watch,
-
 		formState: { errors },
 	} = useForm<SignUpSchemaType>({
 		resolver: zodResolver(SignUpSchema),
@@ -46,26 +32,34 @@ const Register = () => {
 			userType: "patient",
 		},
 	});
+
 	const onSubmit: SubmitHandler<SignUpSchemaType> = async (data) => {
 		if (data.userType === "provider" && !selectedProviderRole) {
 			setShowProviderModal(true);
 			return;
 		}
 
-		setLoading(true);
+		try {
+			setLoading(true);
+			const res = await registerUser({
+				...data,
+				providerRole: selectedProviderRole,
+			});
 
-		const res = await registerUser({
-			...data,
-			providerRole: selectedProviderRole,
-		});
-		console.log(res);
+			if (res.status !== 201) {
+				toast.error(res.message || "Registration failed");
+				setLoading(false);
+				return;
+			}
 
-		if (res.status !== 201) {
-			alert("Error: " + mapRes[res.status as keyof typeof mapRes]);
-			return setLoading(false);
+			toast.success(
+				"Registration successful! Please verify your phone number."
+			);
+			router.push(`/auth/verify?phone=${data.phone}`);
+		} catch (error) {
+			toast.error("An error occurred during registration");
+			setLoading(false);
 		}
-
-		return router.push("/auth/verify?phone=" + data.phone);
 	};
 
 	const handleProviderRoleSelect = (
@@ -258,7 +252,6 @@ const Register = () => {
 								)}
 							</div>
 							<div className="">
-								{/* <Link href="/otp" className=""> */}
 								{loading ?
 									"Loading..."
 								:	<button
@@ -267,14 +260,15 @@ const Register = () => {
 										Send OTP
 									</button>
 								}
-								{/* </Link> */}
 							</div>
 						</form>
 						<p className="text-center text-white">
 							Already have an account?{" "}
-							<a href="/auth/login" className="text-orange-500 hover:underline">
+							<Link
+								href="/auth/login"
+								className="text-orange-500 hover:underline">
 								Login
-							</a>
+							</Link>
 						</p>
 					</div>
 				</div>
