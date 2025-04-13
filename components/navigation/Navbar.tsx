@@ -113,9 +113,9 @@ const Navi = ({ openNav, isNavOpen }: Props & { isNavOpen: boolean }) => {
 								<div
 									onClick={() => {
 										deleteCookie("Auth");
-										location.reload();
+										window.location.href = "/auth/login";
 									}}
-									className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg">
+									className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer">
 									{" "}
 									Logout{" "}
 								</div>
