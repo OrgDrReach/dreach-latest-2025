@@ -2,12 +2,13 @@ import Verify from "@/components/auth/verify/Verify";
 import { VerifyErrorBoundary } from "@/components/auth/verify/VerifyErrorBoundary";
 import { redirect } from "next/navigation";
 
-export default async function VerifyPage({
-	searchParams,
-}: {
-	searchParams: Record<string, string | string[] | undefined>;
-}) {
-	const phone = searchParams.phone as string | undefined;
+interface PageProps {
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function VerifyPage({ searchParams }: PageProps) {
+	const params = await searchParams;
+	const phone = typeof params.phone === "string" ? params.phone : undefined;
 
 	if (!phone) {
 		redirect("/auth/login");
