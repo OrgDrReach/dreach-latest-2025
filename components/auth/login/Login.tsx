@@ -16,10 +16,23 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 const Login = () => {
 	const router = useRouter();
 	const [showPassword, setShowPassword] = useState(false);
+	const [rememberMe, setRememberMe] = useState(false);
+
+	// Check for stored credentials on mount
+	React.useEffect(() => {
+		const storedPhone = localStorage.getItem("rememberedPhone");
+		const storedPassword = localStorage.getItem("rememberedPassword");
+		if (storedPhone && storedPassword) {
+			setValue("phone", storedPhone);
+			setValue("password", storedPassword);
+			setRememberMe(true);
+		}
+	}, []);
 
 	const {
 		register,
 		handleSubmit,
+		setValue,
 		formState: { errors, isSubmitting },
 	} = useForm<SignInSchemaType>({ resolver: zodResolver(SignInSchema) });
 
@@ -32,6 +45,14 @@ const Login = () => {
 			});
 
 			if (!result?.error) {
+				// Store credentials if remember me is checked
+				if (rememberMe) {
+					localStorage.setItem("rememberedPhone", data.phone);
+					localStorage.setItem("rememberedPassword", data.password);
+				} else {
+					localStorage.removeItem("rememberedPhone");
+					localStorage.removeItem("rememberedPassword");
+				}
 				toast.success("Login successful");
 				router.push("/dashboard");
 			} else {
@@ -94,13 +115,9 @@ const Login = () => {
 										Mobile Number
 									</label>
 									<div className="flex gap-2">
-										<select
-											name="countryCode"
-											className="px-3 py-3 mt-1 border border-gray-300 rounded-lg focus:ring-[#31addb] focus:border-[#31addb] bg-white transition-all duration-200">
-											<option value="+91">+91 (IND)</option>
-											<option value="+1">+1 (USA)</option>
-											<option value="+44">+44 (UK)</option>
-										</select>
+										<div className="px-3 py-3 mt-1 border border-gray-300 rounded-lg bg-white text-gray-700 min-w-[100px] flex items-center justify-center">
+											<p className={`font-bold`}>+91 (IND)</p>
+										</div>
 										<input
 											type="tel"
 											{...register("phone")}
@@ -109,7 +126,7 @@ const Login = () => {
 										/>
 									</div>
 									{errors.phone && (
-										<p className="mt-1 text-sm text-red-500">
+										<p className="mt-1 text-sm text-red-400">
 											{errors.phone.message}
 										</p>
 									)}
@@ -124,7 +141,7 @@ const Login = () => {
 											title="Password"
 											{...register("password")}
 											placeholder="Password"
-											className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-[#31addb] pr-10"
+											className="w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-1 focus:ring-[#31addb] pr-10 bg-white text-black"
 										/>
 										<button
 											type="button"
@@ -145,6 +162,8 @@ const Login = () => {
 									<div className="flex items-center">
 										<input
 											type="checkbox"
+											checked={rememberMe}
+											onChange={(e) => setRememberMe(e.target.checked)}
 											className="h-4 w-4 text-[#31addb] focus:ring-[#31addb] border-gray-300 rounded transition-colors duration-200"
 										/>
 										<label className="ml-2 block text-sm text-white">
