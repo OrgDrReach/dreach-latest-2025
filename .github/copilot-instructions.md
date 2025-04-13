@@ -82,6 +82,82 @@ Dr. Reach is an innovative healthcare platform that aims to transform healthcare
 - Implement proper error boundaries
 - Follow React best practices for optimization
 
+## Provider Verification System
+
+Each provider type requires specific verification:
+
+### Doctor Verification
+
+- Medical registration validation
+- Degree and specialization certificates
+- Clinic/Hospital affiliation proof
+- Identity verification
+- Professional experience documentation
+
+### Hospital Verification
+
+- Registration and licensing
+- Accreditation certificates
+- Facility inspection reports
+- Staff credentials
+- Equipment certification
+
+### Laboratory Verification
+
+- Registration/licensing
+- Equipment certification
+- Staff qualifications
+- Quality control certificates
+- Safety compliance
+
+### Pharmaceutical Verification
+
+- Pharmacy licensing
+- Drug handling certificates
+- Storage facility documentation
+- Staff qualifications
+- Inventory management
+
+### Ambulance Service Verification
+
+- Vehicle registration
+- Emergency service licensing
+- Staff certifications
+- Equipment certification
+- Insurance documentation
+
+## Data Management Guidelines
+
+### Provider Data
+
+- Secure storage of verification documents
+- Service records management
+- Availability scheduling
+- Patient feedback tracking
+- Transaction history
+- Compliance records
+
+### Patient Data
+
+- Personal information protection
+- Medical records security
+- Appointment history tracking
+- Prescription management
+- Test results storage
+- Payment records
+- Insurance information handling
+
+## Security Guidelines
+
+1. Implement proper data encryption
+2. Follow HIPAA compliance requirements
+3. Use secure authentication methods
+4. Protect sensitive medical data
+5. Regular security audits
+6. Proper error handling and logging
+7. Secure file upload handling
+8. Input validation and sanitization
+
 ## Development Guidelines
 
 1. Always maintain TypeScript type safety

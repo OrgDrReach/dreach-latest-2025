@@ -1,6 +1,6 @@
 # Dr. Reach - Project Requirements Specifications
 
-Version 1.0 | April 13, 2025
+Version 1.1 | April 13, 2025
 
 ## 1. Introduction
 
@@ -47,18 +47,70 @@ The system encompasses appointment scheduling, patient management, doctor profil
 
 ### 3.1 User Authentication & Management
 
-- Multi-role user registration (patient, doctor, hospital, lab, pharmaceutical)
+- Multi-role user registration:
+  - Patient Registration
+  - Provider Registration:
+    - Doctor Portal
+    - Hospital Administrator Portal
+    - Laboratory Service Portal
+    - Pharmaceutical Service Portal
+    - Ambulance Service Portal
+- Role-based Access Control (RBAC)
 - Mobile number verification with OTP
 - Email verification
-- Secure password requirements
 - Two-factor authentication
 - Social media integration (Google)
-- Session management
+- Session management with NextAuth.js
 - Password recovery system
+- Provider verification system with documentation
 
-### 3.2 Patient Portal
+### 3.2 Provider Verification System
 
-#### 3.2.1 Profile Management
+#### 3.2.1 Doctor Verification
+
+- Medical registration number validation
+- Degree certificates verification
+- Specialization certificates
+- Clinic/Hospital affiliation proof
+- Identity verification
+- Professional experience documentation
+
+#### 3.2.2 Hospital Verification
+
+- Hospital registration documentation
+- License verification
+- Accreditation certificates
+- Facility inspection reports
+- Staff credentials verification
+- Equipment certification
+
+#### 3.2.3 Laboratory Verification
+
+- Lab registration/license
+- Equipment certification
+- Staff qualification documents
+- Quality control certificates
+- Safety compliance documentation
+
+#### 3.2.4 Pharmaceutical Verification
+
+- Pharmacy license
+- Drug handling certificates
+- Storage facility documentation
+- Staff qualification proof
+- Inventory management system
+
+#### 3.2.5 Ambulance Service Verification
+
+- Vehicle registration
+- Emergency service license
+- Staff certification (EMT, Paramedic)
+- Equipment certification
+- Insurance documentation
+
+### 3.3 Patient Portal
+
+#### 3.3.1 Profile Management
 
 - Personal information management
 - Medical history records
@@ -67,7 +119,7 @@ The system encompasses appointment scheduling, patient management, doctor profil
 - Prescription records
 - Medical reports storage
 
-#### 3.2.2 Appointment Booking
+#### 3.3.2 Appointment Booking
 
 - Search doctors by specialty
 - View doctor profiles and ratings
@@ -78,7 +130,7 @@ The system encompasses appointment scheduling, patient management, doctor profil
 - Set appointment reminders
 - Multiple payment options
 
-#### 3.2.3 Consultations
+#### 3.3.3 Consultations
 
 - Video consultation interface
 - Chat with healthcare providers
@@ -86,9 +138,9 @@ The system encompasses appointment scheduling, patient management, doctor profil
 - Download medical records
 - Rate and review services
 
-### 3.3 Doctor Portal
+### 3.4 Doctor Portal
 
-#### 3.3.1 Profile Management
+#### 3.4.1 Profile Management
 
 - Professional information
 - Qualification verification
@@ -98,7 +150,7 @@ The system encompasses appointment scheduling, patient management, doctor profil
 - Consultation fees
 - Hospital affiliations
 
-#### 3.3.2 Appointment Management
+#### 3.4.2 Appointment Management
 
 - View upcoming appointments
 - Manage schedule
@@ -108,7 +160,7 @@ The system encompasses appointment scheduling, patient management, doctor profil
 - Share medical reports
 - Send follow-up reminders
 
-#### 3.3.3 Analytics Dashboard
+#### 3.4.3 Analytics Dashboard
 
 - Patient statistics
 - Appointment trends
@@ -116,16 +168,16 @@ The system encompasses appointment scheduling, patient management, doctor profil
 - Performance metrics
 - Patient feedback analysis
 
-### 3.4 Administrative Portal
+### 3.5 Administrative Portal
 
-#### 3.4.1 User Management
+#### 3.5.1 User Management
 
 - Verify healthcare providers
 - Monitor user activities
 - Handle user complaints
 - Manage system access
 
-#### 3.4.2 System Configuration
+#### 3.5.2 System Configuration
 
 - Service fee management
 - Commission settings
@@ -195,12 +247,25 @@ The system encompasses appointment scheduling, patient management, doctor profil
 
 ### 6.1 Data Storage
 
-- Patient records
-- Medical histories
-- Appointment data
-- Transaction records
-- System logs
-- User feedback
+#### 6.1.1 Provider Data
+
+- Registration information
+- Verification documents
+- Service records
+- Availability schedules
+- Patient feedback
+- Transaction history
+- Compliance records
+
+#### 6.1.2 Patient Data
+
+- Personal information
+- Medical records
+- Appointment history
+- Prescriptions
+- Test results
+- Payment records
+- Insurance information
 
 ### 6.2 Data Security
 
