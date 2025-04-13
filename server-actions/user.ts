@@ -1,6 +1,7 @@
 "use server";
 
 import { SignUpSchema, SignUpSchemaType } from "@/Zod/zod";
+import { EUserRole } from "@/types/user.d.types";
 
 export const registerUser = async (formdata: SignUpSchemaType) => {
 	try {
@@ -85,6 +86,7 @@ export const loginUser = async (phone: string, password: string) => {
 				password: password,
 			}),
 		});
+
 		const data = await res.json();
 
 		return {
@@ -94,14 +96,20 @@ export const loginUser = async (phone: string, password: string) => {
 				data.user ?
 					{
 						id: data.user.id,
+						email: data.user.email,
+						phone: data.user.phone,
 						firstName: data.user.firstName,
 						lastName: data.user.lastName,
-						email: data.user.email,
+						role: data.user.role,
+						isVerified: data.user.isVerified,
+						providerRole: data.user.providerRole,
+						address: data.user.address,
+						profileImage: data.user.profileImage,
 					}
 				:	undefined,
 		};
 	} catch (error) {
-		console.log(error);
+		console.error("Login error:", error);
 		return {
 			status: 500,
 			message: "Internal Server Error",
