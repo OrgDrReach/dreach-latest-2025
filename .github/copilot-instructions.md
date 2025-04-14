@@ -14,6 +14,7 @@ Dr. Reach is an innovative healthcare platform that aims to transform healthcare
 ## Technical Stack
 
 - Frontend: Next.js, TypeScript, Tailwind CSS
+- Package Manager: Yarn
 - State Management: Zustand
 - UI Components: Shadcn/ui
 - Authentication: NextAuth.js
@@ -168,6 +169,7 @@ Each provider type requires specific verification:
 6. Write clean, maintainable code with proper comments
 7. Follow the existing naming conventions
 8. Ensure responsive design across all screen sizes
+9. Use yarn for package management (e.g., `yarn add` instead of `npm install`)
 
 ## Key Files and Directories
 
