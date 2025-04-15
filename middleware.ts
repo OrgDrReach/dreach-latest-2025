@@ -15,7 +15,15 @@ export async function middleware(request: NextRequest) {
 		path === "/services" ||
 		path === "/doctors" ||
 		path.startsWith("/_next") ||
-		path.startsWith("/api/auth")
+		path.startsWith("/api/auth") ||
+		path.startsWith("/assets") ||
+		path.startsWith("/logos") ||
+		path.startsWith("/icons") ||
+		path.startsWith("/websiteImages") ||
+		path.includes(".png") ||
+		path.includes(".jpg") ||
+		path.includes(".ico") ||
+		path.includes(".svg")
 	) {
 		return NextResponse.next();
 	}
@@ -65,5 +73,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ["/((?!api|next/static|next/image|favicon.ico).*)"],
+	matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
