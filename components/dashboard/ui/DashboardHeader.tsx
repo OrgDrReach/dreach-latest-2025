@@ -103,7 +103,7 @@ const DashboardHeader: React.FC<HeaderProps> = ({ role, user }) => {
 		name: user?.name || session?.user?.name || "Guest User",
 		email: user?.email || session?.user?.email || "guest@example.com",
 		role: role,
-		imageUrl: user?.imageUrl || session?.user?.image,
+		imageUrl: user?.imageUrl ?? session?.user?.image ?? undefined,
 	};
 
 	return <Greeting user={userData} />;
