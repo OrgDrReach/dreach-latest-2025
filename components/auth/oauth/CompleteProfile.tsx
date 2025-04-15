@@ -31,7 +31,10 @@ export default function CompleteProfile() {
 
 	useEffect(() => {
 		setIsClient(true);
-	}, []);
+		if (!session && typeof window !== "undefined") {
+			router.push("/auth/login");
+		}
+	}, [session, router]);
 
 	const {
 		register,
@@ -66,9 +69,7 @@ export default function CompleteProfile() {
 
 			await update(); // Update the session with new data
 			toast.success("Profile updated successfully!");
-			if (isClient) {
-				router.push("/dashboard");
-			}
+			router.push("/dashboard");
 		} catch (error) {
 			toast.error("An error occurred while updating your profile");
 			setLoading(false);
@@ -95,17 +96,15 @@ export default function CompleteProfile() {
 
 			await update(); // Update the session with new data
 			toast.success("Profile updated successfully!");
-			if (isClient) {
-				router.push("/dashboard");
-			}
+			router.push("/dashboard");
 		} catch (error) {
 			toast.error("An error occurred while updating your profile");
 			setLoading(false);
 		}
 	};
 
-	if (!session && isClient) {
-		router.push("/auth/login");
+	// Don't render anything if not on client side
+	if (!isClient) {
 		return null;
 	}
 
