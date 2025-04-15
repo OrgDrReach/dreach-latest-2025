@@ -1,31 +1,39 @@
-export interface IAuthUser {
-  id: string;
-  email: string;
-  phone: string;
-  firstName: string;
-  lastName: string;
-  userType: 'patient' | 'provider';
-  providerRole?: 'doctor' | 'hospital' | 'lab' | 'pharmaceutical' | 'ambulance';
-  isVerified: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+import { EUserRole } from "./user.d.types";
+
+export interface AuthResponse {
+	accessToken: string;
+	user: {
+		id: string;
+		name: string;
+		email: string;
+		phone: string;
+		role: EUserRole;
+		image?: string;
+		createdAt: string;
+		updatedAt: string;
+	};
 }
 
-export interface ILoginResponse {
-  status: number;
-  message: string;
-  token?: string;
-  user?: IAuthUser;
+export interface LoginCredentials {
+	phone: string;
+	password: string;
 }
 
-export interface IRegisterResponse {
-  status: number;
-  message: string;
-  userId?: string;
+export interface RegisterCredentials {
+	name: string;
+	email: string;
+	phone: string;
+	password: string;
+	role: EUserRole;
 }
 
-export interface IVerifyResponse {
-  status: number;
-  message: string;
-  token?: string;
+export interface VerifyOTPCredentials {
+	phone: string;
+	otp: string;
+}
+
+export interface ResetPasswordCredentials {
+	phone: string;
+	newPassword: string;
+	otp: string;
 }

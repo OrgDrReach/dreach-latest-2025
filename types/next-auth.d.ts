@@ -1,24 +1,27 @@
-import { DefaultSession, DefaultUser } from "next-auth";
-import type { DashboardRole } from "./dashboard";
+import NextAuth from "next-auth";
+import { EUserRole } from "./user.d.types";
 
 declare module "next-auth" {
-	interface Session {
-		user: {
-			id: string;
-			role: DashboardRole;
-			isVerified: boolean;
-		} & DefaultSession["user"];
+	interface User {
+		id: string;
+		name: string;
+		email: string;
+		image?: string;
+		role: EUserRole;
+		accessToken?: string;
 	}
 
-	interface User extends DefaultUser {
-		role: DashboardRole;
-		isVerified: boolean;
+	interface Session {
+		user: User;
+		accessToken: string;
+		error?: string;
 	}
 }
 
 declare module "next-auth/jwt" {
 	interface JWT {
-		role: DashboardRole;
-		isVerified: boolean;
+		id: string;
+		role: EUserRole;
+		accessToken: string;
 	}
 }
