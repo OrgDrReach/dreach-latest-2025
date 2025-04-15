@@ -6,6 +6,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useTheme } from "next-themes";
 import { DarkModeToggle } from "../themes/dark-mode-toggle";
 import { useSession, signOut } from "next-auth/react";
+import Image from "next/image";
 
 const navLinks = [
 	{ href: "/", label: "Home" },
@@ -57,7 +58,14 @@ const Navi = ({ openNav, isNavOpen }: Props & { isNavOpen: boolean }) => {
 			<nav className="navi">
 				<Link href="/">
 					<div className="flex gap-4 items-center justify-center">
-						<img src="/logos/DR.png" alt="Logo" className="h-12 w-12" />
+						{/* <img src="/logos/DR.png" alt="Logo" className="h-12 w-12" /> */}
+						<Image
+							src={"/logos/DR.png"}
+							alt="Logo"
+							className="h-12 w-12"
+							height={20}
+							width={20}
+						/>
 						<p className="text-[#31ADDB] text-3xl font-semibold italic hidden md:block">
 							Dr.{" "}
 							<span

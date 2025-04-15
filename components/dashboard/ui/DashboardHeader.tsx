@@ -3,16 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSession } from "next-auth/react";
 import { DarkModeToggle } from "@/components/themes/dark-mode-toggle";
-import type { DashboardRole } from "@/types/dashboard";
-import { useAuth } from "@/components/contexts/AuthContext";
-
-interface IUser {
-	name: string | null;
-	email: string | null;
-	role: DashboardRole;
-	imageUrl?: string;
-}
+import type {
+	DashboardUser,
+	DashboardRole,
+	HeaderProps,
+} from "@/types/dashboard";
 
 const getRoleDisplay = (role: DashboardRole) => {
 	switch (role) {
@@ -29,13 +26,12 @@ const getRoleDisplay = (role: DashboardRole) => {
 	}
 };
 
-const Greeting: React.FC<{ user: IUser }> = ({ user }) => {
+const Greeting: React.FC<{ user: DashboardUser }> = ({ user }) => {
 	const [greeting, setGreeting] = useState("");
-	const [currentTime, setCurrentTime] = useState(new Date());
 
 	useEffect(() => {
 		const updateGreeting = () => {
-			const hours = currentTime.getHours();
+			const hours = new Date().getHours();
 			if (hours < 12) {
 				setGreeting("Good Morning!");
 			} else if (hours < 18) {
@@ -44,13 +40,11 @@ const Greeting: React.FC<{ user: IUser }> = ({ user }) => {
 				setGreeting("Good Evening!");
 			}
 		};
+
 		updateGreeting();
-		const intervalId = setInterval(() => {
-			setCurrentTime(new Date());
-			updateGreeting();
-		}, 1000 * 60);
+		const intervalId = setInterval(updateGreeting, 1000 * 60);
 		return () => clearInterval(intervalId);
-	}, [currentTime]);
+	}, []);
 
 	return (
 		<header className="flex justify-between items-center py-4 px-6 bg-white dark:bg-gray-800 shadow-sm">
@@ -102,20 +96,17 @@ const Greeting: React.FC<{ user: IUser }> = ({ user }) => {
 	);
 };
 
-const Header: React.FC = () => {
-	const { user } = useAuth();
-	const currentUser: IUser = {
-		name: user?.name || "Guest User",
-		email: user?.email || "guest@example.com",
-		role: user?.role || "patient",
-		imageUrl: user?.imageUrl,
+const DashboardHeader: React.FC<HeaderProps> = ({ role, user }) => {
+	const { data: session } = useSession();
+
+	const userData: DashboardUser = {
+		name: user?.name || session?.user?.name || "Guest User",
+		email: user?.email || session?.user?.email || "guest@example.com",
+		role: role,
+		imageUrl: user?.imageUrl || session?.user?.image,
 	};
 
-	return (
-		<main className="w-full">
-			<Greeting user={currentUser} />
-		</main>
-	);
+	return <Greeting user={userData} />;
 };
 
-export default Header;
+export default DashboardHeader;
