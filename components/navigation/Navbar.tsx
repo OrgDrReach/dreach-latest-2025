@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useTheme } from "next-themes";
 import { DarkModeToggle } from "../themes/dark-mode-toggle";
 import { useSession, signOut } from "next-auth/react";
-import Image from "next/image";
 
 const navLinks = [
 	{ href: "/", label: "Home" },
@@ -58,14 +58,15 @@ const Navi = ({ openNav, isNavOpen }: Props & { isNavOpen: boolean }) => {
 			<nav className="navi">
 				<Link href="/">
 					<div className="flex gap-4 items-center justify-center">
-						{/* <img src="/logos/DR.png" alt="Logo" className="h-12 w-12" /> */}
-						<Image
-							src={"/logos/DR.png"}
-							alt="Logo"
-							className="h-12 w-12"
-							height={20}
-							width={20}
-						/>
+						<div className="relative h-12 w-12">
+							<Image
+								src="/logos/DR.png"
+								alt="Dr. Reach Logo"
+								fill
+								priority
+								className="object-contain"
+							/>
+						</div>
 						<p className="text-[#31ADDB] text-3xl font-semibold italic hidden md:block">
 							Dr.{" "}
 							<span
