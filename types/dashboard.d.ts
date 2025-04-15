@@ -27,3 +27,10 @@ export interface HeaderProps {
 	role: DashboardRole;
 	user?: DashboardUser;
 }
+
+export interface DashboardStats {
+	totalAppointments: number;
+	upcomingAppointments: number;
+	completedAppointments: number;
+	cancelledAppointments: number;
+}
