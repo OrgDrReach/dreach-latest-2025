@@ -1,6 +1,28 @@
-# Latest repository
+# Dr. Reach Healthcare Platform
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+A modern healthcare platform connecting patients with medical professionals through both virtual and in-person consultations.
+
+## Tech Stack
+
+- Frontend: Next.js, TypeScript, Tailwind CSS
+- Package Manager: Yarn
+- State Management: Zustand
+- UI Components: Shadcn/ui
+- Authentication: NextAuth.js
+- Form Validation: Zod
+- Animations: Framer Motion
+
+## Development Guidelines
+
+1. Always maintain TypeScript type safety
+2. Use existing UI components from /components/ui
+3. Follow established folder structure and naming conventions
+4. Include dark mode support in all new features
+5. Ensure responsive design across all screen sizes
+6. Write clean, maintainable code with proper comments
+7. Use yarn for package management
+8. **Important:** Always fix all errors in a file before moving on to other files
+9. Run error checks after making changes and resolve any issues immediately
 
 ## Getting Started
 
