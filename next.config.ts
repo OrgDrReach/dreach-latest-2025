@@ -1,6 +1,6 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+	pageExtensions: ["tsx", "ts", "jsx", "js"],
 	reactStrictMode: true,
 	images: {
 		remotePatterns: [
@@ -41,6 +41,19 @@ const nextConfig: NextConfig = {
 	},
 	typescript: {
 		ignoreBuildErrors: true,
+	},
+	async headers() {
+		return [
+			{
+				source: "/dashboard/:path*",
+				headers: [
+					{
+						key: "Cache-Control",
+						value: "no-store",
+					},
+				],
+			},
+		];
 	},
 };
 
