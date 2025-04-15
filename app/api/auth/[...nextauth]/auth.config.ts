@@ -1,7 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { loginUser } from "@/server-actions/user";
 import { EUserRole } from "@/types/user.d.types";
 
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
@@ -23,14 +22,10 @@ export const authOptions: NextAuthOptions = {
 			profile(profile) {
 				return {
 					id: profile.sub,
-					email: profile.email,
 					name: profile.name,
-					firstName: profile.given_name,
-					lastName: profile.family_name,
+					email: profile.email,
 					image: profile.picture,
-					role: EUserRole.PATIENT,
-					isVerified: true,
-					phone: "",
+					role: "patient" as EUserRole,
 				};
 			},
 		}),
@@ -45,30 +40,36 @@ export const authOptions: NextAuthOptions = {
 					throw new Error("Missing credentials");
 				}
 
-				const res = await loginUser(credentials.phone, credentials.password);
+				try {
+					const response = await fetch(
+						`${process.env.BACKEND_URL}/auth/login`,
+						{
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({
+								phone: credentials.phone,
+								password: credentials.password,
+							}),
+						}
+					);
 
-				if (res.status !== 201) {
-					throw new Error(res.message || "Authentication failed");
+					const data = await response.json();
+
+					if (!response.ok) {
+						throw new Error(data.message || "Authentication failed");
+					}
+
+					return {
+						id: data.user.id,
+						name: data.user.name,
+						email: data.user.email,
+						image: data.user.image,
+						role: data.user.role,
+						accessToken: data.accessToken,
+					};
+				} catch (error) {
+					throw new Error("Authentication failed");
 				}
-
-				// Return a properly typed User object
-				return {
-					id: res.user?.id || "",
-					email: res.user?.email || "",
-					name:
-						res.user?.firstName ?
-							`${res.user.firstName} ${res.user.lastName}`
-						:	"",
-					phone: res.user?.phone || "",
-					firstName: res.user?.firstName || "",
-					lastName: res.user?.lastName || "",
-					role: res.user?.role || EUserRole.PATIENT,
-					isVerified: res.user?.isVerified || false,
-					image: res.user?.profileImage || null,
-					providerRole: res.user?.providerRole,
-					address: res.user?.address,
-					profileImage: res.user?.profileImage,
-				};
 			},
 		}),
 	],
@@ -78,35 +79,20 @@ export const authOptions: NextAuthOptions = {
 	},
 	callbacks: {
 		async jwt({ token, user, account }) {
-			if (user) {
-				token.id = user.id;
-				token.email = user.email;
-				token.name = user.name;
-				token.phone = user.phone;
-				token.firstName = user.firstName;
-				token.lastName = user.lastName;
-				token.role = user.role || EUserRole.PATIENT;
-				token.isVerified = user.isVerified;
-				token.providerRole = user.providerRole;
-				token.address = user.address;
-				token.profileImage = user.profileImage;
+			if (account && user) {
+				token.accessToken =
+					account.type === "credentials" ?
+						user.accessToken
+					:	account.access_token;
+				token.role = user.role;
 			}
 			return token;
 		},
 		async session({ session, token }) {
-			if (session.user) {
-				session.user.id = token.id;
-				session.user.email = token.email;
-				session.user.name = token.name;
-				session.user.phone = token.phone as string;
-				session.user.firstName = token.firstName as string;
-				session.user.lastName = token.lastName as string;
-				session.user.role = token.role as EUserRole;
-				session.user.isVerified = token.isVerified as boolean;
-				session.user.providerRole =
-					token.providerRole as typeof session.user.providerRole;
-				session.user.address = token.address as typeof session.user.address;
-				session.user.profileImage = token.profileImage as string | undefined;
+			if (token) {
+				session.user.role = token.role;
+				session.user.id = token.sub;
+				session.accessToken = token.accessToken;
 			}
 			return session;
 		},
