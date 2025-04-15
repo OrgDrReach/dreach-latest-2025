@@ -1,11 +1,12 @@
 "use client";
 
+export const runtime = "edge";
+export const dynamic = "force-dynamic";
+
 import { RNChildProp } from "@/@types/interface/Interface";
 import React, { useEffect, Suspense } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
-import { ubuntu, ubuntuMono } from "@/@types/font/Font";
 import DashboardHeader from "@/components/dashboard/ui/DashboardHeader";
 import DashboardSideNav from "@/components/dashboard/ui/DashboardSideNav";
 import DashboardError from "@/components/dashboard/ui/DashboardError";
@@ -24,9 +25,15 @@ export default function DashboardLayout({ children }: RNChildProp) {
 	const pathname = usePathname();
 	const { data: session, status } = useSession();
 	const { expanded, setCurrentUser } = useDashboardStore();
+	const router = useRouter();
 	const role = getRoleFromPath(pathname);
 
 	useEffect(() => {
+		if (status === "unauthenticated") {
+			router.replace("/auth/login");
+			return;
+		}
+
 		if (session?.user) {
 			const user: DashboardUser = {
 				name: session.user.name || null,
@@ -36,21 +43,20 @@ export default function DashboardLayout({ children }: RNChildProp) {
 			};
 			setCurrentUser(user);
 		}
-	}, [session, role, setCurrentUser]);
+	}, [session, role, setCurrentUser, status, router]);
 
-	// Handle loading state
+	// Handle initial loading state
 	if (status === "loading") {
 		return <DashboardLoading />;
 	}
 
-	// Protect dashboard routes
+	// Show nothing while redirecting
 	if (status === "unauthenticated") {
-		redirect("/auth/login");
+		return null;
 	}
 
 	return (
-		<main
-			className={`${ubuntu.className} ${ubuntuMono.className} antialiased min-h-screen`}>
+		<main className="min-h-screen">
 			<div className="flex h-screen overflow-hidden">
 				<DashboardSideNav role={role} />
 				<div
