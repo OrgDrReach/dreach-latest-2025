@@ -1,4 +1,4 @@
-# Dr. Reach - Project Requirements Specifications
+# Dr. Reach - Healthcare Platform Technical Specifications
 
 Version 1.1 | April 13, 2025
 
@@ -21,350 +21,218 @@ The system encompasses appointment scheduling, patient management, doctor profil
 - Pharmaceutical service providers
 - Ambulance service operators
 
-## 2. System Architecture
+## System Architecture
 
-### 2.1 Technology Stack
+### Frontend (Next.js)
 
-- Frontend: Next.js with TypeScript
-- UI Framework: TailwindCSS
+- Framework: Next.js 14+ with App Router
+- Language: TypeScript
 - State Management: Zustand
-- Form Management: React Hook Form with Zod validation
-- Animations: Framer Motion
+- UI Components: Shadcn/ui
+- Styling: Tailwind CSS
+- Form Management: React Hook Form + Zod
 - Authentication: NextAuth.js
-- Data Fetching: Server Actions
-
-### 2.2 Key Components
-
-- Next.js App Router for routing
-- Server-side rendering for improved performance
-- TypeScript for type safety
-- Responsive design with mobile-first approach
-- Dark mode support
-- Real-time notifications
-- Secure payment processing
-
-## 3. Functional Requirements
-
-### 3.1 User Authentication & Management
-
-- Multi-role user registration:
-  - Patient Registration
-  - Provider Registration:
-    - Doctor Portal
-    - Hospital Administrator Portal
-    - Laboratory Service Portal
-    - Pharmaceutical Service Portal
-    - Ambulance Service Portal
-- Role-based Access Control (RBAC)
-- Mobile number verification with OTP
-- Email verification
-- Two-factor authentication
-- Social media integration (Google)
-- Session management with NextAuth.js
-- Password recovery system
-- Provider verification system with documentation
-
-### 3.2 Provider Verification System
-
-#### 3.2.1 Doctor Verification
-
-- Medical registration number validation
-- Degree certificates verification
-- Specialization certificates
-- Clinic/Hospital affiliation proof
-- Identity verification
-- Professional experience documentation
-
-#### 3.2.2 Hospital Verification
-
-- Hospital registration documentation
-- License verification
-- Accreditation certificates
-- Facility inspection reports
-- Staff credentials verification
-- Equipment certification
-
-#### 3.2.3 Laboratory Verification
-
-- Lab registration/license
-- Equipment certification
-- Staff qualification documents
-- Quality control certificates
-- Safety compliance documentation
-
-#### 3.2.4 Pharmaceutical Verification
-
-- Pharmacy license
-- Drug handling certificates
-- Storage facility documentation
-- Staff qualification proof
-- Inventory management system
-
-#### 3.2.5 Ambulance Service Verification
-
-- Vehicle registration
-- Emergency service license
-- Staff certification (EMT, Paramedic)
-- Equipment certification
-- Insurance documentation
-
-### 3.3 Patient Portal
-
-#### 3.3.1 Profile Management
-
-- Personal information management
-- Medical history records
-- Document uploads
-- Appointment history
-- Prescription records
-- Medical reports storage
-
-#### 3.3.2 Appointment Booking
-
-- Search doctors by specialty
-- View doctor profiles and ratings
-- Book appointments (online/in-clinic)
-- Select time slots
-- Receive confirmation notifications
-- Reschedule/cancel appointments
-- Set appointment reminders
-- Multiple payment options
-
-#### 3.3.3 Consultations
-
-- Video consultation interface
-- Chat with healthcare providers
-- View prescriptions
-- Download medical records
-- Rate and review services
 
-### 3.4 Doctor Portal
+### Backend (NestJS)
+
+- Framework: NestJS
+- Database: Prisma ORM
+- Authentication: JWT + Session-based
+- File Storage: Multer
+- Configuration: ConfigModule
+
+## API Endpoints
+
+### Authentication Routes (/auth)
+
+- POST /auth/login - User login
+- POST /auth/verify - OTP verification
+- POST /auth/refresh - Refresh token
+
+### User Routes (/user)
+
+- POST /user/signup - User registration
+- POST /user/updateUser - Update user profile
+- POST /user/applyForServiceProvider - Provider application
+- GET /user/doctors - List all doctors
+- GET /user/getApprovedServiceProviders - List approved providers
+- GET /user/findServiceProvidersByHomeVisit - Find home visit providers
+- GET /user/findServiceProvidersList - Get all providers
+- GET /user/findDoctorbyVideoConsultation - Find teleconsultation doctors
+- GET /user/getServiceProvider/:username - Get provider details
+- GET /user/getAppointments/:userId - Get user appointments
+- POST /user/addReview - Add provider review
+- GET /user/getPopularDoctors - List popular doctors
+
+### Provider Routes (/provider)
+
+- POST /provider/updateServiceProvider - Update provider profile
+- POST /provider/updateSchedule - Update availability
+- POST /provider/uploadProviderProfile - Upload profile documents
+- POST /provider/checkProviderAvailability - Check availability
+- POST /provider/integreatedCheckProviderAvailability - Check integrated care availability
+- POST /provider/bookAppointment - Book appointment
+- POST /provider/integratedBookAppointment - Book integrated care
+- POST /provider/actionOnPatients - Manage patient actions
+- POST /provider/addMedicalRecord - Add medical records
+- POST /provider/addDocument - Upload documents
+- POST /provider/removeDocument - Remove documents
+- GET /provider/getProviderById/:providerId - Get provider details
+- GET /provider/getSchedule/:userId - Get provider schedule
+- GET /provider/getServiceProvider - Get provider profile
+- GET /provider/getScheduleByHomeCare - Get home care schedule
+- GET /provider/getPatients/:providerId - Get provider's patients
+- GET /provider/getPatientMedicalByProvider - Get patient records
+- GET /provider/getPatientsMedicalBySelf - Get self medical records
+- GET /provider/getPatientsInfo - Get patient information
+
+### Admin Routes (/admin)
 
-#### 3.4.1 Profile Management
-
-- Professional information
-- Qualification verification
-- Clinical experience
-- Specializations
-- Available time slots
-- Consultation fees
-- Hospital affiliations
+- GET /admin/getAllUsers - List all users
+- GET /admin/getUnverifiedProvider - List pending verifications
+- GET /admin/getAppointments - List all appointments
+- POST /admin/actionOnProvider - Approve/reject providers
 
-#### 3.4.2 Appointment Management
+## Development Setup
+
+### Environment Variables
 
-- View upcoming appointments
-- Manage schedule
-- Accept/reject appointments
-- Track patient history
-- Issue prescriptions
-- Share medical reports
-- Send follow-up reminders
+- NEXTAUTH_URL: Frontend URL
+- NEXTAUTH_SECRET: Auth secret key
+- GOOGLE_CLIENT_ID: Google OAuth client ID
+- GOOGLE_CLIENT_SECRET: Google OAuth secret
+- BACKEND_URL: NestJS backend URL
+- DATABASE_URL: Database connection string
 
-#### 3.4.3 Analytics Dashboard
+### Backend Server
 
-- Patient statistics
-- Appointment trends
-- Revenue analytics
-- Performance metrics
-- Patient feedback analysis
+- Development Port: 4000
+- Production URL: <https://api.drreach.com>
+- Environment: Node.js 22.14.0
 
-### 3.5 Administrative Portal
+## Security Requirements
 
-#### 3.5.1 User Management
+1. Authentication & Authorization
 
-- Verify healthcare providers
-- Monitor user activities
-- Handle user complaints
-- Manage system access
-
-#### 3.5.2 System Configuration
+   - JWT token-based authentication
+   - Role-based access control (RBAC)
+   - Session management
+   - OAuth 2.0 integration
 
-- Service fee management
-- Commission settings
-- Payment gateway integration
-- Notification templates
-- System maintenance
-
-## 4. Non-Functional Requirements
+2. Data Protection
 
-### 4.1 Performance
+   - HIPAA compliance measures
+   - End-to-end encryption for sensitive data
+   - Secure file storage
+   - Data backup and recovery
 
-- Page load time < 3 seconds
-- Real-time updates < 1 second
-- Support for 10,000+ concurrent users
-- 99.9% system availability
-- Maximum response time of 5 seconds
+3. API Security
+   - Rate limiting
+   - CORS configuration
+   - Input validation
+   - Request sanitization
 
-### 4.2 Security
+## Frontend Features
 
-- End-to-end encryption
-- HIPAA compliance
-- Regular security audits
-- Secure data transmission
-- Regular backups
-- Access control
-- Activity logging
+1. User Dashboard
 
-### 4.3 Scalability
+   - Role-based views (Patient/Doctor/Hospital/Admin)
+   - Appointment management
+   - Medical records access
+   - Profile management
 
-- Horizontal scaling capability
-- Load balancing
-- Caching mechanisms
-- Database optimization
-- CDN integration
+2. Appointment System
 
-### 4.4 Usability
+   - Multi-mode booking (Video/In-person/Home visit)
+   - Real-time availability
+   - Integrated care coordination
+   - Payment integration
 
-- Intuitive user interface
-- Mobile responsiveness
-- Accessibility compliance
-- Multi-language support
-- Offline capabilities
-- Clear error messages
-- Help documentation
+3. Provider Management
+   - Document verification
+   - Schedule management
+   - Patient records management
+   - Service configuration
 
-## 5. Integration Requirements
+## Data Models
 
-### 5.1 Third-Party Services
+1. User
 
-- Payment gateways
-- SMS/Email providers
-- Video conferencing API
-- Cloud storage
-- Analytics services
-- Maps integration
+   - Basic profile
+   - Authentication details
+   - Role information
+   - Medical history
 
-### 5.2 External Systems
+2. Provider
 
-- Hospital management systems
-- Laboratory information systems
-- Pharmacy management systems
-- Electronic health records
-- Insurance providers
-- Emergency services
+   - Professional details
+   - Verification documents
+   - Service configuration
+   - Availability schedule
 
-## 6. Data Management
+3. Appointment
 
-### 6.1 Data Storage
+   - Booking details
+   - Service type
+   - Status tracking
+   - Payment information
 
-#### 6.1.1 Provider Data
+4. Medical Record
+   - Patient information
+   - Treatment details
+   - Documents
+   - Provider notes
 
-- Registration information
-- Verification documents
-- Service records
-- Availability schedules
-- Patient feedback
-- Transaction history
-- Compliance records
+## Testing Requirements
 
-#### 6.1.2 Patient Data
+1. Frontend
 
-- Personal information
-- Medical records
-- Appointment history
-- Prescriptions
-- Test results
-- Payment records
-- Insurance information
+   - Unit tests with Jest
+   - Integration tests
+   - E2E tests with Cypress
 
-### 6.2 Data Security
+2. Backend
+   - Unit tests with Jest
+   - API tests
+   - Integration tests
 
-- Data encryption
-- Access controls
-- Audit trails
-- Backup procedures
-- Retention policies
-- Privacy compliance
+## Deployment
 
-## 7. System Monitoring
+1. Frontend
 
-### 7.1 Performance Monitoring
+   - Vercel deployment
+   - CDN integration
+   - Asset optimization
 
-- Server health checks
-- API response times
-- Database performance
-- User experience metrics
-- Error tracking
+2. Backend
+   - Docker containerization
+   - CI/CD pipeline
+   - Monitoring setup
 
-### 7.2 Business Metrics
+## Performance Metrics
 
-- User engagement
-- Appointment statistics
-- Revenue tracking
-- Customer satisfaction
-- Service utilization
+1. Response Times
 
-## 8. Deployment Requirements
+   - API response < 200ms
+   - Page load < 3s
+   - First contentful paint < 1.5s
 
-### 8.1 Infrastructure
+2. Availability
+   - 99.9% uptime
+   - Automated failover
+   - Load balancing
 
-- Cloud hosting
-- Database clusters
-- CDN configuration
-- SSL certificates
-- Backup systems
+## Monitoring
 
-### 8.2 Development Workflow
+1. Application Monitoring
 
-- Version control
-- CI/CD pipeline
-- Testing environments
-- Code review process
-- Documentation updates
+   - Error tracking
+   - Performance metrics
+   - User analytics
 
-## 9. Future Enhancements
-
-### 9.1 Planned Features
-
-- AI-powered doctor recommendations
-- Health monitoring device integration
-- Telemedicine enhancements
-- Advanced analytics
-- Mobile applications
-- International market support
-
-### 9.2 Scalability Plans
-
-- Geographic expansion
-- Additional healthcare services
-- Enhanced integration capabilities
-- Advanced reporting features
-- Machine learning implementation
-
-## 10. Compliance & Regulations
-
-### 10.1 Healthcare Standards
-
-- HIPAA compliance
-- HL7 standards
-- GDPR requirements
-- Local healthcare regulations
-- Data protection laws
-
-### 10.2 Quality Assurance
-
-- Regular audits
-- Compliance monitoring
-- Security assessments
-- Performance testing
-- User feedback analysis
-
-## 11. Support & Maintenance
-
-### 11.1 Technical Support
-
-- 24/7 system monitoring
-- Incident response
-- Bug fixes
-- Performance optimization
-- Security updates
-
-### 11.2 User Support
-
-- Help desk system
-- Knowledge base
-- Training materials
-- FAQ documentation
-- User guides
+2. Server Monitoring
+   - Resource utilization
+   - Network metrics
+   - Security alerts
 
 This document serves as the primary reference for development teams, stakeholders, and project managers involved in the Dr. Reach platform. Regular updates will be made to reflect changes in requirements and technological advancements.
