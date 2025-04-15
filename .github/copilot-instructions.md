@@ -170,6 +170,7 @@ Each provider type requires specific verification:
 7. Follow the existing naming conventions
 8. Ensure responsive design across all screen sizes
 9. Use yarn for package management (e.g., `yarn add` instead of `npm install`)
+10. Always scan for and fix any errors in a file after making changes before moving on to other tasks
 
 ## Key Files and Directories
 
