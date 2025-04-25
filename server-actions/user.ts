@@ -1,7 +1,7 @@
 "use server";
 
 import { SignUpSchema, SignUpSchemaType, otpSchema } from "@/Zod/zod";
-import { EUserRole } from "@/types/user.d.types";
+import { EUserRole, EUserStatus, EGender } from "@/types/auth.d.types";
 
 // Type for tracking OTP attempts
 type OTPAttempt = {
@@ -28,7 +28,7 @@ export const registerUser = async (formdata: SignUpSchemaType) => {
 			};
 		}
 
-		const res = await fetch(`${process.env["SERVER_URL"]}/user/register`, {
+		const res = await fetch(`${process.env.SERVER_URL}/user/register`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -164,7 +164,7 @@ export const resendOTP = async (phone: string) => {
 			}
 		}
 
-		const res = await fetch(`${process.env["SERVER_URL"]}/user/resend-otp`, {
+		const res = await fetch(`${process.env.SERVER_URL}/user/resend-otp`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -200,7 +200,7 @@ export const resendOTP = async (phone: string) => {
 
 export const loginUser = async (phone: string, password: string) => {
 	try {
-		const res = await fetch(`${process.env["SERVER_URL"]}/user/login`, {
+		const res = await fetch(`${process.env.SERVER_URL}}/user/login`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -222,11 +222,10 @@ export const loginUser = async (phone: string, password: string) => {
 						id: data.user.id,
 						email: data.user.email,
 						phone: data.user.phone,
-						firstName: data.user.firstName,
-						lastName: data.user.lastName,
+						name: data.user.name,
 						role: data.user.role,
 						isVerified: data.user.isVerified,
-						providerRole: data.user.providerRole,
+						providerType: data.user.providerType,
 						address: data.user.address,
 						profileImage: data.user.profileImage,
 					}
@@ -274,6 +273,64 @@ export const updateOAuthUser = async (
 		};
 	} catch (error) {
 		console.error("OAuth user update error:", error);
+		return {
+			status: 500,
+			message: "Internal Server Error",
+		};
+	}
+};
+
+export const handleGoogleAuth = async (userData: {
+	email: string;
+	firstName: string;
+	lastName: string;
+	image?: string;
+}) => {
+	try {
+		const res = await fetch(`${process.env.SERVER_URL}/user/google-auth`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				...userData,
+				role: EUserRole.PATIENT,
+				status: EUserStatus.ACTIVE,
+				phone: "",
+				dob: new Date(),
+				gender: EGender.OTHER,
+				address: [],
+				isVerified: false,
+				authProvider: "google",
+			}),
+		});
+
+		const data = await res.json();
+
+		return {
+			status: res.status,
+			message: data.message,
+			user:
+				data.user ?
+					{
+						id: data.user.id,
+						email: data.user.email,
+						name: data.user.name,
+						firstName: data.user.firstName,
+						lastName: data.user.lastName,
+						role: data.user.role,
+						isVerified: data.user.isVerified,
+						profileImage: data.user.profileImage,
+						authProvider: "google",
+						phone: data.user.phone || "",
+						dob: data.user.dob || new Date(),
+						gender: data.user.gender || EGender.OTHER,
+						address: data.user.address || [],
+					}
+				:	undefined,
+		};
+	} catch (error) {
+		console.error("Google auth error:", error);
 		return {
 			status: 500,
 			message: "Internal Server Error",

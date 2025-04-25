@@ -13,7 +13,7 @@ import {
 	FaNotesMedical,
 } from "react-icons/fa";
 
-import { useDoctorStore } from "@/lib/stores/doctorStore";
+import { useDoctorState } from "@/lib/stores/doctorStore";
 import { Provider, EProviderType } from "@/types/provider.d.types";
 import { IDoctor, EDoctorConsultMode } from "@/types/doctor.d.types";
 import {
@@ -27,7 +27,7 @@ const mapConsultModeToAppointmentMode = (
 	consultMode: EDoctorConsultMode
 ): EAppointmentMode => {
 	switch (consultMode) {
-		case EDoctorConsultMode.VIDEO_CONSULT:
+		case EDoctorConsultMode.VIDEO:
 			return EAppointmentMode.VIDEO;
 		case EDoctorConsultMode.HOME_VISIT:
 			return EAppointmentMode.HOME_VISIT;
@@ -72,8 +72,10 @@ const BookingSchema = z.object({
 	),
 	consultMode: z.enum([
 		EDoctorConsultMode.CLINIC,
-		EDoctorConsultMode.VIDEO_CONSULT,
+		EDoctorConsultMode.VIDEO,
 		EDoctorConsultMode.HOME_VISIT,
+		EDoctorConsultMode.HYBRID,
+		EDoctorConsultMode.IN_PERSON,
 	]),
 	reason: z
 		.string()
@@ -92,7 +94,7 @@ interface AppointmentBookingModalProps {
 export const AppointmentBookingModal: React.FC<
 	AppointmentBookingModalProps
 > = ({ isOpen, onClose, selectedDoctor: initialDoctor }) => {
-	const { bookAppointment } = useDoctorStore();
+	const { bookAppointment } = useDoctorState();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [selectedDoctor, setSelectedDoctor] = useState<
 		(Provider & IDoctor) | null
