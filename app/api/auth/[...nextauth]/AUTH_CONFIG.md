@@ -112,6 +112,29 @@ pages: {
 - **error**: Custom error page route
 - **newUser**: Profile completion page for new users
 
+## API Integration
+
+The configuration uses the `createUser` axios function for backend integration:
+
+```typescript
+const response = await createUser({
+  email: extendedUser.email ?? undefined,
+  firstName: extendedUser.firstName,
+  lastName: extendedUser.lastName,
+  profileImage: extendedUser.profileImage,
+});
+```
+
+### API Response Handling
+
+```typescript
+if (response.status !== 200) {
+  throw new Error(response.message || "Google authentication failed");
+}
+
+token.signupData = response.data;
+```
+
 ## Callbacks
 
 ### JWT Callback
@@ -119,31 +142,59 @@ pages: {
 ```typescript
 async jwt({ token, user, account }) {
   if (user) {
-    // Maps user data to token
-    // Performs signup API call
-    // Handles errors
+    const extendedUser = user as ExtendedUser;
+    // Maps all user properties to token
+    token.id = extendedUser.id;
+    token.email = extendedUser.email;
+    token.name = extendedUser.name;
+    token.phone = extendedUser.phone;
+    token.firstName = extendedUser.firstName;
+    token.lastName = extendedUser.lastName;
+    token.role = extendedUser.role;
+    token.isVerified = extendedUser.isVerified;
+    token.providerRole = extendedUser.providerType;
+    token.address = extendedUser.address;
+    token.profileImage = extendedUser.profileImage;
+    token.authProvider = extendedUser.authProvider;
+
+    // API integration with error handling
+    try {
+      // User creation API call
+      // Store response data in token
+    } catch (error) {
+      console.error("Error during Google auth:", error);
+    }
   }
   return token;
 }
 ```
-
-- Extends JWT token with user information
-- Performs user signup via API
-- Handles authentication errors
 
 ### Session Callback
 
 ```typescript
 async session({ session, token }) {
   if (session.user) {
-    // Maps token data to session user
+    const user = {
+      id: token.id as string,
+      email: token.email as string,
+      name: token.name as string,
+      image: token.image as string,
+      phone: token.phone as string,
+      firstName: token.firstName as string,
+      lastName: token.lastName as string,
+      role: token.role as EUserRole,
+      isVerified: token.isVerified as boolean,
+      providerRole: token.providerRole as string,
+      address: token.address,
+      profileImage: token.profileImage as string,
+      authProvider: token.authProvider as "google",
+    } satisfies ExtendedSessionUser;
+
+    session.user = user;
   }
   return session;
 }
 ```
-
-- Maps JWT token data to session user
-- Ensures type safety with ExtendedSessionUser
 
 ## Session Configuration
 
@@ -165,52 +216,12 @@ session: {
 4. Token expiration handled appropriately
 5. User data validated during signup
 
-## API Integration
-
-The configuration includes integration with backend API:
-
-```typescript
-await fetch(`${process.env.SERVER_URL}/user/signup`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    email: extendedUser.email,
-    firstName: extendedUser.firstName,
-    lastName: extendedUser.lastName,
-    image: extendedUser.image,
-  }),
-});
-```
-
-## Usage Example
-
-```typescript
-// In your component/page
-import { signIn, signOut, useSession } from "next-auth/react"
-
-export default function Component() {
-  const { data: session } = useSession()
-  
-  if (session) {
-    return <button onClick={() => signOut()}>Sign out</button>
-  }
-  return <button onClick={() => signIn('google')}>Sign in</button>
-}
-```
-
-## Error Handling
-
-- Validates required environment variables
-- Handles Google authentication failures
-- Logs authentication errors
-- Provides user-friendly error messages
-
 ## Type Safety
 
 The configuration ensures type safety through:
 
-- Custom interfaces for extended user data
-- Type assertions in callbacks
+- Custom interfaces for extended user data (`ExtendedSessionUser`, `ExtendedUser`)
+- Type assertions in callbacks using the `satisfies` operator
+- Strong typing for API responses and error handling
 - Proper type checking for token and session data
+- Type-safe environment variable validation
