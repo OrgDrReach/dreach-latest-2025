@@ -308,3 +308,50 @@ export const updateUser = async (
     };
   }
 };
+
+/**
+ * Delete user account
+ * @param userId ID of the user to delete
+ * @returns Promise with ApiResponse containing deletion status
+ */
+export const deleteUser = async (
+  userId: string
+): Promise<ApiResponse<void>> => {
+  try {
+    if (!process.env.SERVER_URL) {
+      throw new Error("SERVER_URL environment variable is not defined");
+    }
+
+    const response = await axios.delete(
+      `${process.env.SERVER_URL}/user/${userId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+
+    return {
+      status: response.status,
+      message: response.data.message,
+    };
+
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    
+    if (axios.isAxiosError(error)) {
+      return {
+        status: error.response?.status || 500,
+        message: error.response?.data?.message || "Failed to delete user",
+        error: error.message,
+      };
+    }
+
+    return {
+      status: 500,
+      message: "Internal server error",
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+};
