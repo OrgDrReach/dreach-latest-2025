@@ -21,7 +21,7 @@ export const createUser = async (
 		// Add profileImage field check and handling
 		const dataToSend = {
 			...userData,
-			profilePic: userData.profilePic || null,
+			profilePic: userData.profilePic,
 			isVerified: true,
 			role: EUserRole.PATIENT
 		};
