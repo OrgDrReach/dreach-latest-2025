@@ -63,3 +63,52 @@ export const createUser = async (
 		};
 	}
 };
+
+/**
+ * Fetch user data by ID
+ * @param userId User ID to fetch
+ * @returns Promise with ApiResponse containing user data or error
+ */
+export const fetchUserById = async (
+  userId: string
+): Promise<ApiResponse<IUser>> => {
+  try {
+    if (!userId) {
+      throw new Error("User ID is required");
+    }
+
+    const response = await axios.get(
+      `${process.env.SERVER_URL}/user/fetchUserById/${userId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+
+    console.log("Response data:", response.data);
+
+    return {
+      status: response.status,
+      message: response.data.message,
+      data: response.data.user,
+    };
+  } catch (error) {
+    console.error("Error fetching user:", error);
+
+    if (axios.isAxiosError(error)) {
+      return {
+        status: error.response?.status || 500,
+        message: error.response?.data?.message || "Internal server error",
+        error: error.message,
+      };
+    }
+
+    return {
+      status: 500,
+      message: "Internal server error",
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+};
