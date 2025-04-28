@@ -259,7 +259,7 @@ export const updateUser = async (
 ): Promise<ApiResponse<IUser>> => {
   try {
     if (!process.env.SERVER_URL) {
-      throw new Error("SERVER_URL environment variable is not defined");
+      throw new Error(`process.env.SERVER_URL environment variable is not defined`);
     }
 
     const apiUrl = `${process.env.SERVER_URL}/user/updateUser`;
