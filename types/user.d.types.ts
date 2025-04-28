@@ -71,6 +71,7 @@ export interface IUser {
 	userId: string;
 	firstName: string;
 	lastName: string;
+	name: string;
 	email: string;
 	phone: string;
 	dob: Date;
