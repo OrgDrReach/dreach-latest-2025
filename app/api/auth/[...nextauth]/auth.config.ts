@@ -3,6 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { Session } from "next-auth";
 import { EUserRole } from "@/types/auth.d.types";
 import { User } from "next-auth";
+import { createUser } from "@/lib/api/config/axios";
 
 interface ExtendedSessionUser {
 	id: string;
@@ -87,25 +88,18 @@ export const authOptions: NextAuthOptions = {
 				token.authProvider = extendedUser.authProvider;
 
 				try {
-					const res = await fetch(`${process.env.SERVER_URL}/user/signup`, {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							email: extendedUser.email,
-							firstName: extendedUser.firstName,
-							lastName: extendedUser.lastName,
-							image: extendedUser.image,
-						}),
+					const response = await createUser({
+						email: extendedUser.email ?? undefined,
+						firstName: extendedUser.firstName,
+						lastName: extendedUser.lastName,
+						profileImage: extendedUser.profileImage,
 					});
 
-					if (!res.ok) {
-						throw new Error("Google authentication failed");
+					if (response.status !== 200) {
+						throw new Error(response.message || "Google authentication failed");
 					}
 
-					const data = await res.json();
-					token.signupData = data;
+					token.signupData = response.data;
 				} catch (error) {
 					console.error("Error during Google auth:", error);
 				}
