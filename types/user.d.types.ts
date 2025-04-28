@@ -79,7 +79,9 @@ export interface IUser {
 	address: IAddress[];
 	role: EUserRole;
 	status: EUserStatus;
-	profileImage?: string;
+	profileImage?: string | null;
+	profilePic?: string | null;
+	authProvider?: "google";
 	createdAt: Date;
 	updatedAt: Date;
 

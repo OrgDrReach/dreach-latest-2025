@@ -86,7 +86,7 @@ export const authOptions: NextAuthOptions = {
 				token.isVerified = extendedUser.isVerified;
 				token.providerRole = extendedUser.providerType;
 				token.address = extendedUser.address;
-				token.profileImage = extendedUser.profileImage;
+				token.profilePic = extendedUser.image || null; // Set profile image from Google
 				token.authProvider = extendedUser.authProvider;
 
 				try {
@@ -95,16 +95,21 @@ export const authOptions: NextAuthOptions = {
 						firstName: extendedUser.firstName,
 						lastName: extendedUser.lastName,
 						name: `${extendedUser.firstName} ${extendedUser.lastName}`,
-						profileImage: extendedUser.profileImage,
+						profilePic: extendedUser.image, // Pass the profile image
+						role: EUserRole.PATIENT,
+						isVerified: true,
+						authProvider: "google"
 					});
 
-					if (response.status !== 200) {
-						throw new Error(response.message || "Google authentication failed");
+					if (response.status !== 200 && response.status !== 201) {
+						console.error("Google auth error:", response.message);
+						throw new Error("Google authentication failed");
 					}
 
 					token.signupData = response.data;
 				} catch (error) {
 					console.error("Error during Google auth:", error);
+					// Don't throw error, just log it to prevent authentication failure
 				}
 			}
 			return token;

@@ -18,9 +18,17 @@ export const createUser = async (
 	userData: Partial<IUser>
 ): Promise<ApiResponse<IUser>> => {
 	try {
+		// Add profileImage field check and handling
+		const dataToSend = {
+			...userData,
+			profilePic: userData.profilePic || null,
+			isVerified: true,
+			role: EUserRole.PATIENT
+		};
+
 		const response = await axios.post(
 			`${process.env.SERVER_URL}/user/signup`,
-			userData,
+			dataToSend,
 			{
 				headers: {
 					"Content-Type": "application/json",
@@ -29,13 +37,13 @@ export const createUser = async (
 			}
 		);
 
-		console.log(`User is being created: ${JSON.stringify(userData)}`);
-		console.log(response.data);
-
+		console.log(`User is being created: ${JSON.stringify(dataToSend)}`);
+		
+		// Properly handle the response data
 		return {
 			status: response.status,
-			message: response.data,
-			data: response.data.id,
+			message: "User created successfully",
+			data: response.data // Return the complete response data
 		};
 	} catch (error) {
 		console.error("Error creating user:", error);
