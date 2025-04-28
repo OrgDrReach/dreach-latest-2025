@@ -221,6 +221,7 @@ export const fetchUserByEmail = async (
 				email: data.user.email,
 				firstName: data.user.firstName || "",
 				lastName: data.user.lastName || "",
+				name: `${data.user.firstName} ${data.user.lastName}`,
 				phone: data.user.phone || "",
 				dob: data.user.dob ? new Date(data.user.dob) : new Date(),
 				gender: data.user.gender || EGender.OTHER,
