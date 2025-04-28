@@ -4,6 +4,7 @@ import { Session } from "next-auth";
 import { EUserRole } from "@/types/auth.d.types";
 import { User } from "next-auth";
 import { createUser } from "@/lib/api/config/axios";
+import { IUser } from "@/types/user.d.types";
 
 interface ExtendedSessionUser {
 	id: string;
@@ -17,18 +18,19 @@ interface ExtendedSessionUser {
 	isVerified?: boolean;
 	providerRole?: string;
 	address?: any[];
-	profileImage?: string;
+	profilePic?: string;
 	authProvider?: "google";
 }
 
 interface ExtendedUser extends User {
-	phone?: string;
-	firstName?: string;
-	lastName?: string;
-	role?: EUserRole;
-	isVerified?: boolean;
+	// phone?: string;
+	// firstName?: string;
+	// lastName?: string;
+	// role?: EUserRole;
+	// isVerified?: boolean;
+	name: string;
 	providerType?: string;
-	address?: any[];
+	// address?: any[];
 	profileImage?: string;
 	authProvider?: "google";
 }
@@ -92,6 +94,7 @@ export const authOptions: NextAuthOptions = {
 						email: extendedUser.email ?? undefined,
 						firstName: extendedUser.firstName,
 						lastName: extendedUser.lastName,
+						name: `${extendedUser.firstName} ${extendedUser.lastName}`,
 						profileImage: extendedUser.profileImage,
 					});
 
@@ -120,7 +123,7 @@ export const authOptions: NextAuthOptions = {
 					isVerified: token.isVerified as boolean,
 					providerRole: token.providerRole as string,
 					address: token.address,
-					profileImage: token.profileImage as string,
+					profilePic: token.profileImage as string,
 					authProvider: token.authProvider as "google",
 				} satisfies ExtendedSessionUser;
 
