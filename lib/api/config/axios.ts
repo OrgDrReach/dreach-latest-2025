@@ -2,6 +2,22 @@ import axios from "axios";
 import { IUser, IPatient } from "@/types/user.d.types";
 import { EUserRole, EUserStatus, EGender } from "@/types/auth.d.types";
 
+interface UpdateUserPayload {
+	name: string;
+	phoneNumber: string; // Changed from phone to phoneNumber to match ProfileFormData
+	dob: string | Date; // Allow both string and Date
+	gender: EGender;
+	bloodGroup?: string;
+	role: EUserRole;
+	address?: {
+		address?: string;
+		city?: string;
+		state?: string;
+		country?: string;
+		pincode?: string;
+	};
+}
+
 interface ApiResponse<T> {
 	status: number;
 	message: string | any;
@@ -229,6 +245,66 @@ export const fetchUserByEmail = async (
       status: 500,
       message: "Internal server error",
       error: error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
+};
+
+/**
+ * Update existing user
+ * @param data User data to update
+ * @returns Promise with ApiResponse containing updated user data or error
+ */
+export const updateUser = async (
+  data: UpdateUserPayload
+): Promise<ApiResponse<IUser>> => {
+  try {
+    if (!process.env.SERVER_URL) {
+      throw new Error("SERVER_URL environment variable is not defined");
+    }
+
+    const apiUrl = `${process.env.SERVER_URL}/user/updateUser`;
+
+    // Transform data to match API expectations while keeping consistent field names
+    const apiData = {
+      name: data.name,
+      phoneNumber: data.phoneNumber,
+      dob: data.dob instanceof Date ? data.dob.toISOString() : data.dob,
+      gender: data.gender,
+      bloodGroup: data.bloodGroup,
+      role: data.role,
+      address: data.address ? [data.address] : [], // Convert to array format as expected by API
+    };
+
+    const response = await axios.post(apiUrl, apiData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    console.log("Server response:", response.data);
+
+    return {
+      status: response.status,
+      data: response.data.user,
+      message: "Profile updated successfully",
+    };
+
+  } catch (error) {
+    console.error("Error updating user:", error);
+
+    if (axios.isAxiosError(error)) {
+      return {
+        status: error.response?.status || 500,
+        message: error.response?.data?.message || "Failed to update user",
+        error: error.message,
+      };
+    }
+
+    return {
+      status: 500,
+      message: "Internal server error",
+      error: error instanceof Error ? error.message : "Failed to update profile",
     };
   }
 };
