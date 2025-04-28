@@ -176,6 +176,7 @@ export const fetchUserByEmail = async (
         firstName: data.user.firstName || "",
         lastName: data.user.lastName || "",
         name: `${data.user.firstName} ${data.user.lastName}`,
+        profilePic: data.user.profilePic || "",
         phone: data.user.phone || "",
         dob: data.user.dob ? new Date(data.user.dob) : new Date(),
         gender: data.user.gender || EGender.OTHER,
