@@ -3,6 +3,8 @@ import GoogleProvider from "next-auth/providers/google";
 import { Session } from "next-auth";
 import { EUserRole } from "@/types/auth.d.types";
 import { User } from "next-auth";
+import { createUser } from "@/lib/api/config/axios";
+import { IUser } from "@/types/user.d.types";
 
 interface ExtendedSessionUser {
 	id: string;
@@ -16,18 +18,19 @@ interface ExtendedSessionUser {
 	isVerified?: boolean;
 	providerRole?: string;
 	address?: any[];
-	profileImage?: string;
+	profilePic?: string;
 	authProvider?: "google";
 }
 
 interface ExtendedUser extends User {
-	phone?: string;
-	firstName?: string;
-	lastName?: string;
-	role?: EUserRole;
-	isVerified?: boolean;
+	// phone?: string;
+	// firstName?: string;
+	// lastName?: string;
+	// role?: EUserRole;
+	// isVerified?: boolean;
+	name: string;
 	providerType?: string;
-	address?: any[];
+	// address?: any[];
 	profileImage?: string;
 	authProvider?: "google";
 }
@@ -83,31 +86,30 @@ export const authOptions: NextAuthOptions = {
 				token.isVerified = extendedUser.isVerified;
 				token.providerRole = extendedUser.providerType;
 				token.address = extendedUser.address;
-				token.profileImage = extendedUser.profileImage;
+				token.profilePic = extendedUser.image || null; // Set profile image from Google
 				token.authProvider = extendedUser.authProvider;
 
 				try {
-					const res = await fetch(`${process.env.SERVER_URL}/user/signup`, {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							email: extendedUser.email,
-							firstName: extendedUser.firstName,
-							lastName: extendedUser.lastName,
-							image: extendedUser.image,
-						}),
+					const response = await createUser({
+						email: extendedUser.email ?? undefined,
+						firstName: extendedUser.firstName,
+						lastName: extendedUser.lastName,
+						name: `${extendedUser.firstName} ${extendedUser.lastName}`,
+						profilePic: extendedUser.image, // Pass the profile image
+						role: EUserRole.PATIENT,
+						isVerified: true,
+						authProvider: "google"
 					});
 
-					if (!res.ok) {
+					if (response.status !== 200 && response.status !== 201) {
+						console.error("Google auth error:", response.message);
 						throw new Error("Google authentication failed");
 					}
 
-					const data = await res.json();
-					token.signupData = data;
+					token.signupData = response.data;
 				} catch (error) {
 					console.error("Error during Google auth:", error);
+					// Don't throw error, just log it to prevent authentication failure
 				}
 			}
 			return token;
@@ -126,7 +128,7 @@ export const authOptions: NextAuthOptions = {
 					isVerified: token.isVerified as boolean,
 					providerRole: token.providerRole as string,
 					address: token.address,
-					profileImage: token.profileImage as string,
+					profilePic: token.profileImage as string,
 					authProvider: token.authProvider as "google",
 				} satisfies ExtendedSessionUser;
 

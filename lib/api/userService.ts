@@ -181,20 +181,6 @@ export const fetchUserByEmail = async (
 		// If user not found, create a new user
 		if (res.status === 404 || (res.ok && !data.id)) {
 			console.log("User not found, creating new user");
-			// const createUserResponse = await createUser({
-			// 	email: email,
-			// 	role: EUserRole.PATIENT,
-			// 	status: EUserStatus.ACTIVE,
-			// 	firstName: "",
-			// 	lastName: "",
-			// 	phone: "",
-			// 	dob: new Date(),
-			// 	gender: EGender.OTHER,
-			// 	address: [],
-			// 	isVerified: false,
-			// 	createdAt: new Date(),
-			// 	updatedAt: new Date(),
-			// });
 
 			const createUserResponse = await fetchUserById(data.id);
 
@@ -221,6 +207,7 @@ export const fetchUserByEmail = async (
 				email: data.user.email,
 				firstName: data.user.firstName || "",
 				lastName: data.user.lastName || "",
+				name: `${data.user.firstName} ${data.user.lastName}`,
 				phone: data.user.phone || "",
 				dob: data.user.dob ? new Date(data.user.dob) : new Date(),
 				gender: data.user.gender || EGender.OTHER,
