@@ -17,47 +17,47 @@ const MAX_OTP_ATTEMPTS = 3;
 const BLOCK_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
 const ATTEMPT_RESET_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds
 
-export const registerUser = async (formdata: SignUpSchemaType) => {
-	try {
-		const result = SignUpSchema.safeParse(formdata);
+// export const registerUser = async (formdata: SignUpSchemaType) => {
+// 	try {
+// 		const result = SignUpSchema.safeParse(formdata);
 
-		if (!result.success) {
-			return {
-				status: 400,
-				message: "Invalid form data",
-			};
-		}
+// 		if (!result.success) {
+// 			return {
+// 				status: 400,
+// 				message: "Invalid form data",
+// 			};
+// 		}
 
-		const res = await fetch(`${process.env.SERVER_URL}/user/register`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				phone: formdata.phone,
-				password: formdata.password,
-				firstName: formdata.firstName,
-				lastName: formdata.lastName,
-				email: formdata.email,
-				userType: formdata.userType,
-				providerRole: formdata.providerRole,
-			}),
-		});
+// 		const res = await fetch(`${process.env.SERVER_URL}/user/register`, {
+// 			method: "POST",
+// 			headers: {
+// 				"Content-Type": "application/json",
+// 			},
+// 			body: JSON.stringify({
+// 				phone: formdata.phone,
+// 				password: formdata.password,
+// 				firstName: formdata.firstName,
+// 				lastName: formdata.lastName,
+// 				email: formdata.email,
+// 				userType: formdata.userType,
+// 				providerRole: formdata.providerRole,
+// 			}),
+// 		});
 
-		const data = await res.json();
-		return {
-			status: res.status,
-			message: data.message,
-			userId: data.userId,
-		};
-	} catch (error) {
-		console.error("Registration error:", error);
-		return {
-			status: 500,
-			message: "Internal server error",
-		};
-	}
-};
+// 		const data = await res.json();
+// 		return {
+// 			status: res.status,
+// 			message: data.message,
+// 			userId: data.userId,
+// 		};
+// 	} catch (error) {
+// 		console.error("Registration error:", error);
+// 		return {
+// 			status: 500,
+// 			message: "Internal server error",
+// 		};
+// 	}
+// };
 
 export const verifyUser = async (phone: string, otp: string) => {
 	try {
@@ -240,100 +240,100 @@ export const loginUser = async (phone: string, password: string) => {
 	}
 };
 
-export const updateOAuthUser = async (
-	userId: string,
-	data: {
-		phone?: string;
-		userType?: "patient" | "provider";
-		providerRole?:
-			| "doctor"
-			| "hospital"
-			| "lab"
-			| "pharmaceutical"
-			| "ambulance";
-	}
-) => {
-	try {
-		const res = await fetch(
-			`${process.env["SERVER_URL"]}/user/update/${userId}`,
-			{
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(data),
-			}
-		);
+// export const updateOAuthUser = async (
+// 	userId: string,
+// 	data: {
+// 		phone?: string;
+// 		userType?: "patient" | "provider";
+// 		providerRole?:
+// 			| "doctor"
+// 			| "hospital"
+// 			| "lab"
+// 			| "pharmaceutical"
+// 			| "ambulance";
+// 	}
+// ) => {
+// 	try {
+// 		const res = await fetch(
+// 			`${process.env["SERVER_URL"]}/user/update/${userId}`,
+// 			{
+// 				method: "PUT",
+// 				headers: {
+// 					"Content-Type": "application/json",
+// 				},
+// 				body: JSON.stringify(data),
+// 			}
+// 		);
 
-		const responseData = await res.json();
-		return {
-			status: res.status,
-			message: responseData.message,
-			user: responseData.user,
-		};
-	} catch (error) {
-		console.error("OAuth user update error:", error);
-		return {
-			status: 500,
-			message: "Internal Server Error",
-		};
-	}
-};
+// 		const responseData = await res.json();
+// 		return {
+// 			status: res.status,
+// 			message: responseData.message,
+// 			user: responseData.user,
+// 		};
+// 	} catch (error) {
+// 		console.error("OAuth user update error:", error);
+// 		return {
+// 			status: 500,
+// 			message: "Internal Server Error",
+// 		};
+// 	}
+// };
 
-export const handleGoogleAuth = async (userData: {
-	email: string;
-	firstName: string;
-	lastName: string;
-	image?: string;
-}) => {
-	try {
-		const res = await fetch(`${process.env.SERVER_URL}/user/google-auth`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				...userData,
-				role: EUserRole.PATIENT,
-				status: EUserStatus.ACTIVE,
-				phone: "",
-				dob: new Date(),
-				gender: EGender.OTHER,
-				address: [],
-				isVerified: false,
-				authProvider: "google",
-			}),
-		});
+// export const handleGoogleAuth = async (userData: {
+// 	email: string;
+// 	firstName: string;
+// 	lastName: string;
+// 	image?: string;
+// }) => {
+// 	try {
+// 		const res = await fetch(`${process.env.SERVER_URL}/user/google-auth`, {
+// 			method: "POST",
+// 			headers: {
+// 				"Content-Type": "application/json",
+// 			},
+// 			body: JSON.stringify({
+// 				...userData,
+// 				role: EUserRole.PATIENT,
+// 				status: EUserStatus.ACTIVE,
+// 				phone: "",
+// 				dob: new Date(),
+// 				gender: EGender.OTHER,
+// 				address: [],
+// 				isVerified: false,
+// 				authProvider: "google",
+// 			}),
+// 		});
 
-		const data = await res.json();
+// 		const data = await res.json();
 
-		return {
-			status: res.status,
-			message: data.message,
-			user:
-				data.user ?
-					{
-						id: data.user.id,
-						email: data.user.email,
-						name: data.user.name,
-						firstName: data.user.firstName,
-						lastName: data.user.lastName,
-						role: data.user.role,
-						isVerified: data.user.isVerified,
-						profileImage: data.user.profileImage,
-						authProvider: "google",
-						phone: data.user.phone || "",
-						dob: data.user.dob || new Date(),
-						gender: data.user.gender || EGender.OTHER,
-						address: data.user.address || [],
-					}
-				:	undefined,
-		};
-	} catch (error) {
-		console.error("Google auth error:", error);
-		return {
-			status: 500,
-			message: "Internal Server Error",
-		};
-	}
-};
+// 		return {
+// 			status: res.status,
+// 			message: data.message,
+// 			user:
+// 				data.user ?
+// 					{
+// 						id: data.user.id,
+// 						email: data.user.email,
+// 						name: data.user.name,
+// 						firstName: data.user.firstName,
+// 						lastName: data.user.lastName,
+// 						role: data.user.role,
+// 						isVerified: data.user.isVerified,
+// 						profileImage: data.user.profileImage,
+// 						authProvider: "google",
+// 						phone: data.user.phone || "",
+// 						dob: data.user.dob || new Date(),
+// 						gender: data.user.gender || EGender.OTHER,
+// 						address: data.user.address || [],
+// 					}
+// 				:	undefined,
+// 		};
+// 	} catch (error) {
+// 		console.error("Google auth error:", error);
+// 		return {
+// 			status: 500,
+// 			message: "Internal Server Error",
+// 		};
+// 	}
+// };
