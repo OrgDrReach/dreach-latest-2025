@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { Session } from "next-auth";
 import { EUserRole } from "@/types/auth.d.types";
 import { User } from "next-auth";
-import { createUser } from "@/lib/api/config/axios";
+import { createUser } from "@/lib/api/services/auth";
 import { IUser } from "@/types/user.d.types";
 
 interface ExtendedSessionUser {
@@ -98,7 +98,7 @@ export const authOptions: NextAuthOptions = {
 						profilePic: extendedUser.image, // Pass the profile image
 						role: EUserRole.PATIENT,
 						isVerified: true,
-						authProvider: "google"
+						authProvider: "google",
 					});
 
 					if (response.status !== 200 && response.status !== 201) {
