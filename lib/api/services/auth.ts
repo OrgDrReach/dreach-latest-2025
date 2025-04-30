@@ -77,37 +77,23 @@ export const createUser = async (
 };
 
 /**
- * Login user with credentials (phone/password or Google auth)
- * @param credentials User credentials (phone/password) or Google auth data
+ * Login user with Google auth
+ * @param credentials Google auth credentials
  * @returns Promise with ApiResponse containing user data or error
  */
 export const loginUser = async (credentials: {
-	phone?: string;
-	password?: string;
-	email?: string;
-	googleAuth?: boolean;
-	authProvider?: string;
+	email: string;
+	authProvider: string;
 }): Promise<ApiResponse<LoginResponse>> => {
 	try {
-		const loginData =
-			credentials.googleAuth ?
-				{
-					email: credentials.email,
-					authProvider: "google",
-				}
-			:	{
-					phone: credentials.phone,
-					password: credentials.password,
-				};
+		const loginData = {
+			email: credentials.email,
+			authProvider: "google",
+		};
 
 		const response = await api.post("/user/login", loginData);
 
-		console.log(
-			`User login attempt: ${JSON.stringify({
-				...loginData,
-				password: credentials.password ? "[REDACTED]" : undefined,
-			})}`
-		);
+		console.log(`User login attempt with Google: ${JSON.stringify(loginData)}`);
 
 		const data = response.data;
 

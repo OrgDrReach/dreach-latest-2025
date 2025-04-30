@@ -1,5 +1,7 @@
+// "use server";
+
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
-import { cookies } from "next/headers";
+// import { cookies } from "next/headers";
 
 // Create axios instance with default config
 const api = axios.create({
