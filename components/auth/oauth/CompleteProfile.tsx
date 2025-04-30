@@ -31,8 +31,7 @@ import { toast } from "sonner";
 import {
 	updateUser,
 	fetchUserByEmail,
-	fetchUserById,
-} from "@/lib/api/userService";
+} from "@/lib/api/services/user";
 
 // Define a more complete Session type that includes our custom fields
 interface ExtendedUser {
