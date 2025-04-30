@@ -198,48 +198,6 @@ export const resendOTP = async (phone: string) => {
 	}
 };
 
-export const loginUser = async (phone: string, password: string) => {
-	try {
-		const res = await fetch(`${process.env.SERVER_URL}}/user/login`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				phone: phone,
-				password: password,
-			}),
-		});
-
-		const data = await res.json();
-
-		return {
-			status: res.status,
-			message: data.message,
-			user:
-				data.user ?
-					{
-						id: data.user.id,
-						email: data.user.email,
-						phone: data.user.phone,
-						name: data.user.name,
-						role: data.user.role,
-						isVerified: data.user.isVerified,
-						providerType: data.user.providerType,
-						address: data.user.address,
-						profileImage: data.user.profileImage,
-					}
-				:	undefined,
-		};
-	} catch (error) {
-		console.error("Login error:", error);
-		return {
-			status: 500,
-			message: "Internal Server Error",
-		};
-	}
-};
-
 // export const updateOAuthUser = async (
 // 	userId: string,
 // 	data: {
