@@ -78,12 +78,13 @@ export const createUser = async (
 			}
 		);
 
-		console.log(`User is being created: ${JSON.stringify(userData)}`);
-		console.log(response.data);
-
+		// console.log(`User is being created: ${JSON.stringify(userData)}`);
+		console.log(`User Id: ${response.data.userId}`);
+		console.log(`User is being created: ${userData}`);
+		
 		return {
 			status: response.status,
-			message: response.data,
+			message: response.data.message,
 			data: response.data.id,
 		};
 	} catch (error) {
