@@ -36,6 +36,9 @@ const config: Config = {
 			tsconfig: "tsconfig.json",
 		},
 	},
+	// transform: {
+	// 	<transform_regex>: ['ts-jest', { tsconfig: 'tsconfig.json' }],
+	// }
 };
 
 export default config;
