@@ -34,13 +34,23 @@ const handleApiError = (
 	console.error(`API Error: ${defaultMessage}`, error);
 
 	if (axios.isAxiosError(error)) {
+		// Check if the error has a response
+		if (error.response) {
+			return {
+				status: error.response.status,
+				message: error.response.data?.message || defaultMessage,
+				error: error.message,
+			};
+		}
+		// Handle network errors or timeouts
 		return {
-			status: error.response?.status || 500,
-			message: error.response?.data?.message || defaultMessage,
+			status: 503,
+			message: "Service unavailable",
 			error: error.message,
 		};
 	}
 
+	// For non-Axios errors
 	return {
 		status: 500,
 		message: "Internal server error",
