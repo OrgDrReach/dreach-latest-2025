@@ -13,6 +13,7 @@ export interface ApiResponse<T> {
 }
 
 interface UpdateUserPayload {
+	userId: string;
 	name: string;
 	phoneNumber: string;
 	dob: string | Date;
@@ -170,7 +171,7 @@ export const updateUser = async (
 		// Transform data to match API expectations
 		const apiData = {
 			name: data.name,
-			phone: data.phone, // Ensure this matches the backend field
+			phone: data.phoneNumber, // Ensure this matches the backend field
 			dob: data.dob instanceof Date ? data.dob.toISOString() : data.dob,
 			gender: data.gender,
 			bloodGroup: data.bloodGroup,
@@ -205,6 +206,7 @@ export const updateUser = async (
 		console.error("Error updating user:", error);
 		return {
 			status: 500,
+			message: "Internal server error",
 			error:
 				error instanceof Error ? error.message : "Failed to update profile",
 		};
