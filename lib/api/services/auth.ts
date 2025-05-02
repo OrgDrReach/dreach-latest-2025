@@ -67,28 +67,31 @@ export const createUser = async (
 	userData: Partial<IUser>
 ): Promise<ApiResponse<IUser>> => {
 	try {
-		const response = await axios.post(
-			`${process.env.SERVER_URL}/user/signup`,
-			userData,
-			{
-				headers: {
-					"Content-Type": "application/json",
-				},
-				withCredentials: true,
-			}
-		);
+		const res = await fetch(`${process.env.SERVER_URL}/user/signup`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: "include",
+			body: JSON.stringify(userData),
+		});
+		console.log(`"user is being created", ${JSON.stringify(userData)}`);
 
-		// console.log(`User is being created: ${JSON.stringify(userData)}`);
-		console.log(`User Id: ${response.data.userId}`);
-		console.log(`User is being created: ${userData}`);
-		
+		const data = await res.json();
+
+		console.log(data);
 		return {
-			status: response.status,
-			message: response.data.message,
-			data: response.data.id,
+			status: res.status,
+			message: data,
+			data: data.userId,
 		};
 	} catch (error) {
-		return handleApiError(error, "Error creating user");
+		console.error("Error creating user:", error);
+		return {
+			status: 500,
+			message: "Internal server error",
+			error: error instanceof Error ? error.message : "Unknown error occurred",
+		};
 	}
 };
 

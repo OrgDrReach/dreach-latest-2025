@@ -1,29 +1,16 @@
-import axios from "axios";
+"use server";
+
 import { IUser } from "@/types/user.d.types";
 import { EUserRole, EUserStatus, EGender } from "@/types/auth.d.types";
+import { Phone } from "lucide-react";
 import { createUser } from "./auth";
 
-// Add custom error handling utility
-const handleApiError = (
-	error: unknown,
-	defaultMessage: string
-): ApiResponse<any> => {
-	console.error(`API Error: ${defaultMessage}`, error);
-
-	if (axios.isAxiosError(error)) {
-		return {
-			status: error.response?.status || 500,
-			message: error.response?.data?.message || defaultMessage,
-			error: error.message,
-		};
-	}
-
-	return {
-		status: 500,
-		message: "Internal server error",
-		error: error instanceof Error ? error.message : "Unknown error occurred",
-	};
-};
+export interface ApiResponse<T> {
+	status: number;
+	message: string;
+	data?: T;
+	error?: string;
+}
 
 interface UpdateUserPayload {
 	name: string;
@@ -41,60 +28,50 @@ interface UpdateUserPayload {
 	};
 }
 
-interface ApiResponse<T> {
-	status: number;
-	message: string;
-	data?: T;
-	error?: string;
-}
-
 /**
  * Fetch user data by ID
  * @param userId User ID to fetch
  * @returns Promise with ApiResponse containing user data or error
  */
 export const fetchUserById = async (
-  userId: string
+	userId: string
 ): Promise<ApiResponse<IUser>> => {
-  try {
-    if (!userId) {
-      throw new Error("User ID is required");
-    }
+	try {
+		if (!userId) {
+			throw new Error("User ID is required");
+		}
 
-    const response = await axios.get(
-      `${process.env.SERVER_URL}/user/fetchUserById/${userId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
-    );
+		const res = await fetch(
+			`${process.env.SERVER_URL}/user/fetchUserById/${userId}`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+			}
+		);
 
-    console.log("Response data:", response.data);
+		const data = await res.json();
+		console.log("Response data:", data);
 
-    return {
-      status: response.status,
-      message: response.data.message,
-      data: response.data.user,
-    };
-  } catch (error) {
-    console.error("Error fetching user:", error);
+		if (!res.ok) {
+			throw new Error(data.message || "Failed to fetch user");
+		}
 
-    if (axios.isAxiosError(error)) {
-      return {
-        status: error.response?.status || 500,
-        message: error.response?.data?.message || "Internal server error",
-        error: error.message,
-      };
-    }
-
-    return {
-      status: 500,
-      message: "Internal server error",
-      error: error instanceof Error ? error.message : "Unknown error occurred",
-    };
-  }
+		return {
+			status: res.status,
+			message: data.message,
+			data: data.user,
+		};
+	} catch (error) {
+		console.error("Error fetching user:", error);
+		return {
+			status: 500,
+			message: "Internal server error",
+			error: error instanceof Error ? error.message : "Unknown error occurred",
+		};
+	}
 };
 
 /**
@@ -103,112 +80,76 @@ export const fetchUserById = async (
  * @returns Promise with ApiResponse containing user data or error
  */
 export const fetchUserByEmail = async (
-  email: string
+	email: string
 ): Promise<ApiResponse<IUser>> => {
-  try {
-    if (!email) {
-      return {
-        status: 400,
-        message: "Email is required",
-        error: "Email is required",
-      };
-    }
+	try {
+		if (!email) {
+			return {
+				status: 400,
+				message: "Email is required",
+				error: "Email is required",
+			};
+		}
 
-    console.log("Attempting to fetch user with email:", email);
-    const response = await axios.get(
-      `${process.env.SERVER_URL}/user/fetchUserByEmail/?email=${email}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
-    );
+		if (!process.env.SERVER_URL) {
+			throw new Error("SERVER_URL environment variable is not defined");
+		}
 
-    const data = response.data;
-    console.log("Response from fetch user by email:", data);
+		console.log("Attempting to fetch user with email:", email);
+		const res = await fetch(
+			`${process.env.SERVER_URL}/user/fetchUserByEmail/?email=${encodeURIComponent(email)}`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+			}
+		);
 
-    // Handle successful user fetch
-    if (data && data.id) {
-      console.log("User found with id:", data.userId);
-      const updateUserResponse = await fetchUserById(data.userId);
-      
-      if (updateUserResponse.status === 200 && updateUserResponse.data) {
-        return {
-          status: 200,
-          message: "User found successfully",
-          data: updateUserResponse.data,
-        };
-      }
-    }
+		const data = await res.json();
+		console.log("Response status:", res.status);
+		console.log("Response data:", data);
 
-    // Handle user data validation
-    if (data && data.user) {
-      if (!data.user.email) {
-        throw new Error("Invalid user data received from server");
-      }
+		// Handle user found
+		if (res.ok && data?.userId) {
+			console.log("User found with ID:", data.userId);
+			return {
+				status: 200,
+				message: "User found successfully",
+				data,
+			};
+		}
 
-      const userData: IUser = {
-        id: data.user.id || "",
-        userId: data.user.userId || "",
-        email: data.user.email,
-        firstName: data.user.firstName || "",
-        lastName: data.user.lastName || "",
-        name: `${data.user.firstName} ${data.user.lastName}`,
-        phone: data.user.phone || "",
-        dob: data.user.dob ? new Date(data.user.dob) : new Date(),
-        gender: data.user.gender || EGender.OTHER,
-        address: Array.isArray(data.user.address) ? data.user.address : [],
-        role: data.user.role || EUserRole.PATIENT,
-        status: data.user.status || EUserStatus.ACTIVE,
-        isVerified: Boolean(data.user.isVerified),
-        createdAt: data.user.createdAt ? new Date(data.user.createdAt) : new Date(),
-        updatedAt: data.user.updatedAt ? new Date(data.user.updatedAt) : new Date(),
-      };
+		// Handle user not found
+		if (res.status === 404) {
+			console.log("User not found, creating new user");
+			const createUserResponse = await createUser({
+				email,
+				role: EUserRole.PATIENT,
+				status: EUserStatus.ACTIVE,
+			});
 
-      return {
-        status: 200,
-        message: "User found successfully",
-        data: userData,
-      };
-    }
+			if (createUserResponse.status === 201 && createUserResponse.data) {
+				return {
+					status: 201,
+					message: "User created successfully",
+					data: createUserResponse.data,
+				};
+			}
+			throw new Error(createUserResponse.message || "Failed to create user");
+		}
 
-    throw new Error(data.message || "Failed to fetch user");
-
-  } catch (error) {
-    console.error("Error in fetchUserByEmail:", error);
-
-    if (axios.isAxiosError(error)) {
-      // Handle 404 Not Found specifically
-      if (error.response?.status === 404) {
-        console.log("User not found, attempting to create new user");
-        try {
-          const createUserResponse = await createUser({ email });
-          if (createUserResponse.status === 201 && createUserResponse.data) {
-            return {
-              status: 200,
-              message: "User created successfully",
-              data: createUserResponse.data,
-            };
-          }
-        } catch (createError) {
-          console.error("Error creating user:", createError);
-        }
-      }
-
-      return {
-        status: error.response?.status || 500,
-        message: error.response?.data?.message || "Internal server error",
-        error: error.message,
-      };
-    }
-
-    return {
-      status: 500,
-      message: "Internal server error",
-      error: error instanceof Error ? error.message : "Unknown error occurred",
-    };
-  }
+		// Handle unexpected response
+		throw new Error(data.message || "Unexpected error occurred");
+	} catch (error) {
+		console.error("Error in fetchUserByEmail:", error);
+		return {
+			status: 500,
+			message: error instanceof Error ? error.message : "Internal server error",
+			error: error instanceof Error ? error.message : "Unknown error occurred",
+		};
+	}
 };
 
 /**
@@ -217,58 +158,57 @@ export const fetchUserByEmail = async (
  * @returns Promise with ApiResponse containing updated user data or error
  */
 export const updateUser = async (
-  data: UpdateUserPayload
+	data: UpdateUserPayload
 ): Promise<ApiResponse<IUser>> => {
-  try {
-    if (!process.env.SERVER_URL) {
-      throw new Error("SERVER_URL environment variable is not defined");
-    }
+	try {
+		if (!process.env.SERVER_URL) {
+			throw new Error("SERVER_URL environment variable is not defined");
+		}
 
-    const apiUrl = `${process.env.SERVER_URL}/user/updateUser`;
+		const apiUrl = `${process.env.SERVER_URL}/user/updateUser`;
 
-    // Transform data to match API expectations while keeping consistent field names
-    const apiData = {
-      name: data.name,
-      phoneNumber: data.phoneNumber,
-      dob: data.dob instanceof Date ? data.dob.toISOString() : data.dob,
-      gender: data.gender,
-      bloodGroup: data.bloodGroup,
-      role: data.role,
-      address: data.address ? [data.address] : [], // Convert to array format as expected by API
-    };
+		// Transform data to match API expectations
+		const apiData = {
+			name: data.name,
+			phone: data.phone, // Ensure this matches the backend field
+			dob: data.dob instanceof Date ? data.dob.toISOString() : data.dob,
+			gender: data.gender,
+			bloodGroup: data.bloodGroup,
+			address: data.address ? { ...data.address } : undefined, // Ensure address matches the backend structure
+			userId: data.userId,
+		};
 
-    const response = await axios.post(apiUrl, apiData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
+		console.log("Payload sent to update user:", apiData);
 
-    console.log("Server response:", response.data);
+		const response = await fetch(apiUrl, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: "include",
+			body: JSON.stringify(apiData),
+		});
 
-    return {
-      status: response.status,
-      data: response.data.user,
-      message: "Profile updated successfully",
-    };
+		const responseData = await response.json();
+		console.log("Server response:", responseData);
 
-  } catch (error) {
-    console.error("Error updating user:", error);
+		if (!response.ok) {
+			throw new Error(responseData.message || "Failed to update user");
+		}
 
-    if (axios.isAxiosError(error)) {
-      return {
-        status: error.response?.status || 500,
-        message: error.response?.data?.message || "Failed to update user",
-        error: error.message,
-      };
-    }
-
-    return {
-      status: 500,
-      message: "Internal server error",
-      error: error instanceof Error ? error.message : "Failed to update profile",
-    };
-  }
+		return {
+			status: response.status,
+			data: responseData.user,
+			message: "Profile updated successfully",
+		};
+	} catch (error) {
+		console.error("Error updating user:", error);
+		return {
+			status: 500,
+			error:
+				error instanceof Error ? error.message : "Failed to update profile",
+		};
+	}
 };
 
 /**
@@ -277,43 +217,29 @@ export const updateUser = async (
  * @returns Promise with ApiResponse containing deletion status
  */
 export const deleteUser = async (
-  userId: string
+	userId: string
 ): Promise<ApiResponse<void>> => {
-  try {
-    if (!process.env.SERVER_URL) {
-      throw new Error("SERVER_URL environment variable is not defined");
-    }
+	try {
+		const res = await fetch(`${process.env.SERVER_URL}/user/${userId}`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: "include",
+		});
 
-    const response = await axios.delete(
-      `${process.env.SERVER_URL}/user/${userId}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
-    );
+		const data = await res.json();
 
-    return {
-      status: response.status,
-      message: response.data.message,
-    };
-
-  } catch (error) {
-    console.error("Error deleting user:", error);
-    
-    if (axios.isAxiosError(error)) {
-      return {
-        status: error.response?.status || 500,
-        message: error.response?.data?.message || "Failed to delete user",
-        error: error.message,
-      };
-    }
-
-    return {
-      status: 500,
-      message: "Internal server error",
-      error: error instanceof Error ? error.message : "Unknown error occurred",
-    };
-  }
+		return {
+			status: res.status,
+			message: data.message,
+		};
+	} catch (error) {
+		console.error("Error deleting user:", error);
+		return {
+			status: 500,
+			message: "Internal server error",
+			error: error instanceof Error ? error.message : "Unknown error occurred",
+		};
+	}
 };
