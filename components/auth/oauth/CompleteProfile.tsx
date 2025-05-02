@@ -255,9 +255,16 @@ export default function CompleteProfile() {
 				throw new Error(userResponse.message || "Failed to fetch user data");
 			}
 
+			// Split full name into first and last name
+			const nameParts = data.name.split(' ');
+			const firstName = nameParts[0];
+			const lastName = nameParts.slice(1).join(' ') || firstName;
+
 			const updateData = {
 				...data,
 				userId: userResponse.data.userId,
+				firstName,
+				lastName,
 			};
 
 			const updateResponse = await updateUser(updateData);

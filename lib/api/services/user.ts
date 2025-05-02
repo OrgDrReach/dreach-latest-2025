@@ -14,6 +14,8 @@ export interface ApiResponse<T> {
 
 interface UpdateUserPayload {
 	userId: string;
+	firstName: string;
+	lastName: string;
 	name: string;
 	phoneNumber: string;
 	dob: string | Date;
@@ -172,9 +174,9 @@ export const updateUser = async (
 		const apiData = {
 			name: data.name,
 			phone: data.phoneNumber, // Ensure this matches the backend field
-			dob: data.dob instanceof Date ? data.dob.toISOString() : data.dob,
-			gender: data.gender,
-			bloodGroup: data.bloodGroup,
+			dob: data.dob,
+			Gender: data.gender,
+			BloodGroup: data.bloodGroup,
 			address: data.address ? { ...data.address } : undefined, // Ensure address matches the backend structure
 			userId: data.userId,
 		};
