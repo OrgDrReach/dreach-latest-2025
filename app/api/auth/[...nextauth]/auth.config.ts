@@ -1,13 +1,9 @@
-// lib/authOptions.ts
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-// import { prisma } from "@/lib/prisma";
 import { EUserRole } from "@/types/auth.d.types";
 import { createUser } from "@/lib/api/services/auth";
 import { User as NextAuthUser } from "next-auth";
-import { ClockFading } from "lucide-react";
-// import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
+
 if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
   throw new Error("Missing Google OAuth credentials");
 }
