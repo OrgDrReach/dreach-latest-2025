@@ -3,12 +3,13 @@
 // Conditional Layout for Dashboards using session
 import { ubuntu } from "@/@types/font/Font";
 import { RNChildProp } from "@/@types/interface/Interface";
-import { PatientSideNav, Header } from "@/components/dashboard/ui";
+import { PatientSideNav } from "@/components/dashboard/ui";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import Header from "@/components/dashboard/ui/PatientsHeader";
 
 const Layout: React.FC<RNChildProp> = ({ children }: RNChildProp) => {
 	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -43,7 +44,7 @@ const Layout: React.FC<RNChildProp> = ({ children }: RNChildProp) => {
 						width: "100%",
 						transition: { duration: 0.3 },
 					}}
-					className="flex-1 flex flex-col min-w-0">
+					className="flex-1 flex flex-col min-w-0 w-lg">
 					{/* Header */}
 					<div className="sticky top-0 z-10 bg-[#125872] border-b border-[#ffffff1a]">
 						<Header />
