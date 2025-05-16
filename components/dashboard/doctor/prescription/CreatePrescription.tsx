@@ -42,6 +42,8 @@ const PrescriptionCreateModal: React.FC<PrescriptionCreateModalProps> = ({
     if (validateForm()) {
       const newPrescription: IPrescription = {
         ...formState,
+        patientName: "",
+        notes: "",
         id: Date.now(),
       };
       onSave(newPrescription);
