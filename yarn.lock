@@ -3633,7 +3633,7 @@ __metadata:
     jsonwebtoken: "npm:^9.0.2"
     jwt-decode: "npm:^4.0.0"
     lucide-react: "npm:^0.503.0"
-    next: "npm:^15.3.1"
+    next: "npm:^15.3.2"
     next-auth: "npm:^4.24.11"
     next-themes: "npm:^0.4.6"
     nodemailer: "npm:^6.10.1"
@@ -5688,7 +5688,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:^15.3.1":
+"next@npm:^15.3.2":
   version: 15.3.2
   resolution: "next@npm:15.3.2"
   dependencies:
