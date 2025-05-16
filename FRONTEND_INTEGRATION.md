@@ -63,191 +63,191 @@ NEXT_PUBLIC_ENV=development
 
 1. First install required dependencies:
 
-   ```bash
-   npm install axios @tanstack/react-query jwt-decode date-fns
-   ```
+```bash
+npm install axios @tanstack/react-query jwt-decode date-fns
+```
 
 2. Set up Axios instance (`lib/api/config/axios.ts`):
 
-   ```typescript
-   import axios from "axios";
-   import { cookies } from "next/headers";
+```typescript
+import axios from 'axios';
+import { cookies } from 'next/headers';
 
-   const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-    headers: {
-     "Content-Type": "application/json",
-    },
-   });
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-   // Request interceptor with cookie auth
-   api.interceptors.request.use((config) => {
-    const token = cookies().get("token")?.value;
-    if (token) {
-     config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-   });
+// Request interceptor with cookie auth
+api.interceptors.request.use((config) => {
+  const token = cookies().get('token')?.value;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-   // Response interceptor for error handling & token refresh
-   api.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-     if (error.response?.status === 401) {
+// Response interceptor for error handling & token refresh
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401) {
       // Handle token refresh
-      const refreshToken = cookies().get("refreshToken")?.value;
+      const refreshToken = cookies().get('refreshToken')?.value;
       if (refreshToken) {
-       try {
-        const response = await api.post("/auth/refresh", null, {
-         headers: { Authorization: `Bearer ${refreshToken}` },
-        });
+        try {
+          const response = await api.post('/auth/refresh', null, {
+            headers: { Authorization: `Bearer ${refreshToken}` },
+          });
 
-        // Update cookies with new tokens
-        cookies().set("token", response.data.accessToken);
-        cookies().set("refreshToken", response.data.refreshToken);
+          // Update cookies with new tokens
+          cookies().set('token', response.data.accessToken);
+          cookies().set('refreshToken', response.data.refreshToken);
 
-        // Retry failed request
-        const config = error.config;
-        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
-        return api(config);
-       } catch (refreshError) {
-        // Clear cookies and redirect to login
-        cookies().delete("token");
-        cookies().delete("refreshToken");
-       }
+          // Retry failed request
+          const config = error.config;
+          config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+          return api(config);
+        } catch (refreshError) {
+          // Clear cookies and redirect to login
+          cookies().delete('token');
+          cookies().delete('refreshToken');
+        }
       }
-     }
-     return Promise.reject(error);
     }
-   );
+    return Promise.reject(error);
+  },
+);
 
-   export default api;
-   ```
+export default api;
+```
 
 3. Set up React Query Provider (`app/providers.tsx`):
 
-   ```typescript
-   'use client';
+```typescript
+'use client';
 
-   import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-   import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-   import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useState } from 'react';
 
-   export function Providers({ children }: { children: React.ReactNode }) {
-     const [queryClient] = useState(() => new QueryClient());
+export function Providers({ children }: { children: React.ReactNode }) {
+  const [queryClient] = useState(() => new QueryClient());
 
-     return (
-       <QueryClientProvider client={queryClient}>
-         {children}
-         <ReactQueryDevtools />
-       </QueryClientProvider>
-     );
-   }
-   ```
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <ReactQueryDevtools />
+    </QueryClientProvider>
+  );
+}
+```
 
 4. Update root layout (`app/layout.tsx`):
 
-   ```typescript
-   import { Providers } from './providers';
+```typescript
+import { Providers } from './providers';
 
-   export default function RootLayout({
-     children,
-   }: {
-     children: React.ReactNode;
-   }) {
-     return (
-       <html lang="en">
-         <body>
-           <Providers>
-             {children}
-           </Providers>
-         </body>
-       </html>
-     );
-   }
-   ```
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <Providers>
+          {children}
+        </Providers>
+      </body>
+    </html>
+  );
+}
+```
 
 5. Implement API services (`lib/api/services/`):
 
 Example auth service (`lib/api/services/auth.ts`):
 
-````typescript
-  import api from "../config/axios";
-  import { LoginRequest, AuthResponse } from "../types/auth";
+```typescript
+import api from '../config/axios';
+import { LoginRequest, AuthResponse } from '../types/auth';
 
-  export const authService = {
-    async login(data: LoginRequest): Promise<AuthResponse> {
-      const response = await api.post("/auth/login", data);
-      return response.data;
-    },
+export const authService = {
+  async login(data: LoginRequest): Promise<AuthResponse> {
+    const response = await api.post('/auth/login', data);
+    return response.data;
+  },
 
-    async register(data: RegisterRequest): Promise<AuthResponse> {
-      const response = await api.post("/auth/register", data);
-      return response.data;
-    },
+  async register(data: RegisterRequest): Promise<AuthResponse> {
+    const response = await api.post('/auth/register', data);
+    return response.data;
+  },
 
-    async logout() {
-      const response = await api.post("/auth/logout");
-      return response.data;
-    },
-  };
-  ```
+  async logout() {
+    const response = await api.post('/auth/logout');
+    return response.data;
+  },
+};
+```
 
 6. Create custom hooks for API calls (`lib/hooks/api/`):
 
 Example appointment hook (`lib/hooks/api/use-appointment.ts`):
 
 ```typescript
-  "use client";
+'use client';
 
-  import { useMutation, useQueryClient } from "@tanstack/react-query";
-  import { providerService } from "@/lib/api/services/provider";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { providerService } from '@/lib/api/services/provider';
 
-  export function useBookAppointment() {
-    const queryClient = useQueryClient();
+export function useBookAppointment() {
+  const queryClient = useQueryClient();
 
-    return useMutation({
-      mutationFn: providerService.bookAppointment,
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["appointments"] });
-      },
-    });
-  }
-  ```
+  return useMutation({
+    mutationFn: providerService.bookAppointment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+    },
+  });
+}
+```
 
 7. Create server-side API handlers (`app/api/`):
 
 Example appointment handler (`app/api/appointments/route.ts`):
 
-  ```typescript
-  import { NextResponse } from "next/server";
-  import { z } from "zod";
-  import { api } from "@/lib/api/config/axios";
+```typescript
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+import { api } from '@/lib/api/config/axios';
 
-  // Validation schema
-  const appointmentSchema = z.object({
+// Validation schema
+const appointmentSchema = z.object({
   providerId: z.string(),
   date: z.string(),
   time: z.string(),
   service: z.string(),
-  });
+});
 
-  export async function POST(request: Request) {
+export async function POST(request: Request) {
   try {
     const body = await request.json();
     const validated = appointmentSchema.parse(body);
 
-    const response = await api.post("/provider/appointment", validated);
+    const response = await api.post('/provider/appointment', validated);
 
     return NextResponse.json(response.data);
   } catch (error) {
     return NextResponse.json(
-    { error: "Invalid appointment data" },
-    { status: 400 }
+      { error: 'Invalid appointment data' },
+      { status: 400 },
     );
   }
-  }
-  ```
+}
+```
 
 8. Example page component using the API (`app/(dashboard)/provider/appointments/page.tsx`):
 
@@ -257,23 +257,23 @@ Example appointment handler (`app/api/appointments/route.ts`):
 import { useBookAppointment } from '@/lib/hooks/api/use-appointment';
 
 export default function AppointmentsPage() {
-const { mutate: bookAppointment, isPending } = useBookAppointment();
+  const { mutate: bookAppointment, isPending } = useBookAppointment();
 
-const handleSubmit = async (data: AppointmentFormData) => {
-  try {
-    await bookAppointment(data);
-    // Show success message
-  } catch (error) {
-    // Handle error
-  }
-};
+  const handleSubmit = async (data: AppointmentFormData) => {
+    try {
+      await bookAppointment(data);
+      // Show success message
+    } catch (error) {
+      // Handle error
+    }
+  };
 
-return (
-  <div>
-    <h1>Book Appointment</h1>
-    <AppointmentForm onSubmit={handleSubmit} isLoading={isPending} />
-  </div>
-);
+  return (
+    <div>
+      <h1>Book Appointment</h1>
+      <AppointmentForm onSubmit={handleSubmit} isLoading={isPending} />
+    </div>
+  );
 }
 ```
 
@@ -329,8 +329,8 @@ npm install -D jest @testing-library/react @testing-library/jest-dom
 2. Create test setup (`tests/setup.ts`):
 
 ```typescript
-import "@testing-library/jest-dom";
-import { server } from "./mocks/server";
+import '@testing-library/jest-dom';
+import { server } from './mocks/server';
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
@@ -397,20 +397,20 @@ A few key additional points to keep in mind:
 3. For protected routes, create a middleware file (middleware.ts) in your project root:
 
 ```typescript
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
- const token = request.cookies.get("token");
+  const token = request.cookies.get('token');
 
- if (!token && request.nextUrl.pathname.startsWith("/(dashboard)")) {
-  return NextResponse.redirect(new URL("/login", request.url));
- }
+  if (!token && request.nextUrl.pathname.startsWith('/(dashboard)')) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
 
- return NextResponse.next();
+  return NextResponse.next();
 }
 
 export const config = {
- matcher: ["/(dashboard)/:path*"],
+  matcher: ['/(dashboard)/:path*'],
 };
 ```
