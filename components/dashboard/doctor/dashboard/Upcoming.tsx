@@ -12,7 +12,7 @@ const AppointmentCard: React.FC<Appointment> = ({
   description,
 }) => {
   return (
-    <div className="flex justify-between rounded-xl items-center p-4 border-b border-gray-200">
+    <div className="flex justify-between rounded-xl items-center p-4 border-1 dark:border-gray-600 border-gray-500">
       <div>
         <h4 className="text-[#089dd4] font-semibold">{name}</h4>
         <p className="text-gray-600 dark:text-gray-300">
@@ -43,7 +43,7 @@ const UpcomingAppointments: React.FC = () => {
         <h2 className=" text-[#125872] dark:text-[#4db7dd] text-2xl font-semibold mb-6">
           Upcoming Appointments
         </h2>
-        <div>
+        <div className="space-y-4">
           {appointments.map((appointment, index) => (
             <AppointmentCard
               key={index}
