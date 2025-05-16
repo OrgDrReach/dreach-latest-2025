@@ -71,31 +71,31 @@ const UpcomingAppointments = () => {
               <tr>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium  dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Date & Time
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Patient
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Type
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Actions
                 </th>
@@ -121,14 +121,16 @@ const UpcomingAppointments = () => {
                       <div className="text-sm font-medium text-gray-900 dark:text-gray-400">
                         Jane Cooper
                       </div>
-                      <div className="text-sm text-gray-200">
+                      <div className="text-sm dark:text-gray-200 text-gray-700">
                         jane.cooper@example.com
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900 dark:text-gray-200">Follow-up</div>
+                  <div className="text-sm text-gray-900 dark:text-gray-200">
+                    Follow-up
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -139,12 +141,12 @@ const UpcomingAppointments = () => {
                   {/* PROVIDE LINK ADDRESS */}
                   <Link
                     href="#"
-                    className="text-indigo-600 hover:text-indigo-900 mr-3"
+                    className="text-indigo-600 dark:hover:text-indigo-100 hover:text-indigo-900 mr-3"
                   >
-                    Edit
+                    Reschedule
                   </Link>
                   {/* PROVIDE LINK ADDRESS */}
-                  <Link href="#" className="text-red-600 hover:text-red-900">
+                  <Link href="#" className="text-red-600 dark:hover:text-red-100 hover:text-red-900">
                     Cancel
                   </Link>
                 </td>
@@ -171,31 +173,31 @@ const ScheduledAppointments = () => {
               <tr>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Date & Time
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Patient
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Type
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Actions
                 </th>
@@ -221,7 +223,7 @@ const ScheduledAppointments = () => {
                       <div className="text-sm font-medium text-gray-900 dark:text-gray-400">
                         John Doe
                       </div>
-                      <div className="text-sm text-gray-200">
+                      <div className="text-sm dark:text-gray-200 text-gray-700">
                         john.doe@example.com
                       </div>
                     </div>
@@ -241,12 +243,12 @@ const ScheduledAppointments = () => {
                   {/* PROVIDE LINK ADDRESS */}
                   <Link
                     href="#"
-                    className="text-indigo-600 hover:text-indigo-900 mr-3"
+                    className="text-indigo-600 dark:hover:text-indigo-100 hover:text-indigo-900 mr-3"
                   >
-                    Edit
+                    Reschedule
                   </Link>
                   {/* PROVIDE LINK ADDRESS */}
-                  <Link href="#" className="text-red-600 hover:text-red-900">
+                  <Link href="#" className="text-red-600 dark:hover:text-red-100 hover:text-red-900">
                     Cancel
                   </Link>
                 </td>
@@ -273,31 +275,31 @@ const RescheduledAppointments = () => {
               <tr>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Original Date & Time
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Patient
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Reason
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   New Date & Time
                 </th>
@@ -327,7 +329,7 @@ const RescheduledAppointments = () => {
                       <div className="text-sm font-medium text-gray-900 dark:text-gray-400">
                         Olivia Wilson
                       </div>
-                      <div className="text-sm text-gray-200">
+                      <div className="text-sm dark:text-gray-200 text-gray-700">
                         olivia.wilson@example.com
                       </div>
                     </div>
@@ -367,31 +369,31 @@ const PatientAppointmentHistory = () => {
               <tr>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Patient
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Date & Time
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Type
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-200 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium dark:text-gray-200 text-gray-700 uppercase tracking-wider"
                 >
                   Actions
                 </th>
@@ -419,7 +421,7 @@ const PatientAppointmentHistory = () => {
                       <div className="text-sm font-medium text-gray-900 dark:text-gray-400">
                         Jane Cooper
                       </div>
-                      <div className="text-sm text-gray-200">
+                      <div className="text-sm dark:text-gray-200 text-gray-700">
                         jane.cooper@example.com
                       </div>
                     </div>
@@ -431,7 +433,9 @@ const PatientAppointmentHistory = () => {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900 dark:text-gray-300">Follow-up</div>
+                  <div className="text-sm text-gray-900 dark:text-gray-300">
+                    Follow-up
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
@@ -439,7 +443,7 @@ const PatientAppointmentHistory = () => {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                  <a href="#" className="text-indigo-600 dark:hover:text-indigo-100 hover:text-indigo-900">
                     View Details
                   </a>
                 </td>
